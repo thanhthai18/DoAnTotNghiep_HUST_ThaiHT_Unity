@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 /// <summary>
@@ -14,5 +15,11 @@ public static class Helpers
     /// </summary>
     public static void DestroyChildren(this Transform t) {
         foreach (Transform child in t) Object.Destroy(child.gameObject);
+    }
+
+    public static void ShowMessageText(this TextMeshProUGUI txt, string text, bool isSucces)
+    {
+        txt.color = isSucces? Color.green : Color.red;
+        txt.text = text;
     }
 }

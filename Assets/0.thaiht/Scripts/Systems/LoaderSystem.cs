@@ -7,7 +7,7 @@ public class LoaderSystem : MonoBehaviour
 
     [SerializeField] private CanvasGroup _loaderVisual;
     [SerializeField] private Transform _spinnerImage;
-    [SerializeField] private float _fadeSpeed = 2;
+    [SerializeField] private float _fadeSpeed = 0.5f;
 
     private float _target;
 

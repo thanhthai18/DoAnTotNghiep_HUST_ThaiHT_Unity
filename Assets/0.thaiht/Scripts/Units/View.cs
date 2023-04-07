@@ -2,17 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class View : MonoBehaviour
+public abstract class View : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+	public abstract void Initialize();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	public virtual void Hide() => gameObject.SetActive(false);
+
+	public virtual void Show() => gameObject.SetActive(true);
 }
