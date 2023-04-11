@@ -39,32 +39,43 @@ public class LoginView : View
         {
             Email = inputEmailLogin.text,
             Password = inputPasswordLogin.text,
+            InfoRequestParameters = new GetPlayerCombinedInfoRequestParams
+            {
+                GetPlayerProfile = true,
+            }
         };
 
-        
-        
+
+
         //new LoaderSystem.Load();
+        LoaderSystem.Loading(true);
+
+
         PlayFabClientAPI.LoginWithEmailAddress(request, OnLoginSucces, OnLoginError);
+
     }
 
     private void OnLoginSucces(LoginResult result)
     {
+        LoaderSystem.Loading(false);
         txtMessageLogin.ShowMessageText("Dang nhap thanh cong!", true);
-        StartCoroutine(LoadNextScene());
+        string name = null;
+        if (result.InfoResultPayload != null)
+        {
+            name = result.InfoResultPayload.PlayerProfile.DisplayName;
+            GlobalValue.playerName = name;
+        }
+        LoadNextScene();
     }
 
     private void OnLoginError(PlayFabError error)
     {
+        LoaderSystem.Loading(false);
         txtMessageLogin.ShowMessageText(error.ErrorMessage, false);
     }
 
-    private IEnumerator LoadNextScene()
+    private void LoadNextScene()
     {
-        using (new LoaderSystem.Load())
-        {
-            yield return new WaitForSeconds(5);
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-        }
-       
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }

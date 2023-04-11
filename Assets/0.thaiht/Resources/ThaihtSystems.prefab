@@ -489,4 +489,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _loaderVisual: {fileID: 5727940838173357313}
   _spinnerImage: {fileID: 40994587453848277}
-  _fadeSpeed: 0.5
+  _fadeSpeed: 2

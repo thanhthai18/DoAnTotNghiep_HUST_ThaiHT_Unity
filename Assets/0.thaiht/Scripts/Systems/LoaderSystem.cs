@@ -31,6 +31,11 @@ public class LoaderSystem : MonoBehaviour
         _spinnerImage.Rotate(new Vector3(0, 0, 20 * Time.deltaTime));
     }
 
+    public static void Loading(bool isLoad)
+    {
+        _instance.ToggleLoader(isLoad);
+    }
+
     public class Load : IDisposable
     {
         public Load()
