@@ -23,7 +23,63 @@ public class MenuController : StaticInstance<MenuController>
 
     private void Start()
     {
-        //btnRank.onClick.AddListener(() => ViewManager.Show<>)
+        btnRank.onClick.AddListener(() =>
+        {
+            if(RankView.instance != null)
+            {
+                if (!RankView.instance.CheckIsActive())
+                {
+                    ViewManager.ShowWithAnim<RankView>(); 
+                }
+            }
+            else
+            {
+                ViewManager.ShowWithAnim<RankView>();
+            }
+        });
+        btnProfile.onClick.AddListener(() =>
+        {
+            if (ProfileView.instance != null)
+            {
+                if (!ProfileView.instance.CheckIsActive())
+                {
+                    ViewManager.ShowWithAnim<ProfileView>();
+                }
+            }
+            else
+            {
+                ViewManager.ShowWithAnim<ProfileView>();
+            }
+        });
+        btnGuide.onClick.AddListener(() =>
+        {
+            if (GuideView.instance != null)
+            {
+                if (!GuideView.instance.CheckIsActive())
+                {
+                    ViewManager.ShowWithAnim<GuideView>();
+                }
+            }
+            else
+            {
+                ViewManager.ShowWithAnim<GuideView>();
+            }
+        });
+        btnSettings.onClick.AddListener(() =>
+        {
+            if (SettingsView.instance != null)
+            {
+                if (!SettingsView.instance.CheckIsActive())
+                {
+                    ViewManager.ShowWithAnim<SettingsView>();
+                }
+            }
+            else
+            {
+                ViewManager.ShowWithAnim<SettingsView>();
+            }
+        });
+
         btnLogout.onClick.AddListener(() => SceneManager.LoadScene("LoginScene"));
 
         overviewProfileData = new OverviewProfileData
