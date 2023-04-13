@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using UnityEngine;
 
@@ -35,6 +36,19 @@ public class LoaderSystem : MonoBehaviour
     {
         _instance.ToggleLoader(isLoad);
     }
+
+    public static void LoadingWithDuration(float duration)
+    {
+        Loading(true);
+        _instance.transform.DOMoveZ(_instance.transform.position.z, duration).OnComplete(() =>
+        {
+            Loading(false);
+        });
+
+    }
+
+  
+
 
     public class Load : IDisposable
     {

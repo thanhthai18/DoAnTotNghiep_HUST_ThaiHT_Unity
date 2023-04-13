@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using PlayFab;
 using PlayFab.ClientModels;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 public class MenuController : StaticInstance<MenuController>
 {
@@ -19,17 +20,21 @@ public class MenuController : StaticInstance<MenuController>
     [SerializeField] TextMeshProUGUI txtDisplayRank;
     [SerializeField] TextMeshProUGUI txtDisplayScore;
     [SerializeField] Button btnLogout;
+    [SerializeField] GameObject blockPanel;
     public OverviewProfileData overviewProfileData;
 
     private void Start()
     {
+        blockPanel.SetActive(false);
+        /*---Button Tool---*/
         btnRank.onClick.AddListener(() =>
         {
-            if(RankView.instance != null)
+            btnRank.AnimButton(0);
+            if (RankView.instance != null)
             {
                 if (!RankView.instance.CheckIsActive())
                 {
-                    ViewManager.ShowWithAnim<RankView>(); 
+                    ViewManager.ShowWithAnim<RankView>();
                 }
             }
             else
@@ -39,6 +44,7 @@ public class MenuController : StaticInstance<MenuController>
         });
         btnProfile.onClick.AddListener(() =>
         {
+            btnProfile.AnimButton(0);
             if (ProfileView.instance != null)
             {
                 if (!ProfileView.instance.CheckIsActive())
@@ -53,6 +59,7 @@ public class MenuController : StaticInstance<MenuController>
         });
         btnGuide.onClick.AddListener(() =>
         {
+            btnGuide.AnimButton(0);
             if (GuideView.instance != null)
             {
                 if (!GuideView.instance.CheckIsActive())
@@ -67,6 +74,7 @@ public class MenuController : StaticInstance<MenuController>
         });
         btnSettings.onClick.AddListener(() =>
         {
+            btnSettings.AnimButton(0);
             if (SettingsView.instance != null)
             {
                 if (!SettingsView.instance.CheckIsActive())
@@ -80,6 +88,9 @@ public class MenuController : StaticInstance<MenuController>
             }
         });
 
+
+
+        /*---Button Login---*/
         btnLogout.onClick.AddListener(() => SceneManager.LoadScene("LoginScene"));
 
         overviewProfileData = new OverviewProfileData
@@ -90,6 +101,13 @@ public class MenuController : StaticInstance<MenuController>
         };
 
         LoadOverviewData();
+
+
+
+        /*---Button Play (Select Mode)---*/
+        btnPlay.onClick.AddListener(ClickButtonPlayMode);
+
+
     }
 
     public void LoadOverviewData()
@@ -97,6 +115,18 @@ public class MenuController : StaticInstance<MenuController>
         txtDisplayName.text = overviewProfileData.displayName;
         txtDisplayRank.text = overviewProfileData.displayRank;
         txtDisplayScore.text = overviewProfileData.displayScore;
+    }
+
+    public void ClickButtonPlayMode()
+    {
+        LoaderSystem.Loading(true);
+        blockPanel.SetActive(true);
+        transform.DOMoveZ(transform.position.z, 0.5f).OnComplete(() =>
+        {
+            ViewManager.Show<PlayModeView>();
+            LoaderSystem.Loading(false);
+            blockPanel.SetActive(false);
+        });
     }
 }
 
