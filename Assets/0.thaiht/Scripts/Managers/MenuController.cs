@@ -20,12 +20,10 @@ public class MenuController : StaticInstance<MenuController>
     [SerializeField] TextMeshProUGUI txtDisplayRank;
     [SerializeField] TextMeshProUGUI txtDisplayScore;
     [SerializeField] Button btnLogout;
-    [SerializeField] GameObject blockPanel;
     public OverviewProfileData overviewProfileData;
 
     private void Start()
     {
-        blockPanel.SetActive(false);
         /*---Button Tool---*/
         btnRank.onClick.AddListener(() =>
         {
@@ -117,15 +115,21 @@ public class MenuController : StaticInstance<MenuController>
         txtDisplayScore.text = overviewProfileData.displayScore;
     }
 
+
+
     public void ClickButtonPlayMode()
     {
         LoaderSystem.Loading(true);
-        blockPanel.SetActive(true);
-        transform.DOMoveZ(transform.position.z, 0.5f).OnComplete(() =>
+        //transform.DOMoveZ(transform.position.z, 0.5f).OnComplete(() =>
+        //{
+        //    ViewManager.Show<PlayModeView>();
+        //    LoaderSystem.Loading(false);
+        //    blockPanel.SetActive(false);
+        //});
+        this.Wait(0.5f, () =>
         {
             ViewManager.Show<PlayModeView>();
             LoaderSystem.Loading(false);
-            blockPanel.SetActive(false);
         });
     }
 }

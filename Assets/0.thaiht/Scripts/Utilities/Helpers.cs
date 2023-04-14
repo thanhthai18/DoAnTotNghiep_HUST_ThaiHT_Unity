@@ -1,4 +1,6 @@
 using DG.Tweening;
+using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,7 +19,7 @@ public static class Helpers
     /// </summary>
     public static void DestroyChildren(this Transform t)
     {
-        foreach (Transform child in t) Object.Destroy(child.gameObject);
+        foreach (Transform child in t) UnityEngine.Object.Destroy(child.gameObject);
     }
 
     public static void ShowMessageText(this TextMeshProUGUI txt, string text, bool isSucces)
@@ -46,5 +48,17 @@ public static class Helpers
                 btn.interactable = true;
             });
         }
+    }
+
+    public static void Wait(this MonoBehaviour mono, float delay, Action action)
+    {
+        mono.StartCoroutine(ExecuteAction(delay, action));
+    }
+
+    private static IEnumerator ExecuteAction(float delay, Action action)
+    {
+        yield return new WaitForSecondsRealtime(delay);
+        action?.Invoke();
+        yield break;
     }
 }
