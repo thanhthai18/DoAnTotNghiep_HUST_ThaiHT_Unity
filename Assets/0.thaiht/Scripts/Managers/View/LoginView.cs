@@ -32,10 +32,6 @@ public class LoginView : View
         btnOpenRecovery.onClick.AddListener(() => ViewManager.Show<RecoveryView>());
         btnLogin.onClick.AddListener(Login);
     }
-    private void OnEnable()
-    {
-        GlobalController.Instance.currentScene = SceneGame.LoginScene;
-    }
 
     public void Login()
     {

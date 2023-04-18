@@ -89,7 +89,7 @@ public class MenuController : StaticInstance<MenuController>
 
 
         /*---Button Login---*/
-        btnLogout.onClick.AddListener(() => SceneManager.LoadScene("LoginScene"));
+        btnLogout.onClick.AddListener(() => SceneManager.LoadScene(SceneGame.LoginScene));
 
         overviewProfileData = new OverviewProfileData
         {
@@ -108,14 +108,7 @@ public class MenuController : StaticInstance<MenuController>
 
     }
 
-    private void OnEnable()
-    {
-        if(GlobalController.Instance.currentScene != SceneGame.LoginScene)
-        {
-            GlobalController.Instance.currentScene = SceneGame.MainMenuScene;
-            ViewManager.Show<PlayModeView>();
-        }
-    }
+   
 
     public void LoadOverviewData()
     {
@@ -137,7 +130,7 @@ public class MenuController : StaticInstance<MenuController>
         //});
         this.Wait(0.5f, () =>
         {
-            ViewManager.Show<PlayModeView>();
+            SceneManager.LoadScene(SceneGame.SelectModeScene);
             LoaderSystem.Loading(false);
         });
     }

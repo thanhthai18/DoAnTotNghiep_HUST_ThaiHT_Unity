@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class PlayModeView : View
+public class SelectModeView : View
 {
     [SerializeField] Button btnBack;
     [SerializeField] Button btnRankMode;
@@ -16,10 +16,10 @@ public class PlayModeView : View
         btnBack.onClick.AddListener(() =>
         {
             LoaderSystem.Loading(true);
-            this.Wait(0.2f, () =>
+            GlobalController.Instance.Wait(0.2f, () =>
             {
+                SceneManager.LoadScene(SceneGame.MainMenuScene);
                 LoaderSystem.Loading(false);
-                gameObject.SetActive(false);
             });
         });
 
@@ -31,11 +31,12 @@ public class PlayModeView : View
 
     public void OpenMode(Button btn, int indexMode)
     {
+        btn.AnimButton(-1);
         LoaderSystem.Loading(true);
-        GlobalController.Instance.Wait(1.5f, () =>
+        GlobalController.Instance.Wait(0.5f, () =>
         {
             LoaderSystem.Loading(false);
-            btn.AnimButton(-1);
+            
             switch (indexMode)
             {
                 case 0:
@@ -57,7 +58,7 @@ public class PlayModeView : View
     {
         Debug.Log("Open Room Mode");
 
-        SceneManager.LoadScene(SceneGame.RoomModeScene.ToString());
+        SceneManager.LoadScene(SceneGame.RoomModeScene);
 
     }
     public void OpenRankMode()
@@ -65,7 +66,7 @@ public class PlayModeView : View
         Debug.Log("Open Rank Mode");
         using (new LoaderSystem.Load())
         {
-            SceneManager.LoadScene(SceneGame.RankModeScene.ToString());
+            SceneManager.LoadScene(SceneGame.RankModeScene);
         }
     }
     public void OpenTrainingMode()
@@ -73,7 +74,7 @@ public class PlayModeView : View
         Debug.Log("Open Training Mode");
         using (new LoaderSystem.Load())
         {
-            SceneManager.LoadScene(SceneGame.TrainingModeScene.ToString());
+            SceneManager.LoadScene(SceneGame.TrainingModeScene);
         }
     }
 

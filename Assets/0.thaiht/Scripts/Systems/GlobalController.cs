@@ -5,16 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class GlobalController : StaticInstance<GlobalController>
 {
-    public SceneGame currentScene;
-
+    public Scene currentScene;
     private void Start()
     {
         Debug.Log("Khoi tao GlobalController");
-        //SceneManager.sceneLoaded += SceneManager_sceneLoaded;
+        SceneManager.sceneLoaded += SceneManager_sceneLoaded;
     }
 
     private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
-        //currentScene = arg0.name;
+        currentScene = arg0;
     }
 }
