@@ -6,3 +6,12 @@ public static class GlobalValue
 {
     public static string playerName;
 }
+
+public enum SceneGame
+{
+    LoginScene,
+    MainMenuScene,
+    RoomModeScene,
+    RankModeScene,
+    TrainingModeScene,
+}

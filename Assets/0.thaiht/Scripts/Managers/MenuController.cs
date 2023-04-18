@@ -108,6 +108,15 @@ public class MenuController : StaticInstance<MenuController>
 
     }
 
+    private void OnEnable()
+    {
+        if(GlobalController.Instance.currentScene != SceneGame.LoginScene)
+        {
+            GlobalController.Instance.currentScene = SceneGame.MainMenuScene;
+            ViewManager.Show<PlayModeView>();
+        }
+    }
+
     public void LoadOverviewData()
     {
         txtDisplayName.text = overviewProfileData.displayName;

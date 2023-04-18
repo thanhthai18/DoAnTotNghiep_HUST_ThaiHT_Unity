@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/0.thaiht/Scenes/MainMenuScene.unity
     guid: 13c1c24e23cfd044081cd6d6d9c12c00
+  - enabled: 1
+    path: Assets/0.thaiht/Scenes/RoomModeScene.unity
+    guid: cec17e7657cf7e3429365545d68df6d3
   m_configObjects: {}
