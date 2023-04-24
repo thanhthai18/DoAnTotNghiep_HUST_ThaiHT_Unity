@@ -5,10 +5,15 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+
 public class SelectRoomView : View
 {
-    [SerializeField] Button btnBack;
-    [SerializeField] TextMeshProUGUI txtMessage;
+    [SerializeField] public Button btnBack;
+    [SerializeField] public TextMeshProUGUI txtMessage;
+    [SerializeField] public Button btnCreateRoom;
+    [SerializeField] public Button btnJoinRoom;
+    [SerializeField] public TMP_InputField inputRoomName;
+
     public override void Initialize()
     {
         btnBack.onClick.AddListener(() =>
