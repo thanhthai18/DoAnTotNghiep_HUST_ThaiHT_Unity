@@ -16,6 +16,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         else
         {
             instance = this;
+            Debug.Log("clgt");
             DontDestroyOnLoad(gameObject);
         }
     }

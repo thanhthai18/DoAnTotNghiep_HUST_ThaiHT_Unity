@@ -5,6 +5,7 @@ using UnityEngine;
 public static class GlobalValue
 {
     public static string playerName;
+    public static int countData;
 }
 
 public static class SceneGame
@@ -15,4 +16,5 @@ public static class SceneGame
     public static readonly string RoomModeScene = "RoomModeScene";
     public static readonly string RankModeScene = "RankModeScene";
     public static readonly string TrainingModeScene = "TrainingModeScene";
+    public static readonly string MainGameScene = "MainGameScene";
 }

@@ -1,19 +1,21 @@
+using Doozy.Runtime.UIManager.Components;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class SelectModeView : View
 {
-    [SerializeField] Button btnBack;
-    [SerializeField] Button btnRankMode;
-    [SerializeField] Button btnTraningMode;
-    [SerializeField] Button btnRoomMode;
+    [SerializeField] UIButton btnBack;
+    [SerializeField] UIButton btnRankMode;
+    [SerializeField] UIButton btnTraningMode;
+    [SerializeField] UIButton btnRoomMode;
 
     public override void Initialize()
     {
-        btnBack.onClick.AddListener(() =>
+        btnBack.onClickEvent.AddListener(() =>
         {
             LoaderSystem.Loading(true);
             GlobalController.Instance.Wait(0.2f, () =>
@@ -22,16 +24,16 @@ public class SelectModeView : View
                 LoaderSystem.Loading(false);
             });
         });
-
-        btnRoomMode.onClick.AddListener(() => { OpenMode(btnRoomMode, 0); });
-        btnRankMode.onClick.AddListener(() => { OpenMode(btnRankMode, 1); });
-        btnTraningMode.onClick.AddListener(() => { OpenMode(btnTraningMode, 2); });
+        btnRoomMode.onClickEvent.AddListener(() => { OpenMode(0); });
+        btnRankMode.onClickEvent.AddListener(() => { OpenMode(1); });
+        btnTraningMode.onClickEvent.AddListener(() => { OpenMode(2); });
 
     }
 
-    public void OpenMode(Button btn, int indexMode)
+
+    public void OpenMode(int indexMode)
     {
-        btn.AnimButton(-1);
+        //btn.AnimButton(-1);
         LoaderSystem.Loading(true);
         GlobalController.Instance.Wait(0.5f, () =>
         {
