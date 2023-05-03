@@ -63,7 +63,7 @@ public class LoginView : View
         if (result.InfoResultPayload != null)
         {
             name = result.InfoResultPayload.PlayerProfile.DisplayName;
-            GlobalValue.playerName = name;
+            MyPlayerValue.playerName = name;
         }
         LoadNextScene();
     }

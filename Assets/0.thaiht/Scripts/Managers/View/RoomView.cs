@@ -12,11 +12,11 @@ public class RoomView : View
     [SerializeField] public Button btnBack;
     [SerializeField] public Button btnStartGame;
     [SerializeField] TextMeshProUGUI txtBannerRoomName;
+    public GameObject playerChooseParent;
 
     public override void Initialize()
     {
-        LobbyRoomController.eventUpdateLobbyRoom += OnUpdateLobbyUI;
-        Debug.Log("lobby");
+
     }
 
     public void SetBannerRoomName(string roomName)
@@ -43,8 +43,5 @@ public class RoomView : View
         //}
     }
 
-    private void OnDestroy()
-    {
-        LobbyRoomController.eventUpdateLobbyRoom -= OnUpdateLobbyUI;
-    }
+
 }

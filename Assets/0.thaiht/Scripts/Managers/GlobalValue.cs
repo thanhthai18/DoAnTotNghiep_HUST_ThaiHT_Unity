@@ -4,8 +4,14 @@ using UnityEngine;
 
 public static class GlobalValue
 {
-    public static string playerName;
     public static int countData;
+    public static ModeGame currentModeGame;
+}
+
+public static class MyPlayerValue
+{
+    public static string playerName;
+    public static int rankScore;
 }
 
 public static class SceneGame
@@ -17,4 +23,12 @@ public static class SceneGame
     public static readonly string RankModeScene = "RankModeScene";
     public static readonly string TrainingModeScene = "TrainingModeScene";
     public static readonly string MainGameScene = "MainGameScene";
+}
+
+
+public enum ModeGame
+{
+    RoomMode,
+    RankMode,
+    TrainingMode
 }

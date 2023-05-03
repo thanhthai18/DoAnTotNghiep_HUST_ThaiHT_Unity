@@ -64,6 +64,7 @@ namespace Photon.Pun.Demo.Asteroids
 
         public override void OnRoomListUpdate(List<RoomInfo> roomList)
         {
+            Debug.Log("dua nhau a");
             ClearRoomListView();
 
             UpdateCachedRoomList(roomList);
@@ -73,6 +74,7 @@ namespace Photon.Pun.Demo.Asteroids
         public override void OnJoinedLobby()
         {
             // whenever this joins a new lobby, clear any previous room lists
+            Debug.Log("OnJoinedLobby");
             cachedRoomList.Clear();
             ClearRoomListView();
         }
@@ -262,7 +264,9 @@ namespace Photon.Pun.Demo.Asteroids
             if (!PhotonNetwork.InLobby)
             {
                 PhotonNetwork.JoinLobby();
+                Debug.Log("JoinLobby");
             }
+            
 
             SetActivePanel(RoomListPanel.name);
         }

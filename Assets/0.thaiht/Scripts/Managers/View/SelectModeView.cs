@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using DG.Tweening;
+using Photon.Pun;
 
 public class SelectModeView : View
 {
@@ -34,42 +35,36 @@ public class SelectModeView : View
     public void OpenMode(int indexMode)
     {
         //btn.AnimButton(-1);
-        LoaderSystem.Loading(true);
-        GlobalController.Instance.Wait(0.5f, () =>
+        
+        switch (indexMode)
         {
-            LoaderSystem.Loading(false);
-            
-            switch (indexMode)
-            {
-                case 0:
-                    OpenRoomMode();
-                    break;
-                case 1:
-                    OpenRankMode();
-                    break;
-                case 2:
-                    OpenTrainingMode();
-                    break;
-                default:
-                    break;
-            }
-        });
+            case 0:
+                OpenRoomMode((ModeGame)indexMode);
+                break;
+            case 1:
+                OpenRankMode((ModeGame)indexMode);
+                break;
+            case 2:
+                OpenTrainingMode();
+                break;
+            default:
+                break;
+        }
+
     }
 
-    public void OpenRoomMode()
+    public void OpenRoomMode(ModeGame enumMode)
     {
         Debug.Log("Open Room Mode");
-
-        SceneManager.LoadScene(SceneGame.RoomModeScene);
+        LoaderSystem.Loading(true);
+        NetworkManager.instance.ConnectMasterServerToOpenMode(enumMode);
 
     }
-    public void OpenRankMode()
+    public void OpenRankMode(ModeGame enumMode)
     {
         Debug.Log("Open Rank Mode");
-        using (new LoaderSystem.Load())
-        {
-            SceneManager.LoadScene(SceneGame.RankModeScene);
-        }
+        LoaderSystem.Loading(true);
+        NetworkManager.instance.ConnectMasterServerToOpenMode(enumMode);
     }
     public void OpenTrainingMode()
     {
@@ -81,5 +76,6 @@ public class SelectModeView : View
     }
 
 }
+
 
 

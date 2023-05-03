@@ -93,9 +93,9 @@ public class MenuController : StaticInstance<MenuController>
 
         overviewProfileData = new OverviewProfileData
         {
-            displayName = GlobalValue.playerName,
+            displayName = MyPlayerValue.playerName,
             displayRank = $"Rank: {"#1"}",
-            displayScore = $"Score: {"3000"}",
+            displayScore = $"Score: {MyPlayerValue.rankScore}",
         };
 
         LoadOverviewData();

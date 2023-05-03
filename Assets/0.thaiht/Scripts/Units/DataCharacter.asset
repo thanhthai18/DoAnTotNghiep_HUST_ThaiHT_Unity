@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39a6a29f0b7053946841acaccfcc08fc, type: 3}
+  m_Name: DataCharacter
+  m_EditorClassIdentifier: 
+  listCharacter:
+  - id: 0
+    characterSprite: {fileID: 21300000, guid: ccc49337a90380847ac6a43455cd9b31, type: 3}
+    speed: 5
+    weight: 5
+    mySkill: 0
+    characterPrefab: {fileID: 2433797733483435184, guid: 2b74537331479d84aa343954837c9a55, type: 3}
+  - id: 1
+    characterSprite: {fileID: 21300000, guid: c39b937104c4d4c44a9df22daf290658, type: 3}
+    speed: 8
+    weight: 4
+    mySkill: 1
+    characterPrefab: {fileID: 2433797733483435184, guid: 2b74537331479d84aa343954837c9a55, type: 3}
+  - id: 2
+    characterSprite: {fileID: 21300000, guid: 9f5b38a12b1926744be2a8924617a1db, type: 3}
+    speed: 3
+    weight: 6
+    mySkill: 2
+    characterPrefab: {fileID: 2433797733483435184, guid: 2b74537331479d84aa343954837c9a55, type: 3}
+  - id: 3
+    characterSprite: {fileID: 21300000, guid: c94a7b0afcacc4449991a71d9cbbcc27, type: 3}
+    speed: 1
+    weight: 10
+    mySkill: 3
+    characterPrefab: {fileID: 2433797733483435184, guid: 2b74537331479d84aa343954837c9a55, type: 3}

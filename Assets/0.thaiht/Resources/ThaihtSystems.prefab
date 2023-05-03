@@ -351,6 +351,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56fcc608b4a79c44c9e5fe23f95fb88d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentScene:
+    m_Handle: 0
+  scriptableDataCharacter: {fileID: 11400000, guid: fa7545d1de23e2a4a899205ba93dc65e, type: 2}
 --- !u!1 &6983507442991133612
 GameObject:
   m_ObjectHideFlags: 0

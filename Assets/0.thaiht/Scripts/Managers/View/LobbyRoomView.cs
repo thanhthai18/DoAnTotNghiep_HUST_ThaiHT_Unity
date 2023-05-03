@@ -22,13 +22,16 @@ public class LobbyRoomView : View
         btnBack.onClick.AddListener(() =>
         {
             LoaderSystem.Loading(true);
+            if (PhotonNetwork.InLobby)
+            {
+                PhotonNetwork.LeaveLobby();
+            }
             GlobalController.Instance.Wait(0.2f, () =>
             {
                 SceneManager.LoadScene(SceneGame.SelectModeScene);
                 LoaderSystem.Loading(false);
             });
         });
-
     }
-    
+
 }

@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class GlobalController : StaticInstance<GlobalController>
 {
     public Scene currentScene;
+    public DataCharacter scriptableDataCharacter;
     private void Start()
     {
         Debug.Log("Khoi tao GlobalController");

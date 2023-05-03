@@ -7,6 +7,7 @@ using UnityEngine;
 public class SlotRoomSelect : MonoBehaviour
 {
     public string roomName;
+    public int maxPlayer;
     [SerializeField] UIButton selfButton;
     [SerializeField] TextMeshProUGUI txtRoomName;
     [SerializeField] TextMeshProUGUI txtSoLuong;
@@ -17,27 +18,15 @@ public class SlotRoomSelect : MonoBehaviour
     void Awake()
     {
         CollectViews();
-        SetValueSoLuong(1);
         selfButton.onClickEvent.AddListener(OnClickButtonJoinRoom);
     }
-    #region SUBSCRIBE
-    private void OnEnable()
+    public void Initialize(string name, byte currentPlayers, byte maxPlayers)
     {
-        
-    }
-    private void OnDisable()
-    {
-        
-    }
-    #endregion
-    
-    void Start()
-    {
-        
-
+        SetValueRoomName(name);
+        SetValueSoLuong(currentPlayers, maxPlayers);
     }
 
-   
+
 
     public void CollectViews()
     {
@@ -75,9 +64,9 @@ public class SlotRoomSelect : MonoBehaviour
         roomName = _roomName;
         txtRoomName.text = roomName;
     }
-    public void SetValueSoLuong(int playerNum)
+    public void SetValueSoLuong(int playerNum, int maxPlayer)
     {
-        txtSoLuong.text = $"{playerNum}/4";
+        txtSoLuong.text = $"{playerNum}/{maxPlayer}";
         SetValueKimRect(playerNum);
     }
     public void OnClickButtonJoinRoom()
