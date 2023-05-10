@@ -125,9 +125,12 @@ public class RoomModeController : MonoBehaviourPunCallbacks
                 entry.GetComponent<PlayerChoose>().SetPlayerReady((bool)isPlayerReady);
             }
 
+            entry.btnKick.gameObject.SetActive(false);
+
             playerListChoose.Add(p.ActorNumber, entry);
         }
-
+        CheckActiveBtnKickPlayer();
+        CheckIconKeyHost();
         roomView.btnStartGame.gameObject.SetActive(CheckPlayersReady());
 
         //Hashtable props = new Hashtable
@@ -160,8 +163,13 @@ public class RoomModeController : MonoBehaviourPunCallbacks
         entry.transform.SetParent(roomView.playerChooseParent.transform);
         entry.GetComponent<PlayerChoose>().Initialize(newPlayer.ActorNumber, newPlayer.NickName, MyPlayerValue.rankScore, newPlayer);
 
+        entry.btnKick.gameObject.SetActive(false);
+        entry.keyHostIcon.SetActive(false);
+
         playerListChoose.Add(newPlayer.ActorNumber, entry);
 
+        CheckActiveBtnKickPlayer();
+        CheckIconKeyHost();
         roomView.btnStartGame.gameObject.SetActive(CheckPlayersReady());
     }
 
@@ -180,6 +188,7 @@ public class RoomModeController : MonoBehaviourPunCallbacks
         {
             roomView.btnStartGame.gameObject.SetActive(CheckPlayersReady());
         }
+        CheckIconKeyHost();
     }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
@@ -198,7 +207,7 @@ public class RoomModeController : MonoBehaviourPunCallbacks
             {
                 entry.SetPlayerReady((bool)isPlayerReady);
             }
-            if(changedProps.TryGetValue("characterIndex", out characterIndex))
+            if (changedProps.TryGetValue("characterIndex", out characterIndex))
             {
                 entry.SetPlayerCharacter(GlobalController.Instance.scriptableDataCharacter.listCharacter[(int)characterIndex]);
             }
@@ -208,6 +217,31 @@ public class RoomModeController : MonoBehaviourPunCallbacks
     }
 
     #endregion
+
+    private void CheckActiveBtnKickPlayer()
+    {
+        if (PhotonNetwork.LocalPlayer.IsMasterClient)
+        {
+            foreach (PlayerChoose value in playerListChoose.Values)
+            {
+                value.btnKick.gameObject.SetActive(true);
+                value.btnKick.onClickEvent.AddListener(() => { PhotonNetwork.CloseConnection(value.myPlayerPhoton); });
+            }
+            playerListChoose[PhotonNetwork.LocalPlayer.ActorNumber].btnKick.gameObject.SetActive(false);
+        }
+    }
+
+    private void CheckIconKeyHost()
+    {
+        foreach (PlayerChoose value in playerListChoose.Values)
+        {
+            value.keyHostIcon.SetActive(false);
+            if (value.myPlayerPhoton.IsMasterClient)
+            {
+                value.keyHostIcon.SetActive(true);
+            }
+        }
+    }
     private void ClearRoomListView()
     {
         foreach (SlotRoomSelect entry in listRoomEntry.Values)

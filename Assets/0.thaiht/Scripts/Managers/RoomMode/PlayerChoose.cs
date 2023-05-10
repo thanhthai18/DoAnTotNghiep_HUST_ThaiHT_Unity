@@ -19,7 +19,10 @@ public class PlayerChoose : MonoBehaviour
     public Button btnRight;
     public Button btnLeft;
     public TextMeshProUGUI txtScoreRankDisplay;
+    public GameObject keyHostIcon;
+    public UIButton btnKick;
 
+    [Space]
     private int ownerId;
     private bool isPlayerReady;
 
@@ -34,14 +37,8 @@ public class PlayerChoose : MonoBehaviour
 
     public void Start()
     {
-        if (PhotonNetwork.LocalPlayer.ActorNumber != ownerId)
-        {
-            ApplyLocalPlayer(false);
-        }
-        else
-        {
-            ApplyLocalPlayer(true);
-        }
+
+
     }
 
     public void ApplyLocalPlayer(bool isApply)
@@ -52,13 +49,11 @@ public class PlayerChoose : MonoBehaviour
             btnLeft.gameObject.SetActive(false);
             btnRight.gameObject.SetActive(false);
             SetPlayerCharacter(GlobalController.Instance.scriptableDataCharacter.listCharacter[(int)myPlayerPhoton.CustomProperties["characterIndex"]]);
+            //PhotonNetwork.SetPlayerCustomProperties(playerProperties);
         }
         else
         {
-            currentCharacter = GlobalController.Instance.scriptableDataCharacter.listCharacter[0];
-            SetPlayerCharacter(currentCharacter);
             PhotonNetwork.SetPlayerCustomProperties(playerProperties);
-
             btnLeft.onClick.AddListener(OnClickLeftBtn);
             btnRight.onClick.AddListener(OnClickRightBtn);
 
@@ -82,7 +77,7 @@ public class PlayerChoose : MonoBehaviour
 
     }
 
-   
+
 
     #endregion
 
@@ -92,11 +87,26 @@ public class PlayerChoose : MonoBehaviour
         txtPlayerName.text = playerName;
         txtScoreRankDisplay.text = scoreRank.ToString();
         myPlayerPhoton = player;
+
+        currentCharacter = GlobalController.Instance.scriptableDataCharacter.listCharacter[0];
+        SetPlayerCharacter(currentCharacter);
+
+        if (PhotonNetwork.LocalPlayer.ActorNumber != ownerId)
+        {
+            ApplyLocalPlayer(false);
+        }
+        else
+        {
+            ApplyLocalPlayer(true);
+        }
     }
+
+
 
     public void SetPlayerReady(bool playerReady)
     {
-        btnReady.GetComponent<Image>().color = playerReady ? Color.white : Color.black;
+        btnReady.GetComponent<Image>().color = playerReady ? Color.red : Color.white;
+        btnReady.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = playerReady ? "Cancel" : "Ready";
         imgReadyIcon.enabled = playerReady;
     }
     public void SetPlayerCharacter(Character character)
@@ -108,7 +118,7 @@ public class PlayerChoose : MonoBehaviour
 
     public void OnClickLeftBtn()
     {
-        if((int)playerProperties["characterIndex"] == 0)
+        if ((int)playerProperties["characterIndex"] == 0)
         {
             playerProperties["characterIndex"] = GlobalController.Instance.scriptableDataCharacter.listCharacter.Count - 1;
         }

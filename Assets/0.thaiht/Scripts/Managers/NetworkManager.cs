@@ -70,7 +70,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         Debug.Log("Da ket noi toi master server");
-
+        PhotonNetwork.EnableCloseConnection = true;
     }
 
     public override void OnDisconnected(DisconnectCause cause)
