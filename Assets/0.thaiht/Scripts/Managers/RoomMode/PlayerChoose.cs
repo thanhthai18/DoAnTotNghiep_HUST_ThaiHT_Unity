@@ -28,8 +28,9 @@ public class PlayerChoose : MonoBehaviour
 
     public Character currentCharacter;
     public Player myPlayerPhoton;
+    public int myIndexCharacter;
 
-    Hashtable playerProperties = new Hashtable();
+    public Hashtable playerProperties = new Hashtable();
 
     #region UNITY
 
@@ -48,12 +49,10 @@ public class PlayerChoose : MonoBehaviour
             btnReady.gameObject.SetActive(false);
             btnLeft.gameObject.SetActive(false);
             btnRight.gameObject.SetActive(false);
-            SetPlayerCharacter(GlobalController.Instance.scriptableDataCharacter.listCharacter[(int)myPlayerPhoton.CustomProperties["characterIndex"]]);
             //PhotonNetwork.SetPlayerCustomProperties(playerProperties);
         }
         else
         {
-            PhotonNetwork.SetPlayerCustomProperties(playerProperties);
             btnLeft.onClick.AddListener(OnClickLeftBtn);
             btnRight.onClick.AddListener(OnClickRightBtn);
 
@@ -88,8 +87,16 @@ public class PlayerChoose : MonoBehaviour
         txtScoreRankDisplay.text = scoreRank.ToString();
         myPlayerPhoton = player;
 
-        currentCharacter = GlobalController.Instance.scriptableDataCharacter.listCharacter[0];
-        SetPlayerCharacter(currentCharacter);
+        //currentCharacter = GlobalController.Instance.scriptableDataCharacter.listCharacter[0];
+        //SetPlayerCharacter(currentCharacter);
+        playerProperties = new Hashtable()
+        {
+            { "characterIndex", 0}
+        };
+        if(myPlayerPhoton.CustomProperties["characterIndex"] == null)
+        {
+            myPlayerPhoton.SetCustomProperties(playerProperties);
+        }
 
         if (PhotonNetwork.LocalPlayer.ActorNumber != ownerId)
         {
@@ -113,7 +120,6 @@ public class PlayerChoose : MonoBehaviour
     {
         currentCharacter = character;
         imgCharacterIcon.sprite = currentCharacter.characterSprite;
-        playerProperties["characterIndex"] = currentCharacter.id;
     }
 
     public void OnClickLeftBtn()
@@ -126,7 +132,7 @@ public class PlayerChoose : MonoBehaviour
         {
             playerProperties["characterIndex"] = (int)playerProperties["characterIndex"] - 1;
         }
-        PhotonNetwork.SetPlayerCustomProperties(playerProperties);
+        myPlayerPhoton.SetCustomProperties(playerProperties);
         //currentCharacter = GlobalController.Instance.scriptableDataCharacter.listCharacter[PhotonNetwork.LocalPlayer.CustomProperties(playerProperties["characterIndex"])]
     }
     public void OnClickRightBtn()
@@ -139,7 +145,7 @@ public class PlayerChoose : MonoBehaviour
         {
             playerProperties["characterIndex"] = (int)playerProperties["characterIndex"] + 1;
         }
-        PhotonNetwork.SetPlayerCustomProperties(playerProperties);
+        myPlayerPhoton.SetCustomProperties(playerProperties);
     }
 }
 

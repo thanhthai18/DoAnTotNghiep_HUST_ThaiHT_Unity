@@ -20,6 +20,7 @@ public class RoomModeController : MonoBehaviourPunCallbacks
     private Dictionary<string, RoomInfo> cachedRoomList;
     public PlayerChoose PlayerListEntryPrefab;
     private Dictionary<int, PlayerChoose> playerListChoose;
+    [SerializeField] PanelSetupKeyHost panelSetupKeyHost_MapTime;
 
 
     private void Awake()
@@ -119,18 +120,30 @@ public class RoomModeController : MonoBehaviourPunCallbacks
             entry.transform.SetParent(roomView.playerChooseParent.transform);
             entry.GetComponent<PlayerChoose>().Initialize(p.ActorNumber, p.NickName, MyPlayerValue.rankScore, p);
 
-            object isPlayerReady;
+            object isPlayerReady, characterIndex;
             if (p.CustomProperties.TryGetValue("isPlayerReady", out isPlayerReady))
             {
                 entry.GetComponent<PlayerChoose>().SetPlayerReady((bool)isPlayerReady);
+            }
+            if (p.CustomProperties.TryGetValue("characterIndex", out characterIndex))
+            {
+                entry.SetPlayerCharacter(GlobalController.Instance.scriptableDataCharacter.listCharacter[(int)characterIndex]);
+                Debug.Log("Caccccc");
+            }
+            else
+            {
+                //entry.playerProperties = new Hashtable() { { "characterIndex", 0 } };
+                //p.SetCustomProperties(entry.playerProperties);
+                //entry.SetPlayerCharacter(GlobalController.Instance.scriptableDataCharacter.listCharacter[0]);
+                //Debug.Log("Lozzzzzzzzzz");
             }
 
             entry.btnKick.gameObject.SetActive(false);
 
             playerListChoose.Add(p.ActorNumber, entry);
         }
-        CheckActiveBtnKickPlayer();
-        CheckIconKeyHost();
+        //CheckActiveBtnKickPlayer();
+        CheckKeyHost();
         roomView.btnStartGame.gameObject.SetActive(CheckPlayersReady());
 
         //Hashtable props = new Hashtable
@@ -147,6 +160,8 @@ public class RoomModeController : MonoBehaviourPunCallbacks
     public override void OnLeftRoom()
     {
         ViewManager.Show<LobbyRoomView>();
+
+        PhotonNetwork.LocalPlayer.CustomProperties.Clear();
 
         foreach (PlayerChoose entry in playerListChoose.Values)
         {
@@ -168,8 +183,8 @@ public class RoomModeController : MonoBehaviourPunCallbacks
 
         playerListChoose.Add(newPlayer.ActorNumber, entry);
 
-        CheckActiveBtnKickPlayer();
-        CheckIconKeyHost();
+        //CheckActiveBtnKickPlayer();
+        CheckKeyHost();
         roomView.btnStartGame.gameObject.SetActive(CheckPlayersReady());
     }
 
@@ -188,7 +203,7 @@ public class RoomModeController : MonoBehaviourPunCallbacks
         {
             roomView.btnStartGame.gameObject.SetActive(CheckPlayersReady());
         }
-        CheckIconKeyHost();
+        CheckKeyHost();
     }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
@@ -210,6 +225,7 @@ public class RoomModeController : MonoBehaviourPunCallbacks
             if (changedProps.TryGetValue("characterIndex", out characterIndex))
             {
                 entry.SetPlayerCharacter(GlobalController.Instance.scriptableDataCharacter.listCharacter[(int)characterIndex]);
+                Debug.Log("Update properties character");
             }
         }
 
@@ -231,16 +247,44 @@ public class RoomModeController : MonoBehaviourPunCallbacks
         }
     }
 
-    private void CheckIconKeyHost()
+    private void CheckKeyHost()
     {
+        //foreach (PlayerChoose value in playerListChoose.Values)
+        //{
+        //    value.keyHostIcon.SetActive(false);
+        //}
         foreach (PlayerChoose value in playerListChoose.Values)
         {
-            value.keyHostIcon.SetActive(false);
             if (value.myPlayerPhoton.IsMasterClient)
             {
                 value.keyHostIcon.SetActive(true);
+                value.btnReady.gameObject.SetActive(false);
+                value.imgReadyIcon.gameObject.SetActive(false);
+                panelSetupKeyHost_MapTime.gameObject.SetActive(true);
+            }
+            else
+            {
+                value.keyHostIcon.SetActive(false);
+                panelSetupKeyHost_MapTime.gameObject.SetActive(false);
             }
         }
+
+        CheckActiveBtnKickPlayer();
+        //if (PhotonNetwork.IsMasterClient)
+        //{
+        //    foreach( var p in PhotonNetwork.PlayerList)
+        //    {
+        //        if(p != PhotonNetwork.LocalPlayer)
+        //        {
+        //            playerListChoose[p.ActorNumber].btnKick.gameObject.SetActive(true);
+        //        }
+        //        else
+        //        {
+        //            playerListChoose[p.ActorNumber].btnKick.gameObject.SetActive(false);
+        //        }
+        //    }
+        //}
+
     }
     private void ClearRoomListView()
     {
@@ -299,18 +343,22 @@ public class RoomModeController : MonoBehaviourPunCallbacks
 
         foreach (Player p in PhotonNetwork.PlayerList)
         {
-            object isPlayerReady;
-            if (p.CustomProperties.TryGetValue("IsPlayerReady", out isPlayerReady))
+            if(p != PhotonNetwork.MasterClient)
             {
-                if (!(bool)isPlayerReady)
+                object isPlayerReady;
+                if (p.CustomProperties.TryGetValue("isPlayerReady", out isPlayerReady))
+                {
+                    if (!(bool)isPlayerReady)
+                    {
+                        return false;
+                    }
+                }
+                else
                 {
                     return false;
                 }
             }
-            else
-            {
-                return false;
-            }
+            
         }
 
         return true;
@@ -346,6 +394,17 @@ public class RoomModeController : MonoBehaviourPunCallbacks
         PhotonNetwork.LeaveRoom();
 
     }
+
+    //thai thai thai
+    public void SetRoomMapProperties()
+    {
+        if (PhotonNetwork.LocalPlayer.IsMasterClient)
+        {
+            Hashtable newProp = new Hashtable() { { "indexMap", (int)PhotonNetwork.LocalPlayer.CustomProperties["indexRoomChoose"] } };
+            PhotonNetwork.CurrentRoom.SetCustomProperties(newProp);
+        }
+    }
+
 
     public void OnStartGameButton()
     {
