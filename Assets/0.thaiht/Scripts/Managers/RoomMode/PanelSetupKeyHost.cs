@@ -1,10 +1,13 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Realtime;
 
-public class PanelSetupKeyHost : MonoBehaviour
+
+public class PanelSetupKeyHost : MonoBehaviourPunCallbacks
 {
     [Header("MapChoose")]
     public int indexMap = 0;
@@ -20,22 +23,24 @@ public class PanelSetupKeyHost : MonoBehaviour
     [Header("DataMap")]
     [SerializeField] DataMapScriptableObj dataMapScriptableObj;
 
-    
+
     void Awake()
     {
-        
+
     }
     #region SUBSCRIBE
-    private void OnEnable()
+    public override void OnEnable()
     {
+        base.OnEnable();
         btnLeftMap.onClick.AddListener(OnClickLeftMap);
         btnRightMap.onClick.AddListener(OnClickRightMap);
 
         btnLeftTime.onClick.AddListener(OnClickLeftTime);
         btnRightTime.onClick.AddListener(OnClickRightTime);
     }
-    private void OnDisable()
+    public override void OnDisable()
     {
+        base.OnDisable();
         btnLeftMap.onClick.RemoveListener(OnClickLeftMap);
         btnRightMap.onClick.RemoveListener(OnClickRightMap);
 
@@ -43,16 +48,32 @@ public class PanelSetupKeyHost : MonoBehaviour
         btnRightTime.onClick.RemoveListener(OnClickRightTime);
     }
     #endregion
-    
+
     void Start()
     {
-        
+
     }
 
+    public void ActiveButtonArrows(bool isActive)
+    {
+        btnLeftMap.gameObject.SetActive(isActive);
+        btnRightMap.gameObject.SetActive(isActive);
+        btnLeftTime.gameObject.SetActive(isActive);
+        btnRightTime.gameObject.SetActive(isActive);
+    }
+
+    public override void OnLeftRoom()
+    {
+        SetMapChoose(0);
+        SetTimeChoose(0);
+    }
+
+    [PunRPC]
     public void SetMapChoose(int index)
     {
         imgMapChoose.sprite = dataMapScriptableObj.listSpriteMap[index];
     }
+    [PunRPC]
     public void SetTimeChoose(int index)
     {
         txtTimeChoose.text = listTimeChooseData[index].ToString() + "s";
@@ -60,7 +81,7 @@ public class PanelSetupKeyHost : MonoBehaviour
 
     public void OnClickLeftMap()
     {
-        if(indexMap == 0)
+        if (indexMap == 0)
         {
             indexMap = dataMapScriptableObj.listSpriteMap.Count - 1;
         }
@@ -68,7 +89,8 @@ public class PanelSetupKeyHost : MonoBehaviour
         {
             indexMap -= 1;
         }
-        SetMapChoose(indexMap);
+        //SetMapChoose(indexMap);
+        photonView.RPC(nameof(SetMapChoose), RpcTarget.AllBufferedViaServer, indexMap);
     }
     public void OnClickRightMap()
     {
@@ -80,7 +102,8 @@ public class PanelSetupKeyHost : MonoBehaviour
         {
             indexMap += 1;
         }
-        SetMapChoose(indexMap);
+        //SetMapChoose(indexMap);
+        photonView.RPC(nameof(SetMapChoose), RpcTarget.AllBufferedViaServer, indexMap);
     }
 
     public void OnClickLeftTime()
@@ -93,7 +116,8 @@ public class PanelSetupKeyHost : MonoBehaviour
         {
             indexTime -= 1;
         }
-        SetTimeChoose(indexTime);
+        //SetTimeChoose(indexTime);
+        photonView.RPC(nameof(SetTimeChoose), RpcTarget.AllBufferedViaServer, indexTime);
     }
     public void OnClickRightTime()
     {
@@ -105,7 +129,8 @@ public class PanelSetupKeyHost : MonoBehaviour
         {
             indexTime += 1;
         }
-        SetTimeChoose(indexTime);
+        //SetTimeChoose(indexTime);
+        photonView.RPC(nameof(SetTimeChoose), RpcTarget.AllBufferedViaServer, indexTime);
     }
 
 

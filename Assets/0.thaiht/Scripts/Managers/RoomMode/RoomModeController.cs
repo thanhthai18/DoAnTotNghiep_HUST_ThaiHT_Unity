@@ -260,13 +260,20 @@ public class RoomModeController : MonoBehaviourPunCallbacks
                 value.keyHostIcon.SetActive(true);
                 value.btnReady.gameObject.SetActive(false);
                 value.imgReadyIcon.gameObject.SetActive(false);
-                panelSetupKeyHost_MapTime.gameObject.SetActive(true);
             }
             else
             {
                 value.keyHostIcon.SetActive(false);
-                panelSetupKeyHost_MapTime.gameObject.SetActive(false);
             }
+        }
+
+        if (PhotonNetwork.LocalPlayer.IsMasterClient)
+        {
+            panelSetupKeyHost_MapTime.ActiveButtonArrows(true);
+        }
+        else
+        {
+            panelSetupKeyHost_MapTime.ActiveButtonArrows(false);
         }
 
         CheckActiveBtnKickPlayer();
@@ -286,6 +293,9 @@ public class RoomModeController : MonoBehaviourPunCallbacks
         //}
 
     }
+
+   
+
     private void ClearRoomListView()
     {
         foreach (SlotRoomSelect entry in listRoomEntry.Values)
