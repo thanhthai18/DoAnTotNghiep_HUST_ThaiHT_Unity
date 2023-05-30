@@ -12,15 +12,59 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8882fb8fe814f5144b18b7569be33c1c, type: 3}
   m_Name: DataMap
   m_EditorClassIdentifier: 
-  listSpriteMap:
-  - {fileID: 21300000, guid: fe4ceba8b8130f54bbb7d0ec46ea064e, type: 3}
-  - {fileID: 21300000, guid: 26e9d16b7fe168c419b07704580d5376, type: 3}
-  - {fileID: 21300000, guid: 1dcdd34bdee5bc84ab5e20ecd452a04d, type: 3}
-  - {fileID: 21300000, guid: c52c86bc8b6e01a4c9286b4b1387ee85, type: 3}
-  - {fileID: 21300000, guid: 4fa3d4c18f971fb4d93126d1b294a824, type: 3}
-  - {fileID: 21300000, guid: bb386690e3ceb40449ef3eaa6e14abe0, type: 3}
-  - {fileID: 21300000, guid: fd860a2b52e1b6d489dbf25c53611d73, type: 3}
-  - {fileID: 21300000, guid: a86ef8d46e4975e4faca1dcbb0a7f4fd, type: 3}
-  - {fileID: 21300000, guid: 24591c4d48c411f41a099fdf85634e5d, type: 3}
-  - {fileID: 21300000, guid: d4d3ef58ac0696d42b1ca67622f14ddc, type: 3}
-  - {fileID: 21300000, guid: c2c4636c31792784594b25fc4d9ce081, type: 3}
+  listMapInfo:
+  - id: 0
+    spriteMap: {fileID: 21300000, guid: fe4ceba8b8130f54bbb7d0ec46ea064e, type: 3}
+    radiusVector: {x: 7.315, y: 3.92}
+    offsetPosition: {x: 0.21, y: 0}
+    brightnessHandle: 1
+  - id: 1
+    spriteMap: {fileID: 21300000, guid: 26e9d16b7fe168c419b07704580d5376, type: 3}
+    radiusVector: {x: 6.845, y: 3.81}
+    offsetPosition: {x: -0.13, y: 0}
+    brightnessHandle: 0.8773585
+  - id: 2
+    spriteMap: {fileID: 21300000, guid: 1dcdd34bdee5bc84ab5e20ecd452a04d, type: 3}
+    radiusVector: {x: 6.845, y: 3.81}
+    offsetPosition: {x: -0.17, y: -0.15}
+    brightnessHandle: 0.8962264
+  - id: 3
+    spriteMap: {fileID: 21300000, guid: c52c86bc8b6e01a4c9286b4b1387ee85, type: 3}
+    radiusVector: {x: 7.665, y: 4.355}
+    offsetPosition: {x: -0.19, y: 0}
+    brightnessHandle: 1
+  - id: 4
+    spriteMap: {fileID: 21300000, guid: 4fa3d4c18f971fb4d93126d1b294a824, type: 3}
+    radiusVector: {x: 6.38, y: 3.525}
+    offsetPosition: {x: 0, y: -0.22}
+    brightnessHandle: 1
+  - id: 5
+    spriteMap: {fileID: 21300000, guid: bb386690e3ceb40449ef3eaa6e14abe0, type: 3}
+    radiusVector: {x: 7.115, y: 4.6}
+    offsetPosition: {x: 0.1, y: 0}
+    brightnessHandle: 0.9622642
+  - id: 6
+    spriteMap: {fileID: 21300000, guid: fd860a2b52e1b6d489dbf25c53611d73, type: 3}
+    radiusVector: {x: 5.89, y: 3.405}
+    offsetPosition: {x: 0, y: 0}
+    brightnessHandle: 1
+  - id: 7
+    spriteMap: {fileID: 21300000, guid: a86ef8d46e4975e4faca1dcbb0a7f4fd, type: 3}
+    radiusVector: {x: 6.805, y: 3.76}
+    offsetPosition: {x: 0.35, y: -0.09}
+    brightnessHandle: 1
+  - id: 8
+    spriteMap: {fileID: 21300000, guid: 24591c4d48c411f41a099fdf85634e5d, type: 3}
+    radiusVector: {x: 5.92, y: 3.19}
+    offsetPosition: {x: 0.21, y: 0.24}
+    brightnessHandle: 1
+  - id: 9
+    spriteMap: {fileID: 21300000, guid: d4d3ef58ac0696d42b1ca67622f14ddc, type: 3}
+    radiusVector: {x: 6.31, y: 3.575}
+    offsetPosition: {x: -0.39, y: 0.15}
+    brightnessHandle: 1
+  - id: 10
+    spriteMap: {fileID: 21300000, guid: c2c4636c31792784594b25fc4d9ce081, type: 3}
+    radiusVector: {x: 6.8, y: 3.54}
+    offsetPosition: {x: -0.25, y: -0.22}
+    brightnessHandle: 1

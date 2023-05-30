@@ -71,7 +71,7 @@ public class PanelSetupKeyHost : MonoBehaviourPunCallbacks
     [PunRPC]
     public void SetMapChoose(int index)
     {
-        imgMapChoose.sprite = dataMapScriptableObj.listSpriteMap[index];
+        imgMapChoose.sprite = dataMapScriptableObj.listMapInfo[index].spriteMap;
     }
     [PunRPC]
     public void SetTimeChoose(int index)
@@ -83,7 +83,7 @@ public class PanelSetupKeyHost : MonoBehaviourPunCallbacks
     {
         if (indexMap == 0)
         {
-            indexMap = dataMapScriptableObj.listSpriteMap.Count - 1;
+            indexMap = dataMapScriptableObj.listMapInfo.Count - 1;
         }
         else
         {
@@ -94,7 +94,7 @@ public class PanelSetupKeyHost : MonoBehaviourPunCallbacks
     }
     public void OnClickRightMap()
     {
-        if (indexMap == dataMapScriptableObj.listSpriteMap.Count - 1)
+        if (indexMap == dataMapScriptableObj.listMapInfo.Count - 1)
         {
             indexMap = 0;
         }
