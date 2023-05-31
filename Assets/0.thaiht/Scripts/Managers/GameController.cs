@@ -5,8 +5,7 @@ using UnityEngine;
 
 public class GameController : StaticInstance<GameController>
 {
-    public static event Action<GameState> OnBeforeStateChanged;
-    public static event Action<GameState> OnAfterStateChanged;
+
 
     //public GameState State { get; private set; }
 
@@ -79,13 +78,3 @@ public class GameController : StaticInstance<GameController>
 /// You can use a similar manager for controlling your menu states or dynamic-cinematics, etc
 /// </summary>
 //[Serializable]
-public enum GameState
-{
-    Starting = 0,
-    SpawningHeroes = 1,
-    SpawningEnemies = 2,
-    HeroTurn = 3,
-    EnemyTurn = 4,
-    Win = 5,
-    Lose = 6,
-}
