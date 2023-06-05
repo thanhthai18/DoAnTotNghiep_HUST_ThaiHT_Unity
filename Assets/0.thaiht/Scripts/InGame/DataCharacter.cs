@@ -16,8 +16,12 @@ public class Character
 {
     public int id;
     public Sprite characterSprite;
-    public float speed;
     public float weight;
+    public float moveSpeed;
+    public float dragRigidbody;
+    public float dashingTime;
+    public float dashDistance;
+    public float pushForce;
     public SkillCharacter mySkill;
     public GameObject characterPrefab;
 }

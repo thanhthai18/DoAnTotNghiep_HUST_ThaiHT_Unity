@@ -6,6 +6,7 @@ public static class GlobalValue
 {
     public static int countData;
     public static ModeGame currentModeGame;
+    public static int indexCharacterTransfer;
 }
 
 public static class MyPlayerValue

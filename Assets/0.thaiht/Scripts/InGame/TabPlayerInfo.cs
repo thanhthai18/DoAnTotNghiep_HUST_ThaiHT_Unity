@@ -62,7 +62,7 @@ namespace thaiht20183826
         {
             btnTab.interactable = false;
             selfRectTransform.DOKill();
-            selfRectTransform.DOAnchorPos(archorPosShow, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
+            selfRectTransform.DOAnchorPos(archorPosShow, 0.3f).SetEase(Ease.Linear).OnComplete(() =>
             {
                 imgBtnTab.transform.localScale = new Vector3(-1,1,1);
                 btnTab.interactable = true;
@@ -72,7 +72,7 @@ namespace thaiht20183826
         {
             selfRectTransform.DOKill();
             btnTab.interactable = false;
-            selfRectTransform.DOAnchorPos(archorPosHide, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
+            selfRectTransform.DOAnchorPos(archorPosHide, 0.3f).SetEase(Ease.Linear).OnComplete(() =>
             {
                 imgBtnTab.transform.localScale = Vector3.one;
                 btnTab.interactable = true;

@@ -420,7 +420,8 @@ public class RoomModeController : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.PlayerList.Length >= 1 && PhotonNetwork.PlayerList.Length < 5)
         {
-            NetworkManager.instance.photonView.RPC("ChangeScene", RpcTarget.All, "MainGameScene");
+            //NetworkManager.instance.photonView.RPC("ChangeScene", RpcTarget.All, "MainGameScene");
+            NetworkManager.instance.ChangeScene("MainGameScene");
             PhotonNetwork.CurrentRoom.IsOpen = false;
             PhotonNetwork.CurrentRoom.IsVisible = false;
 

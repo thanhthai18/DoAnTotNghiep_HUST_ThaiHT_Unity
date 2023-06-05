@@ -120,6 +120,7 @@ public class PlayerChoose : MonoBehaviour
     {
         currentCharacter = character;
         imgCharacterIcon.sprite = currentCharacter.characterSprite;
+        GlobalValue.indexCharacterTransfer = currentCharacter.id;
     }
 
     public void OnClickLeftBtn()
