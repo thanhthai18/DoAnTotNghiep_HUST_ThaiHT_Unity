@@ -132,9 +132,11 @@ namespace thaiht20183826
         
         public void SpawnPlayer()
         {
-            Debug.Log($"Call InitPlayer + {GlobalValue.indexCharacterTransfer}");
+            Debug.Log($"Call InitPlayer + {(int)PhotonNetwork.LocalPlayer.CustomProperties["characterIndex"]}");
+            var dataSpawn = dataCharacterScriptableObj.listCharacter[(int)PhotonNetwork.LocalPlayer.CustomProperties["characterIndex"]];
+            playerGamePlayPrefabPath = dataSpawn.characterPrefab.name;
             PlayerGamePlay playerGamePlay = PhotonNetwork.Instantiate(playerGamePlayPrefabPath, Vector2.zero, Quaternion.identity).GetComponent<PlayerGamePlay>();
-            playerGamePlay.photonView.RPC("InitPlayer", RpcTarget.All, PhotonNetwork.LocalPlayer, dataCharacterScriptableObj.listCharacter[GlobalValue.indexCharacterTransfer]);
+            playerGamePlay.photonView.RPC("InitPlayer", RpcTarget.All, PhotonNetwork.LocalPlayer, dataSpawn);
         }
 
         /*---------------------------------------*/

@@ -51,6 +51,7 @@ namespace thaiht20183826
         [SerializeField] int id_Character;
         public Sprite myAvatar;
         public int countDead;
+        Vector3 beginScale;
 
 
 
@@ -74,35 +75,40 @@ namespace thaiht20183826
         {
             rig.drag = dragRigidbody;
             isCanControl = true;
+            beginScale = transform.localScale;
         }
 
         private void Update()
         {
-            if (isCanControl)
+            if (photonView.IsMine)
             {
-                if (id_Character == 0)
+                if (isCanControl)
                 {
-                    Move();
-
-                    if (Input.GetKeyDown(KeyCode.A))
+                    if (id_Character == 0)
                     {
+                        Move();
 
-                        DashSkill();
+                        if (Input.GetKeyDown(KeyCode.A))
+                        {
 
-                    }
+                            DashSkill();
+
+                        }
 
 
-                    if (isDashing)
-                    {
-                        //rig.velocity = dashingDir.normalized * dashingVelocity;
-                        //rig.AddForce(dashingDir.normalized * 0.5f, ForceMode2D.Impulse);
-                        newPositionDash = Vector3.Lerp(dashOrigin, dashDestination, DashCurve.Evaluate(dashTimer / dashingTime));
-                        dashTimer += Time.deltaTime;
-                        rig.MovePosition(newPositionDash);
-                        //transform.position = Vector2.Lerp(transform.position, newPositionDash, dashTimer);
-                        return;
+                        if (isDashing)
+                        {
+                            //rig.velocity = dashingDir.normalized * dashingVelocity;
+                            //rig.AddForce(dashingDir.normalized * 0.5f, ForceMode2D.Impulse);
+                            newPositionDash = Vector3.Lerp(dashOrigin, dashDestination, DashCurve.Evaluate(dashTimer / dashingTime));
+                            dashTimer += Time.deltaTime;
+                            rig.MovePosition(newPositionDash);
+                            //transform.position = Vector2.Lerp(transform.position, newPositionDash, dashTimer);
+                            return;
+                        }
                     }
                 }
+
             }
 
 
@@ -135,6 +141,24 @@ namespace thaiht20183826
         {
             float x = Input.GetAxis("Horizontal");
             float y = Input.GetAxis("Vertical");
+            if (x >= 0)
+            {
+                if (transform.localScale.x != beginScale.x)
+                {
+                    transform.localScale = beginScale;
+                    var childParticleScale = transform.GetChild(0).localScale;
+                    transform.GetChild(0).localScale = new Vector3(-childParticleScale.x, childParticleScale.y, childParticleScale.z);
+                }
+            }
+            else
+            {
+                if (transform.localScale.x != -beginScale.x)
+                {
+                    transform.localScale = new Vector3(-1 * beginScale.x, beginScale.y, beginScale.z);
+                    var childParticleScale = transform.GetChild(0).localScale;
+                    transform.GetChild(0).localScale = new Vector3(-childParticleScale.x, childParticleScale.y, childParticleScale.z);
+                }
+            }
 
             // Vận tốc sẽ liên tục tăng
             // Được kiềm lại bằng Linear Drag của rigidbody2D ( có thể thay thế việc này bằng code chay)
@@ -165,10 +189,29 @@ namespace thaiht20183826
                 dashOrigin = transform.position;
                 dashDestination = (Vector2)transform.position + dashingDir.normalized * dashDistance;
 
+                if (PhotonNetwork.IsConnected)
+                {
+                    photonView.RPC(nameof(DashFeedbackEffect), RpcTarget.All, true);
+                }
+                else
+                {
+                    DashFeedbackEffect(true);
+                }
 
-                playerFeedback_Dash.PlayFeedbacks();
 
                 StartCoroutine(StopDashing());
+            }
+        }
+        [PunRPC]
+        public void DashFeedbackEffect(bool isPlay)
+        {
+            if (isPlay)
+            {
+                playerFeedback_Dash.PlayFeedbacks();
+            }
+            else
+            {
+                playerFeedback_Dash.StopFeedbacks();
             }
         }
 
@@ -178,7 +221,14 @@ namespace thaiht20183826
             isDashing = false;
             canDash = true;
             dashTimer = 0;
-            playerFeedback_Dash.StopFeedbacks();
+            if (PhotonNetwork.IsConnected)
+            {
+                photonView.RPC(nameof(DashFeedbackEffect), RpcTarget.All, false);
+            }
+            else
+            {
+                DashFeedbackEffect(false);
+            }
         }
 
         private void OnCollisionEnter2D(Collision2D collision)

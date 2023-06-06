@@ -15,7 +15,6 @@ MonoBehaviour:
   listCharacter:
   - id: 0
     characterSprite: {fileID: 21300000, guid: ccc49337a90380847ac6a43455cd9b31, type: 3}
-    speed: 5
     weight: 5
     moveSpeed: 10
     dragRigidbody: 3
@@ -23,11 +22,10 @@ MonoBehaviour:
     dashDistance: 2
     pushForce: 3
     mySkill: 0
-    characterPrefab: {fileID: 2433797733483435184, guid: 2b74537331479d84aa343954837c9a55,
+    characterPrefab: {fileID: 2840530604279137823, guid: b526f1cab5397a945a387172f00662cf,
       type: 3}
   - id: 1
     characterSprite: {fileID: 21300000, guid: c39b937104c4d4c44a9df22daf290658, type: 3}
-    speed: 8
     weight: 4
     moveSpeed: 10
     dragRigidbody: 3
@@ -35,11 +33,10 @@ MonoBehaviour:
     dashDistance: 2
     pushForce: 3
     mySkill: 1
-    characterPrefab: {fileID: 2433797733483435184, guid: 2b74537331479d84aa343954837c9a55,
+    characterPrefab: {fileID: 2840530604279137823, guid: 895be4b584fc31b44ad3de592bf53973,
       type: 3}
   - id: 2
     characterSprite: {fileID: 21300000, guid: 9f5b38a12b1926744be2a8924617a1db, type: 3}
-    speed: 3
     weight: 6
     moveSpeed: 10
     dragRigidbody: 3
@@ -47,11 +44,10 @@ MonoBehaviour:
     dashDistance: 2
     pushForce: 3
     mySkill: 2
-    characterPrefab: {fileID: 2433797733483435184, guid: 2b74537331479d84aa343954837c9a55,
+    characterPrefab: {fileID: 7468868049246088623, guid: 101c46d739eac824c9321746000d7a9e,
       type: 3}
   - id: 3
     characterSprite: {fileID: 21300000, guid: c94a7b0afcacc4449991a71d9cbbcc27, type: 3}
-    speed: 1
     weight: 10
     moveSpeed: 10
     dragRigidbody: 3
@@ -59,5 +55,5 @@ MonoBehaviour:
     dashDistance: 2
     pushForce: 3
     mySkill: 3
-    characterPrefab: {fileID: 2433797733483435184, guid: 2b74537331479d84aa343954837c9a55,
+    characterPrefab: {fileID: 2840530604279137823, guid: 895be4b584fc31b44ad3de592bf53973,
       type: 3}
