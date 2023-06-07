@@ -33,7 +33,7 @@ MonoBehaviour:
     dashDistance: 2
     pushForce: 3
     mySkill: 1
-    characterPrefab: {fileID: 2840530604279137823, guid: 895be4b584fc31b44ad3de592bf53973,
+    characterPrefab: {fileID: 8822590998322489314, guid: 895be4b584fc31b44ad3de592bf53973,
       type: 3}
   - id: 2
     characterSprite: {fileID: 21300000, guid: 9f5b38a12b1926744be2a8924617a1db, type: 3}
@@ -44,7 +44,7 @@ MonoBehaviour:
     dashDistance: 2
     pushForce: 3
     mySkill: 2
-    characterPrefab: {fileID: 7468868049246088623, guid: 101c46d739eac824c9321746000d7a9e,
+    characterPrefab: {fileID: 3377668862741075602, guid: 101c46d739eac824c9321746000d7a9e,
       type: 3}
   - id: 3
     characterSprite: {fileID: 21300000, guid: c94a7b0afcacc4449991a71d9cbbcc27, type: 3}
@@ -55,5 +55,5 @@ MonoBehaviour:
     dashDistance: 2
     pushForce: 3
     mySkill: 3
-    characterPrefab: {fileID: 2840530604279137823, guid: 895be4b584fc31b44ad3de592bf53973,
+    characterPrefab: {fileID: 2154781857891577842, guid: 4e001c32eefc45f4d981fbfa96d534da,
       type: 3}
