@@ -7,12 +7,12 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "DataCharacter", menuName = "Data/DataCharacter", order = 0)]
 public class DataCharacter : ScriptableObject
 {
-    public List<Character> listCharacter = new List<Character>();
+    public List<CharacterData> listCharacter = new List<CharacterData>();
    
 }
 
 [Serializable]
-public class Character
+public class CharacterData
 {
     public int id;
     public Sprite characterSprite;

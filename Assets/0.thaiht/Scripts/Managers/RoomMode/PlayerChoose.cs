@@ -26,7 +26,7 @@ public class PlayerChoose : MonoBehaviour
     private int ownerId;
     private bool isPlayerReady;
 
-    public Character currentCharacter;
+    public CharacterData currentCharacter;
     public Player myPlayerPhoton;
     public int myIndexCharacter;
 
@@ -116,7 +116,7 @@ public class PlayerChoose : MonoBehaviour
         btnReady.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = playerReady ? "Cancel" : "Ready";
         imgReadyIcon.enabled = playerReady;
     }
-    public void SetPlayerCharacter(Character character)
+    public void SetPlayerCharacter(CharacterData character)
     {
         currentCharacter = character;
         imgCharacterIcon.sprite = currentCharacter.characterSprite;

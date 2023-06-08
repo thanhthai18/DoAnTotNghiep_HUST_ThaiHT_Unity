@@ -10364,6 +10364,7 @@ MonoBehaviour:
   moveSpeed: 10
   dragRigidbody: 3
   rig: {fileID: 8822590998322489321}
+  selfCharacterScript: {fileID: 0}
   dashingTime: 0.2
   dashDistance: 2
   DashCurve:
@@ -10391,6 +10392,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   playerFeedback_Dash: {fileID: 8822590997317586271}
+  playerFeedback_Dash_Particle: {fileID: 0}
   pushForce: 3
   isCanControl: 0
   id_Photon: 0

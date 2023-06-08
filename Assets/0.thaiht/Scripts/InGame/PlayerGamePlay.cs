@@ -25,7 +25,7 @@ namespace thaiht20183826
         [Space(10)]
         [Header("Components")]
         public Rigidbody2D rig;
-
+        public CharacterScript selfCharacterScript;
 
         [Space(10)]
         [Header("Dash Info")]
@@ -40,6 +40,7 @@ namespace thaiht20183826
         Vector2 newPositionDash;
         public AnimationCurve DashCurve = new AnimationCurve(new Keyframe(0f, 0f), new Keyframe(1f, 1f));
         [SerializeField] private MMF_Player playerFeedback_Dash;
+        [SerializeField] private MMFeedbackParticles playerFeedback_Dash_Particle;
         public float pushForce;
 
         [Space(10)]
@@ -59,6 +60,8 @@ namespace thaiht20183826
         void Awake()
         {
             rig = GetComponent<Rigidbody2D>();
+            selfCharacterScript = GetComponent<CharacterScript>();
+            playerFeedback_Dash_Particle = playerFeedback_Dash.GetComponent<MMFeedbackParticles>();
         }
         #region SUBSCRIBE
         private void OnEnable()
@@ -76,6 +79,7 @@ namespace thaiht20183826
             rig.drag = dragRigidbody;
             isCanControl = true;
             beginScale = transform.localScale;
+            selfCharacterScript.AnimIdle();
         }
 
         private void Update()
@@ -88,7 +92,7 @@ namespace thaiht20183826
                     {
                         Move();
 
-                        if (Input.GetKeyDown(KeyCode.A))
+                        if (Input.GetKeyDown(KeyCode.Space))
                         {
 
                             DashSkill();
@@ -115,7 +119,7 @@ namespace thaiht20183826
         }
 
         [PunRPC]
-        public void InitPlayer(Player player, Character data)
+        public void InitPlayer(Player player, CharacterData data)
         {
             //Player
             photonPlayer = player;
@@ -141,7 +145,18 @@ namespace thaiht20183826
         {
             float x = Input.GetAxis("Horizontal");
             float y = Input.GetAxis("Vertical");
-            if (x >= 0)
+            if (!isDashing && isCanControl)
+            {
+                if (x != 0 || y != 0)
+                {
+                    selfCharacterScript.AnimRun();
+                }
+                else if(x == 0 && y == 0)
+                {
+                    selfCharacterScript.AnimIdle();
+                }
+            }
+            if (x > 0)
             {
                 if (transform.localScale.x != beginScale.x)
                 {
@@ -150,7 +165,7 @@ namespace thaiht20183826
                     transform.GetChild(0).localScale = new Vector3(-childParticleScale.x, childParticleScale.y, childParticleScale.z);
                 }
             }
-            else
+            else if(x < 0)
             {
                 if (transform.localScale.x != -beginScale.x)
                 {
@@ -177,6 +192,7 @@ namespace thaiht20183826
             if (canDash)
             {
                 Debug.Log("Dash");
+                selfCharacterScript.AnimSkill();
                 isDashing = true; //trigger dash
                 canDash = false;
                 dashingDir = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
@@ -208,10 +224,12 @@ namespace thaiht20183826
             if (isPlay)
             {
                 playerFeedback_Dash.PlayFeedbacks();
+                //playerFeedback_Dash_Particle.Play(transform.position);
             }
             else
             {
                 playerFeedback_Dash.StopFeedbacks();
+                //playerFeedback_Dash_Particle.Stop(transform.position);
             }
         }
 

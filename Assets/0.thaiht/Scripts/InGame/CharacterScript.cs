@@ -61,6 +61,44 @@ namespace thaiht20183826
             }
         }
 
-        
+        public virtual void AnimIdle()
+        {
+            if (isSpine)
+            {
+                if (anim.AnimationName != anim_idle)
+                {
+                    PlayAnim(anim, anim_idle, true);
+                }
+            }
+
+        }
+        public virtual void AnimRun()
+        {
+            if (isSpine)
+            {
+                if (anim.AnimationName != anim_run)
+                {
+                    PlayAnim(anim, anim_run, true);
+                }
+            }
+
+        }
+        public virtual void AnimSkill()
+        {
+            if (isSpine)
+            {
+                PlayAnim(anim, anim_skill, true);
+            }
+
+        }
+        public virtual void AnimDie()
+        {
+            if (isSpine)
+            {
+                PlayAnim(anim, anim_die, true);
+            }
+        }
+
+
     }
 }
