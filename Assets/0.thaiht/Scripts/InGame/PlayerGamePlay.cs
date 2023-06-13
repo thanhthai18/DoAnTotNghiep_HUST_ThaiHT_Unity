@@ -6,7 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
-
+using System;
 
 namespace thaiht20183826
 {
@@ -52,8 +52,15 @@ namespace thaiht20183826
         [SerializeField] int id_Character;
         public Sprite myAvatar;
         public int countDead;
+        public int countHeart;
         Vector3 beginScale;
+        public int scoreRank;
 
+
+        public static event Action<PlayerGamePlay> OnPlayerOutAreaMap;
+        public static event Action<PlayerGamePlay> OnPlayerDaHoiSinh;
+        public static event Action<int, int> OnSetCountScoreLifePlayer;
+        public static event Action OnPlayerLostByHeart;
 
 
 
@@ -88,28 +95,25 @@ namespace thaiht20183826
             {
                 if (isCanControl)
                 {
-                    if (id_Character == 0)
+                    Move();
+
+                    if (Input.GetKeyDown(KeyCode.Space))
                     {
-                        Move();
 
-                        if (Input.GetKeyDown(KeyCode.Space))
-                        {
+                        DashSkill();
 
-                            DashSkill();
-
-                        }
+                    }
 
 
-                        if (isDashing)
-                        {
-                            //rig.velocity = dashingDir.normalized * dashingVelocity;
-                            //rig.AddForce(dashingDir.normalized * 0.5f, ForceMode2D.Impulse);
-                            newPositionDash = Vector3.Lerp(dashOrigin, dashDestination, DashCurve.Evaluate(dashTimer / dashingTime));
-                            dashTimer += Time.deltaTime;
-                            rig.MovePosition(newPositionDash);
-                            //transform.position = Vector2.Lerp(transform.position, newPositionDash, dashTimer);
-                            return;
-                        }
+                    if (isDashing)
+                    {
+                        //rig.velocity = dashingDir.normalized * dashingVelocity;
+                        //rig.AddForce(dashingDir.normalized * 0.5f, ForceMode2D.Impulse);
+                        newPositionDash = Vector3.Lerp(dashOrigin, dashDestination, DashCurve.Evaluate(dashTimer / dashingTime));
+                        dashTimer += Time.deltaTime;
+                        rig.MovePosition(newPositionDash);
+                        //transform.position = Vector2.Lerp(transform.position, newPositionDash, dashTimer);
+                        return;
                     }
                 }
 
@@ -119,7 +123,7 @@ namespace thaiht20183826
         }
 
         [PunRPC]
-        public void InitPlayer(Player player, CharacterData data)
+        public void InitPlayer(Player player, int indexDataCharacter)
         {
             //Player
             photonPlayer = player;
@@ -129,15 +133,27 @@ namespace thaiht20183826
             {
                 rig.isKinematic = true;
             }
+            else
+            {
+                scoreRank = MyPlayerValue.rankScore;
+            }
 
             //Character
-            id_Character = data.id;
-            moveSpeed = data.moveSpeed;
-            dashingTime = data.dashingTime;
-            dashDistance = data.dashDistance;
-            myTypeSkill = data.mySkill;
-            rig.mass = data.weight;
-            myAvatar = data.characterSprite;
+            var data = GamePlayController.instance.dataCharacterScriptableObj.listCharacter[indexDataCharacter];
+            if (data != null)
+            {
+                id_Character = data.id;
+                moveSpeed = data.moveSpeed;
+                dashingTime = data.dashingTime;
+                dashDistance = data.dashDistance;
+                myTypeSkill = data.mySkill;
+                rig.mass = data.weight;
+                myAvatar = data.characterSprite;
+            }
+
+
+            //Tab
+            GamePlayController.instance.gamePlayView.tabPlayerInfo.SpawnPlayerTab(id_Photon, MyPlayerValue.playerName, myAvatar, GlobalValue.currentModeGame);
         }
 
 
@@ -151,7 +167,7 @@ namespace thaiht20183826
                 {
                     selfCharacterScript.AnimRun();
                 }
-                else if(x == 0 && y == 0)
+                else if (x == 0 && y == 0)
                 {
                     selfCharacterScript.AnimIdle();
                 }
@@ -165,7 +181,7 @@ namespace thaiht20183826
                     transform.GetChild(0).localScale = new Vector3(-childParticleScale.x, childParticleScale.y, childParticleScale.z);
                 }
             }
-            else if(x < 0)
+            else if (x < 0)
             {
                 if (transform.localScale.x != -beginScale.x)
                 {
@@ -249,6 +265,28 @@ namespace thaiht20183826
             }
         }
 
+        public void HoiSinh()
+        {
+            isCanControl = false;
+            var beginScale = transform.localScale;
+            selfCharacterScript.AnimDie();
+            FeedBackGamePlay.instance.PlayFlicker();
+            transform.DOMoveZ(transform.position.z, 1.3f).OnComplete(() =>
+            {
+                transform.DOScale(0, 0.1f).OnComplete(() =>
+                {
+                    transform.position = Vector3.zero;
+                    selfCharacterScript.AnimIdle();
+                    transform.DOScale(beginScale, 0.1f).OnComplete(() =>
+                    {
+                        isCanControl = true;
+                        OnPlayerDaHoiSinh?.Invoke(this);
+                    });
+                });
+            });
+
+        }
+
         private void OnCollisionEnter2D(Collision2D collision)
         {
             if (collision.gameObject.CompareTag("Player"))
@@ -267,6 +305,31 @@ namespace thaiht20183826
             }
         }
 
+        private void OnTriggerExit2D(Collider2D collision)
+        {
+            if (collision.CompareTag("Map"))
+            {
+                if (GlobalValue.currentModeGame == ModeGame.RoomMode)
+                {
+                    countDead++;
+                    OnSetCountScoreLifePlayer?.Invoke(id_Photon, countDead);
+                }
+                else if (GlobalValue.currentModeGame == ModeGame.RankMode)
+                {
+                    if (countHeart > 0)
+                    {
+                        countHeart--;
+                        OnSetCountScoreLifePlayer?.Invoke(id_Photon, countHeart);
+                        if(countHeart == 0)
+                        {
+                            OnPlayerLostByHeart?.Invoke();
+                        }
+                    }
+                }
+                HoiSinh();
+                OnPlayerOutAreaMap?.Invoke(this);
+            }
+        }
 
     }
 }

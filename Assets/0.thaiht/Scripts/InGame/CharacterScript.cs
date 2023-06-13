@@ -95,7 +95,7 @@ namespace thaiht20183826
         {
             if (isSpine)
             {
-                PlayAnim(anim, anim_die, true);
+                PlayAnim(anim, anim_die, false);
             }
         }
 

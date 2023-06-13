@@ -7,6 +7,7 @@ public static class GlobalValue
     public static int countData;
     public static ModeGame currentModeGame;
     public static int indexCharacterTransfer;
+    public const int LIFE_HEART_RANK_MODE = 5;
 }
 
 public static class MyPlayerValue

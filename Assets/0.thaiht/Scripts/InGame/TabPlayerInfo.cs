@@ -1,12 +1,15 @@
 using DG.Tweening;
+using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace thaiht20183826
 {
-    public class TabPlayerInfo : MonoBehaviour
+    public class TabPlayerInfo : MonoBehaviourPunCallbacks
     {
         [SerializeField] Image imgBtnTab;
         [SerializeField] RectTransform selfRectTransform;
@@ -14,10 +17,14 @@ namespace thaiht20183826
         private Vector2 archorPosHide;
         private Vector2 archorPosShow;
 
+        public List<HolderPlayerIconInTab> listHolderPlayerIconInTab = new List<HolderPlayerIconInTab>();
+        [SerializeField] HolderPlayerIconInTab holderPlayerIconInTabPrefab;
+        [SerializeField] GameObject panelTabPlayer;
+
         private bool isShow;
 
-    
-    
+
+
         void Awake()
         {
             selfRectTransform = GetComponent<RectTransform>();
@@ -29,14 +36,16 @@ namespace thaiht20183826
         #region SUBSCRIBE
         private void OnEnable()
         {
-        
+            PlayerGamePlay.OnSetCountScoreLifePlayer += CallSetTextCountLifePlayer;
         }
+
+
         private void OnDisable()
         {
-        
+            PlayerGamePlay.OnSetCountScoreLifePlayer -= CallSetTextCountLifePlayer;
         }
         #endregion
-    
+
         void Start()
         {
             isShow = false;
@@ -64,7 +73,7 @@ namespace thaiht20183826
             selfRectTransform.DOKill();
             selfRectTransform.DOAnchorPos(archorPosShow, 0.3f).SetEase(Ease.Linear).OnComplete(() =>
             {
-                imgBtnTab.transform.localScale = new Vector3(-1,1,1);
+                imgBtnTab.transform.localScale = new Vector3(-1, 1, 1);
                 btnTab.interactable = true;
             });
         }
@@ -79,6 +88,53 @@ namespace thaiht20183826
             });
         }
 
-    
+        public void SpawnPlayerTab(int idPlayer, string namePlayer, Sprite imgIconAvatar, ModeGame enumModeGame)
+        {
+            var tab = Instantiate(holderPlayerIconInTabPrefab, panelTabPlayer.transform);
+            tab.idPhoton = idPlayer;
+            tab.SetImgSpriteModeGame(enumModeGame);
+            tab.txtPlayerName.text = namePlayer;
+            tab.imgIconAvatar.sprite = imgIconAvatar;
+
+            listHolderPlayerIconInTab.Add(tab);
+            if (tab.isHeartIcon)
+            {
+                SetTextCountLifePlayer(idPlayer, GlobalValue.LIFE_HEART_RANK_MODE);
+            }
+            else
+            {
+                SetTextCountLifePlayer(idPlayer, 0);
+            }
+        }
+
+
+        public void SortCountLifeTab()
+        {
+            List<HolderPlayerIconInTab> listTmp = new List<HolderPlayerIconInTab>();
+            if (listHolderPlayerIconInTab[0].isHeartIcon)
+            {
+                listTmp = listHolderPlayerIconInTab.OrderByDescending(s => int.Parse(s.txtCount.text)).ThenBy(s =>
+                    GamePlayController.instance.GetPlayer(s.idPhoton).scoreRank).ToList();
+            }
+            else
+            {
+                listTmp = listHolderPlayerIconInTab.OrderBy(s => int.Parse(s.txtCount.text)).ThenBy(s =>
+                    GamePlayController.instance.GetPlayer(s.idPhoton).scoreRank).ToList();
+            }
+            listTmp.ForEach(s => s.gameObject.transform.SetAsLastSibling());
+            listTmp.Clear();
+        }
+
+        public void CallSetTextCountLifePlayer(int idPlayer, int count)
+        {
+            photonView.RPC(nameof(SetTextCountLifePlayer), RpcTarget.All, idPlayer, count);
+        }
+        [PunRPC]
+        private void SetTextCountLifePlayer(int idPlayer, int count)
+        {
+            var playerTab = listHolderPlayerIconInTab.First(s => s.idPhoton == idPlayer);
+            playerTab.SetTextCountLife(count);
+            SortCountLifeTab();
+        }
     }
 }

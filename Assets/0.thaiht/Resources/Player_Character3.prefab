@@ -10400,6 +10400,7 @@ MonoBehaviour:
   id_Character: 0
   myAvatar: {fileID: 0}
   countDead: 0
+  countHeart: 0
 --- !u!50 &2154781857891577849
 Rigidbody2D:
   serializedVersion: 4

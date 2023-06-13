@@ -3,6 +3,7 @@ using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace thaiht20183826
@@ -11,7 +12,7 @@ namespace thaiht20183826
     {
         public static GamePlayController instance;
 
-        [SerializeField] GamePlayView gamePlayView;
+        [SerializeField] public GamePlayView gamePlayView;
         public static event Action<GamePlayState> OnBeforeStateChanged;
         public static event Action<GamePlayState> OnAfterStateChanged;
         public static event Action<KeyCode> OnGetKey;
@@ -29,6 +30,8 @@ namespace thaiht20183826
         [Header("Data")]
         public DataCharacter dataCharacterScriptableObj;
 
+
+
         public GamePlayState State { get; private set; }
         void Awake()
         {
@@ -45,18 +48,24 @@ namespace thaiht20183826
         private void OnEnable()
         {
             base.OnEnable();
-            MapController.OnOutAreaMap += RevivalPlayer;
+            PlayerGamePlay.OnPlayerOutAreaMap += PlayerGamePlay_OnPlayerOutAreaMap;
+            PlayerGamePlay.OnPlayerDaHoiSinh += PlayerGamePlay_OnPlayerDaHoiSinh;
+            PlayerGamePlay.OnPlayerLostByHeart += PlayerGamePlay_OnPlayerLostByHeart;
         }
+
+
         private void OnDisable()
         {
             base.OnDisable();
-            MapController.OnOutAreaMap -= RevivalPlayer;
+            PlayerGamePlay.OnPlayerOutAreaMap -= PlayerGamePlay_OnPlayerOutAreaMap;
+            PlayerGamePlay.OnPlayerDaHoiSinh -= PlayerGamePlay_OnPlayerDaHoiSinh;
+            PlayerGamePlay.OnPlayerLostByHeart -= PlayerGamePlay_OnPlayerLostByHeart;
         }
         #endregion
 
         void Start()
         {
-            listPlayersGamePlay = new List<PlayerGamePlay>(PhotonNetwork.PlayerList.Length);
+            listPlayersGamePlay = new List<PlayerGamePlay>(new PlayerGamePlay[PhotonNetwork.PlayerList.Length]);
             ChangeState(GamePlayState.IM_IN_GAME);
         }
 
@@ -118,25 +127,39 @@ namespace thaiht20183826
 
 
         /*-----------------Function-----------------*/
-        public void RevivalPlayer(PlayerGamePlay playerGamePlayer)
-        {
-            playerGamePlayer.isCanControl = false;
-            var beginScale = playerGamePlayer.transform.localScale;
-            playerGamePlayer.transform.DOScale(0, 0.1f).OnComplete(() =>
-            {
-                playerGamePlayer.transform.position = Vector3.zero;
-                playerGamePlayer.transform.DOScale(beginScale, 0.1f).OnComplete(() => playerGamePlayer.isCanControl = true);
-            });
-        }
 
         
         public void SpawnPlayer()
         {
             Debug.Log($"Call InitPlayer + {(int)PhotonNetwork.LocalPlayer.CustomProperties["characterIndex"]}");
-            var dataSpawn = dataCharacterScriptableObj.listCharacter[(int)PhotonNetwork.LocalPlayer.CustomProperties["characterIndex"]];
+            int indexData = (int)PhotonNetwork.LocalPlayer.CustomProperties["characterIndex"];
+            var dataSpawn = dataCharacterScriptableObj.listCharacter[indexData];
             playerGamePlayPrefabPath = dataSpawn.characterPrefab.name;
             PlayerGamePlay playerGamePlay = PhotonNetwork.Instantiate(playerGamePlayPrefabPath, Vector2.zero, Quaternion.identity).GetComponent<PlayerGamePlay>();
-            playerGamePlay.photonView.RPC("InitPlayer", RpcTarget.All, PhotonNetwork.LocalPlayer, dataSpawn);
+            playerGamePlay.photonView.RPC("InitPlayer", RpcTarget.All, PhotonNetwork.LocalPlayer, indexData);
+
+        }
+
+
+        public PlayerGamePlay GetPlayer(int playerId)
+        {
+            return listPlayersGamePlay.First(s => s.id_Photon == playerId);
+        }
+
+        private void PlayerGamePlay_OnPlayerOutAreaMap(PlayerGamePlay playerGamePlay)
+        {
+            //Truyen diem
+            //var listTmp = gamePlayView.tabPlayerInfo.listHolderPlayerIconInTab[]
+        }
+        private void PlayerGamePlay_OnPlayerDaHoiSinh(PlayerGamePlay obj)
+        {
+            //throw new NotImplementedException();
+        }
+
+
+        private void PlayerGamePlay_OnPlayerLostByHeart()
+        {
+            Debug.Log("End Game Rank");
         }
 
         /*---------------------------------------*/

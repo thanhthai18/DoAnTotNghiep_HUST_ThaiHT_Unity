@@ -50,6 +50,9 @@ MonoBehaviour:
   - HandleImInGame
   - InitPlayer
   - DashFeedbackEffect
+  - SpawnPlayerTab
+  - SetCountLifePlayer
+  - SetTextCountLifePlayer
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

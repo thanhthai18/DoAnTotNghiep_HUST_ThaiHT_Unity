@@ -7,7 +7,6 @@ namespace thaiht20183826
 {
     public class MapController : MonoBehaviour
     {
-        public static event Action<PlayerGamePlay> OnOutAreaMap;
         [SerializeField] private DataMapScriptableObj dataMapScriptableObj;
         [SerializeField] Map currentMap;
         [SerializeField] int indexCurrentMap;
@@ -57,13 +56,7 @@ namespace thaiht20183826
             }
         }
 
-        private void OnTriggerExit2D(Collider2D collision)
-        {
-            if (collision.CompareTag("Player"))
-            {
-                OnOutAreaMap?.Invoke(collision.GetComponent<PlayerGamePlay>());
-            }
-        }
+        
 
     }
 }
