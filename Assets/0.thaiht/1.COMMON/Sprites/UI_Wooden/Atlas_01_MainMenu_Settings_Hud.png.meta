@@ -1210,7 +1210,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Atlas_01_MainMenu_Settings_Hud_27: -562557026
+      Atlas_01_MainMenu_Settings_Hud_32: -366700962
       Atlas_01_MainMenu_Settings_Hud_19: -296829057
       Atlas_01_MainMenu_Settings_Hud_20: 119694011
       Atlas_01_MainMenu_Settings_Hud_3: -296339299
@@ -1259,8 +1259,8 @@ TextureImporter:
       Atlas_01_MainMenu_Settings_Hud_28: -2019953327
       Atlas_01_MainMenu_Settings_Hud_12: -570320184
       Atlas_01_MainMenu_Settings_Hud_13: 1593987662
-      Atlas_01_MainMenu_Settings_Hud_32: -366700962
       Atlas_01_MainMenu_Settings_Hud_39: 1023778144
+      Atlas_01_MainMenu_Settings_Hud_27: -562557026
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

@@ -57,14 +57,14 @@ public class SelectModeView : View
     {
         Debug.Log("Open Room Mode");
         LoaderSystem.Loading(true);
-        NetworkManager.instance.ConnectMasterServerToOpenMode(enumMode);
+        NetworkManager.Instance.ConnectMasterServerToOpenMode(enumMode);
 
     }
     public void OpenRankMode(ModeGame enumMode)
     {
         Debug.Log("Open Rank Mode");
         LoaderSystem.Loading(true);
-        NetworkManager.instance.ConnectMasterServerToOpenMode(enumMode);
+        NetworkManager.Instance.ConnectMasterServerToOpenMode(enumMode);
     }
     public void OpenTrainingMode()
     {

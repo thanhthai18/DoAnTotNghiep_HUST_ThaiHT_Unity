@@ -1,10 +1,12 @@
-using DG.Tweening;
+﻿using DG.Tweening;
 using Photon.Pun;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+
 
 namespace thaiht20183826
 {
@@ -30,6 +32,10 @@ namespace thaiht20183826
         [Header("Data")]
         public DataCharacter dataCharacterScriptableObj;
 
+        [Header("General")]
+        public float gamePlayTime = 10; // Thời gian trò chơi (đơn vị: giây)
+        private float currentTime;
+        [SerializeField] private bool isCounting = false;
 
 
         public GamePlayState State { get; private set; }
@@ -69,16 +75,6 @@ namespace thaiht20183826
             ChangeState(GamePlayState.IM_IN_GAME);
         }
 
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Tab))
-            {
-                OnGetKey?.Invoke(KeyCode.Tab);
-            }
-        }
-
-
-
 
         /*-----------------State-----------------*/
         public void ChangeState(GamePlayState newState)
@@ -97,7 +93,10 @@ namespace thaiht20183826
                 case GamePlayState.PLAYING:
                     HandlePlaying();
                     break;
-                
+                case GamePlayState.ENDGAME:
+                    HandleEndGame();
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
             }
@@ -115,20 +114,54 @@ namespace thaiht20183826
             {
                 SpawnPlayer();
             }
+            ChangeState(GamePlayState.INTRO);
         }
         private void HandleIntro()
         {
-
+            ChangeState(GamePlayState.PLAYING);
         }
         private void HandlePlaying()
         {
-
+            if (PhotonNetwork.IsMasterClient)
+            {
+                StartCountdown(); // Chỉ khởi động đếm ngược từ Master Client
+            }
         }
-
+        private void HandleEndGame()
+        {
+            photonView.RPC(nameof(GameEndRPC), RpcTarget.All);
+        }
 
         /*-----------------Function-----------------*/
 
-        
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Tab))
+            {
+                OnGetKey?.Invoke(KeyCode.Tab);
+            }
+
+
+            if (isCounting)
+            {
+                currentTime -= Time.deltaTime;
+
+                // Gửi thời gian cập nhật cho tất cả các người chơi trong phòng
+                photonView.RPC(nameof(UpdateTimeRPC), RpcTarget.All, currentTime);
+
+                // Kiểm tra nếu thời gian kết thúc
+                if (currentTime <= 0f)
+                {
+                    if (!isEndGame)
+                    {
+                        isEndGame = true;
+                        ChangeState(GamePlayState.ENDGAME);
+                    }
+
+                }
+            }
+
+        }
         public void SpawnPlayer()
         {
             Debug.Log($"Call InitPlayer + {(int)PhotonNetwork.LocalPlayer.CustomProperties["characterIndex"]}");
@@ -162,6 +195,30 @@ namespace thaiht20183826
             Debug.Log("End Game Rank");
         }
 
+
+
+        public void StartCountdown()
+        {
+            currentTime = gamePlayTime;
+            isCounting = true;
+        }
+
+        [PunRPC]
+        private void UpdateTimeRPC(float time)
+        {
+            currentTime = time;
+            gamePlayView.SetTextTimeCount((int)currentTime);
+        }
+
+
+        [PunRPC]
+        private void GameEndRPC()
+        {
+            // Thực hiện các hành động sau khi kết thúc trò chơi (ví dụ: hiển thị kết quả cuối cùng, trở về menu, vv.)
+            isCounting = false;
+            listPlayersGamePlay.ForEach(s => s.isCanControl = false);
+            gamePlayView.ShowLeaderBoardEndGame();
+        }
         /*---------------------------------------*/
     }
 }
@@ -171,5 +228,5 @@ public enum GamePlayState
     IM_IN_GAME,
     INTRO,
     PLAYING,
-
+    ENDGAME,
 }

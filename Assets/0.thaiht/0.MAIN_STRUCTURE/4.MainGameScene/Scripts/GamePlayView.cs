@@ -1,5 +1,7 @@
+using Doozy.Runtime.UIManager.Containers;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,11 +10,13 @@ namespace thaiht20183826
     public class GamePlayView : View
     {
         public TabPlayerInfo tabPlayerInfo;
+        public TextMeshProUGUI txtTimeCounting;
+        public UIView leaderBoardEndGameView;
     
     
         void Awake()
         {
-        
+            
         }
         #region SUBSCRIBE
         private void OnEnable()
@@ -45,6 +49,16 @@ namespace thaiht20183826
                     break;
             }
         }
+        public void SetTextTimeCount(int time)
+        {
+            txtTimeCounting.text = "Time: " + time +"s";
+        }
+
+        public void ShowLeaderBoardEndGame()
+        {
+            leaderBoardEndGameView.Show();
+        }
+
         private void OnDestroy()
         {
             GamePlayController.OnGetKey -= GamePlayController_OnGetKey;

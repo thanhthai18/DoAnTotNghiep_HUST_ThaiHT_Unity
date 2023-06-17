@@ -71,7 +71,7 @@ public class SlotRoomSelect : MonoBehaviour
     }
     public void OnClickButtonJoinRoom()
     {
-        NetworkManager.instance.JoinRoom(roomName);
+        NetworkManager.Instance.JoinRoom(roomName);
     }
 
 }

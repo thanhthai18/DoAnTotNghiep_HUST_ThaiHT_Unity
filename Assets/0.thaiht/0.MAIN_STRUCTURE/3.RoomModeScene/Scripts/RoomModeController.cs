@@ -6,7 +6,7 @@ using Photon.Realtime;
 using System;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
-public class RoomModeController : MonoBehaviourPunCallbacks
+public class RoomModeController : MonoBehaviour
 {
     public static RoomModeController instance;
 
@@ -47,16 +47,59 @@ public class RoomModeController : MonoBehaviourPunCallbacks
 
     private void Start()
     {
+      
+    }
+
+    private void OnEnable()
+    {
         lobbyRoomView.btnCreateRoom.onClick.AddListener(OnClickBtnCreateRoom);
         lobbyRoomView.btnJoinRoom.onClick.AddListener(OnClickBtnJoinRoom);
         roomView.btnBack.onClick.AddListener(OnLeaveRoomButton);
         roomView.btnStartGame.onClick.AddListener(OnStartGameButton);
+
+        NetworkManager.ActionOnConnectedToMaster += HandleOnConnectedToMaster;
+        NetworkManager.ActionOnRoomListUpdate += HandleOnRoomListUpdate;
+        NetworkManager.ActionOnJoinedLobby += HandleOnJoinedLobby;
+        NetworkManager.ActionOnLeftLobby += HandleOnLeftLobby;
+        NetworkManager.ActionOnCreateRoomFailed += HandleOnCreateRoomFailed;
+        NetworkManager.ActionOnJoinRoomFailed += HandleOnJoinRoomFailed;
+        NetworkManager.ActionOnJoinedRoom += HandleOnJoinedRoom;
+        NetworkManager.ActionOnCreateRoom += HandleOnCreatedRoom;
+        NetworkManager.ActionOnLeftRoom += HandleOnLeftRoom;
+        NetworkManager.ActionOnPlayerEnterRoom += HandleOnPlayerEnteredRoom;
+        NetworkManager.ActionOnPLayerLeftRoom += HandleOnPlayerLeftRoom;
+        NetworkManager.ActionOnMasterClientSwitched += HandleOnMasterClientSwitched;
+        NetworkManager.ActionOnPlayerPropertiesUpdate += HandleOnPlayerPropertiesUpdate;
+    }
+
+ 
+
+    private void OnDisable()
+    {
+        lobbyRoomView.btnCreateRoom.onClick.RemoveAllListeners();
+        lobbyRoomView.btnJoinRoom.onClick.RemoveAllListeners();
+        roomView.btnBack.onClick.RemoveAllListeners();
+        roomView.btnStartGame.onClick.RemoveAllListeners();
+
+        NetworkManager.ActionOnConnectedToMaster -= HandleOnConnectedToMaster;
+        NetworkManager.ActionOnRoomListUpdate -= HandleOnRoomListUpdate;
+        NetworkManager.ActionOnJoinedLobby -= HandleOnJoinedLobby;
+        NetworkManager.ActionOnLeftLobby -= HandleOnLeftLobby;
+        NetworkManager.ActionOnCreateRoomFailed -= HandleOnCreateRoomFailed;
+        NetworkManager.ActionOnJoinRoomFailed -= HandleOnJoinRoomFailed;
+        NetworkManager.ActionOnJoinedRoom -= HandleOnJoinedRoom;
+        NetworkManager.ActionOnCreateRoom -= HandleOnCreatedRoom;
+        NetworkManager.ActionOnLeftRoom -= HandleOnLeftRoom;
+        NetworkManager.ActionOnPlayerEnterRoom -= HandleOnPlayerEnteredRoom;
+        NetworkManager.ActionOnPLayerLeftRoom -= HandleOnPlayerLeftRoom;
+        NetworkManager.ActionOnMasterClientSwitched -= HandleOnMasterClientSwitched;
+        NetworkManager.ActionOnPlayerPropertiesUpdate -= HandleOnPlayerPropertiesUpdate;
     }
 
 
     #region PUN CALLBACKS
 
-    public override void OnConnectedToMaster()
+    public void HandleOnConnectedToMaster()
     {
         if (!PhotonNetwork.InLobby)
         {
@@ -65,7 +108,7 @@ public class RoomModeController : MonoBehaviourPunCallbacks
         }
     }
 
-    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    public void HandleOnRoomListUpdate(List<RoomInfo> roomList)
     {
         Debug.Log("dua nhau a");
         ClearRoomListView();
@@ -74,7 +117,7 @@ public class RoomModeController : MonoBehaviourPunCallbacks
         UpdateRoomListView();
     }
 
-    public override void OnJoinedLobby()
+    public void HandleOnJoinedLobby()
     {
         // whenever this joins a new lobby, clear any previous room lists
         Debug.Log("OnJoinedLobby");
@@ -83,24 +126,22 @@ public class RoomModeController : MonoBehaviourPunCallbacks
     }
 
     // note: when a client joins / creates a room, OnLeftLobby does not get called, even if the client was in a lobby before
-    public override void OnLeftLobby()
+    public void HandleOnLeftLobby()
     {
         cachedRoomList.Clear();
         ClearRoomListView();
     }
-
-    public override void OnCreateRoomFailed(short returnCode, string message)
+    private void HandleOnCreateRoomFailed()
     {
-
+        throw new NotImplementedException();
+    }
+    private void HandleOnJoinRoomFailed()
+    {
+        throw new NotImplementedException();
     }
 
-    public override void OnJoinRoomFailed(short returnCode, string message)
-    {
 
-    }
-
-
-    public override void OnJoinedRoom()
+    public void HandleOnJoinedRoom()
     {
         // joining (or entering) a room invalidates any cached lobby room list (even if LeaveLobby was not called due to just joining a room)
         cachedRoomList.Clear();
@@ -150,14 +191,13 @@ public class RoomModeController : MonoBehaviourPunCallbacks
         //    {
         //        {"PlayerLoadedLevel", false}
         //    };
-        //PhotonNetwork.LocalPlayer.SetCustomProperties(props);
     }
-    public override void OnCreatedRoom()
+    public void HandleOnCreatedRoom()
     {
         Debug.Log("Da tao phong: " + PhotonNetwork.CurrentRoom.Name);
     }
 
-    public override void OnLeftRoom()
+    public void HandleOnLeftRoom()
     {
         ViewManager.Show<LobbyRoomView>();
 
@@ -172,7 +212,7 @@ public class RoomModeController : MonoBehaviourPunCallbacks
         playerListChoose = null;
     }
 
-    public override void OnPlayerEnteredRoom(Player newPlayer)
+    public void HandleOnPlayerEnteredRoom(Player newPlayer)
     {
         PlayerChoose entry = Instantiate(PlayerListEntryPrefab);
         entry.transform.SetParent(roomView.playerChooseParent.transform);
@@ -188,7 +228,7 @@ public class RoomModeController : MonoBehaviourPunCallbacks
         roomView.btnStartGame.gameObject.SetActive(CheckPlayersReady());
     }
 
-    public override void OnPlayerLeftRoom(Player otherPlayer)
+    public void HandleOnPlayerLeftRoom(Player otherPlayer)
     {
         //roomView.OnUpdateLobbyUI();
         Destroy(playerListChoose[otherPlayer.ActorNumber].gameObject);
@@ -197,7 +237,7 @@ public class RoomModeController : MonoBehaviourPunCallbacks
         roomView.btnStartGame.gameObject.SetActive(CheckPlayersReady());
     }
 
-    public override void OnMasterClientSwitched(Player newMasterClient)
+    public void HandleOnMasterClientSwitched(Player newMasterClient)
     {
         if (PhotonNetwork.LocalPlayer.ActorNumber == newMasterClient.ActorNumber)
         {
@@ -206,7 +246,7 @@ public class RoomModeController : MonoBehaviourPunCallbacks
         CheckKeyHost();
     }
 
-    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    public void HandleOnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
 
         if (playerListChoose == null)
@@ -384,7 +424,7 @@ public class RoomModeController : MonoBehaviourPunCallbacks
 
     public void OnClickBtnCreateRoom()
     {
-        NetworkManager.instance.CreateRoom(lobbyRoomView.inputRoomName.text);
+        NetworkManager.Instance.CreateRoom(lobbyRoomView.inputRoomName.text);
     }
     public void OnClickBtnJoinRoom()
     {
@@ -421,7 +461,7 @@ public class RoomModeController : MonoBehaviourPunCallbacks
         if (PhotonNetwork.PlayerList.Length >= 1 && PhotonNetwork.PlayerList.Length < 5)
         {
             //NetworkManager.instance.photonView.RPC("ChangeScene", RpcTarget.All, "MainGameScene");
-            NetworkManager.instance.ChangeScene("MainGameScene");
+            NetworkManager.Instance.ChangeScene("MainGameScene");
             PhotonNetwork.CurrentRoom.IsOpen = false;
             PhotonNetwork.CurrentRoom.IsVisible = false;
 

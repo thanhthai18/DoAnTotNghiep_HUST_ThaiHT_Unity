@@ -2869,7 +2869,6 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Atlas_08_Icons_96: 1316206519
       Atlas_08_Icons_59: -552302348
       Atlas_08_Icons_115: -578176744
       Atlas_08_Icons_20: -1984084321
@@ -2989,6 +2988,7 @@ TextureImporter:
       Atlas_08_Icons_16: -969513052
       Atlas_08_Icons_68: -2024116485
       Atlas_08_Icons_129: 1280669036
+      Atlas_08_Icons_96: 1316206519
       Atlas_08_Icons_32: -623768945
       Atlas_08_Icons_56: -1684058052
       Atlas_08_Icons_62: 121495354

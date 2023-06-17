@@ -53,6 +53,8 @@ MonoBehaviour:
   - SpawnPlayerTab
   - SetCountLifePlayer
   - SetTextCountLifePlayer
+  - GameEndRPC
+  - UpdateTimeRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

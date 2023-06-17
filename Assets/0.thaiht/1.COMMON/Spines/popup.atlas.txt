@@ -1,0 +1,104 @@
+
+popup.png
+size: 1916,1260
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Layer 1
+  rotate: false
+  xy: 292, 435
+  size: 823, 823
+  orig: 850, 851
+  offset: 14, 14
+  index: -1
+XP 1
+  rotate: true
+  xy: 427, 306
+  size: 37, 41
+  orig: 39, 43
+  offset: 1, 1
+  index: -1
+XP 4
+  rotate: false
+  xy: 470, 306
+  size: 39, 37
+  orig: 41, 39
+  offset: 1, 1
+  index: -1
+XP 5
+  rotate: true
+  xy: 499, 394
+  size: 39, 37
+  orig: 42, 39
+  offset: 1, 1
+  index: -1
+center
+  rotate: true
+  xy: 2, 305
+  size: 953, 288
+  orig: 955, 291
+  offset: 1, 2
+  index: -1
+center-2
+  rotate: false
+  xy: 2, 15
+  size: 952, 288
+  orig: 952, 289
+  offset: 0, 1
+  index: -1
+disk
+  rotate: false
+  xy: 1117, 518
+  size: 740, 740
+  orig: 742, 742
+  offset: 1, 1
+  index: -1
+left 1
+  rotate: false
+  xy: 1632, 296
+  size: 280, 220
+  orig: 282, 222
+  offset: 1, 1
+  index: -1
+left 2
+  rotate: true
+  xy: 956, 99
+  size: 165, 149
+  orig: 167, 151
+  offset: 1, 1
+  index: -1
+mic
+  rotate: false
+  xy: 292, 328
+  size: 133, 105
+  orig: 136, 108
+  offset: 1, 2
+  index: -1
+mic-2
+  rotate: true
+  xy: 427, 345
+  size: 88, 70
+  orig: 105, 83
+  offset: 8, 4
+  index: -1
+right 1
+  rotate: false
+  xy: 1632, 74
+  size: 280, 220
+  orig: 282, 222
+  offset: 1, 1
+  index: -1
+right 2
+  rotate: true
+  xy: 956, 266
+  size: 167, 149
+  orig: 169, 151
+  offset: 1, 1
+  index: -1
+sunray
+  rotate: false
+  xy: 1117, 2
+  size: 513, 514
+  orig: 523, 523
+  offset: 4, 5
+  index: -1
