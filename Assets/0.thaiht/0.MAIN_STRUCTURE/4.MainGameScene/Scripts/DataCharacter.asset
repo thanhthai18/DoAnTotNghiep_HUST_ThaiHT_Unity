@@ -22,7 +22,7 @@ MonoBehaviour:
     dashDistance: 2
     pushForce: 3
     mySkill: 0
-    characterPrefab: {fileID: 2840530604279137823, guid: b526f1cab5397a945a387172f00662cf,
+    characterPrefab: {fileID: 2154781857891577842, guid: e3d967e72f4fcfd41ae86b2841e29ba4,
       type: 3}
   - id: 1
     characterSprite: {fileID: 21300000, guid: c39b937104c4d4c44a9df22daf290658, type: 3}

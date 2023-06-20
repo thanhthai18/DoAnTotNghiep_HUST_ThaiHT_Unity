@@ -153,7 +153,7 @@ namespace thaiht20183826
 
 
             //Tab
-            GamePlayController.instance.gamePlayView.tabPlayerInfo.SpawnPlayerTab(id_Photon, MyPlayerValue.playerName, myAvatar, GlobalValue.currentModeGame);
+            GamePlayController.instance.gamePlayView.tabPlayerInfo.SpawnPlayerTab(id_Photon, player.NickName, myAvatar, GlobalValue.currentModeGame);
         }
 
 

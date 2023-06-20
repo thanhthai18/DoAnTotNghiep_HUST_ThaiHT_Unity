@@ -33,7 +33,7 @@ namespace thaiht20183826
         public DataCharacter dataCharacterScriptableObj;
 
         [Header("General")]
-        public float gamePlayTime = 10; // Thời gian trò chơi (đơn vị: giây)
+        public float gamePlayTime = 30; // Thời gian trò chơi (đơn vị: giây)
         private float currentTime;
         [SerializeField] private bool isCounting = false;
 
@@ -129,7 +129,8 @@ namespace thaiht20183826
         }
         private void HandleEndGame()
         {
-            photonView.RPC(nameof(GameEndRPC), RpcTarget.All);
+            int[] arrScore = Helpers.GetAddScoreRank(gamePlayView.tabPlayerInfo.listHolderPlayerIconInTab.Count).ToArray(); 
+            photonView.RPC(nameof(GameEndRPC), RpcTarget.All, arrScore);
         }
 
         /*-----------------Function-----------------*/
@@ -169,7 +170,7 @@ namespace thaiht20183826
             var dataSpawn = dataCharacterScriptableObj.listCharacter[indexData];
             playerGamePlayPrefabPath = dataSpawn.characterPrefab.name;
             PlayerGamePlay playerGamePlay = PhotonNetwork.Instantiate(playerGamePlayPrefabPath, Vector2.zero, Quaternion.identity).GetComponent<PlayerGamePlay>();
-            playerGamePlay.photonView.RPC("InitPlayer", RpcTarget.All, PhotonNetwork.LocalPlayer, indexData);
+            playerGamePlay.photonView.RPC(nameof(playerGamePlay.InitPlayer), RpcTarget.All, PhotonNetwork.LocalPlayer, indexData);
 
         }
 
@@ -212,12 +213,12 @@ namespace thaiht20183826
 
 
         [PunRPC]
-        private void GameEndRPC()
+        private void GameEndRPC(int[] arrScore)
         {
             // Thực hiện các hành động sau khi kết thúc trò chơi (ví dụ: hiển thị kết quả cuối cùng, trở về menu, vv.)
             isCounting = false;
             listPlayersGamePlay.ForEach(s => s.isCanControl = false);
-            gamePlayView.ShowLeaderBoardEndGame();
+            gamePlayView.ShowLeaderBoardEndGame(arrScore);
         }
         /*---------------------------------------*/
     }

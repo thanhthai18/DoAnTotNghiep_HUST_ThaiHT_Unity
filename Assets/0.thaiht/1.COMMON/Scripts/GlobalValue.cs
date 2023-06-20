@@ -8,6 +8,7 @@ public static class GlobalValue
     public static ModeGame currentModeGame;
     public static int indexCharacterTransfer;
     public const int LIFE_HEART_RANK_MODE = 5;
+    public const int ELO_RANK = 50;
 }
 
 public static class MyPlayerValue
@@ -34,3 +35,5 @@ public enum ModeGame
     RankMode,
     TrainingMode
 }
+
+

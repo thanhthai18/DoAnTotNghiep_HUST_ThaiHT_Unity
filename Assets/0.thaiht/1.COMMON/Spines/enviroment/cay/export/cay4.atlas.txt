@@ -1,0 +1,13 @@
+
+cay4.png
+size: 612,532
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+cay3
+  rotate: false
+  xy: 2, 2
+  size: 606, 525
+  orig: 606, 525
+  offset: 0, 0
+  index: -1

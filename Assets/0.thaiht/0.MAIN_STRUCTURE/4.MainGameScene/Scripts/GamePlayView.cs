@@ -11,24 +11,24 @@ namespace thaiht20183826
     {
         public TabPlayerInfo tabPlayerInfo;
         public TextMeshProUGUI txtTimeCounting;
-        public UIView leaderBoardEndGameView;
-    
-    
+        public LeaderBoardEndGame leaderBoardEndGameView;
+
+
         void Awake()
         {
-            
+
         }
         #region SUBSCRIBE
         private void OnEnable()
         {
-        
+
         }
         private void OnDisable()
         {
-        
+
         }
         #endregion
-    
+
         void Start()
         {
         }
@@ -51,12 +51,15 @@ namespace thaiht20183826
         }
         public void SetTextTimeCount(int time)
         {
-            txtTimeCounting.text = "Time: " + time +"s";
+            txtTimeCounting.text = "Time: " + time + "s";
         }
 
-        public void ShowLeaderBoardEndGame()
+        public void ShowLeaderBoardEndGame(int[] listScore)
         {
-            leaderBoardEndGameView.Show();
+            leaderBoardEndGameView.SpawnElement(tabPlayerInfo.listHolderPlayerIconInTab, listScore);
+
+
+            leaderBoardEndGameView.GetComponent<UIView>().Show();
         }
 
         private void OnDestroy()

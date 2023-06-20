@@ -1,0 +1,55 @@
+
+cay_bb.png
+size: 1960,532
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Layer 555
+  rotate: false
+  xy: 1576, 26
+  size: 74, 76
+  orig: 74, 76
+  offset: 0, 0
+  index: -1
+than1
+  rotate: false
+  xy: 1576, 104
+  size: 126, 426
+  orig: 126, 426
+  offset: 0, 0
+  index: -1
+than2
+  rotate: false
+  xy: 1704, 110
+  size: 126, 420
+  orig: 126, 420
+  offset: 0, 0
+  index: -1
+than3
+  rotate: false
+  xy: 1832, 110
+  size: 126, 420
+  orig: 126, 420
+  offset: 0, 0
+  index: -1
+trang_tri1
+  rotate: true
+  xy: 530, 2
+  size: 528, 521
+  orig: 528, 521
+  offset: 0, 0
+  index: -1
+trang_tri2
+  rotate: true
+  xy: 2, 2
+  size: 528, 526
+  orig: 528, 526
+  offset: 0, 0
+  index: -1
+trang_tri3
+  rotate: true
+  xy: 1053, 2
+  size: 528, 521
+  orig: 528, 521
+  offset: 0, 0
+  index: -1

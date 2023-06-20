@@ -110,19 +110,17 @@ namespace thaiht20183826
 
         public void SortCountLifeTab()
         {
-            List<HolderPlayerIconInTab> listTmp = new List<HolderPlayerIconInTab>();
             if (listHolderPlayerIconInTab[0].isHeartIcon)
             {
-                listTmp = listHolderPlayerIconInTab.OrderByDescending(s => int.Parse(s.txtCount.text)).ThenBy(s =>
+                listHolderPlayerIconInTab = listHolderPlayerIconInTab.OrderByDescending(s => int.Parse(s.txtCount.text)).ThenBy(s =>
                     GamePlayController.instance.GetPlayer(s.idPhoton).scoreRank).ToList();
             }
             else
             {
-                listTmp = listHolderPlayerIconInTab.OrderBy(s => int.Parse(s.txtCount.text)).ThenBy(s =>
+                listHolderPlayerIconInTab = listHolderPlayerIconInTab.OrderBy(s => int.Parse(s.txtCount.text)).ThenBy(s =>
                     GamePlayController.instance.GetPlayer(s.idPhoton).scoreRank).ToList();
             }
-            listTmp.ForEach(s => s.gameObject.transform.SetAsLastSibling());
-            listTmp.Clear();
+            listHolderPlayerIconInTab.ForEach(s => s.gameObject.transform.SetAsLastSibling());
         }
 
         public void CallSetTextCountLifePlayer(int idPlayer, int count)

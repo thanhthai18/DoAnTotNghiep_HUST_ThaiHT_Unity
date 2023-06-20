@@ -1,0 +1,55 @@
+
+cay3.png
+size: 884,320
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+back_c3
+  rotate: false
+  xy: 348, 15
+  size: 277, 302
+  orig: 277, 302
+  offset: 0, 0
+  index: -1
+c3_1
+  rotate: false
+  xy: 767, 149
+  size: 113, 168
+  orig: 113, 168
+  offset: 0, 0
+  index: -1
+c3_2
+  rotate: true
+  xy: 679, 7
+  size: 43, 45
+  orig: 43, 45
+  offset: 0, 0
+  index: -1
+c3_3
+  rotate: false
+  xy: 627, 16
+  size: 50, 34
+  orig: 50, 34
+  offset: 0, 0
+  index: -1
+c3_4
+  rotate: false
+  xy: 767, 60
+  size: 81, 87
+  orig: 81, 87
+  offset: 0, 0
+  index: -1
+c3_5
+  rotate: true
+  xy: 2, 2
+  size: 315, 344
+  orig: 315, 344
+  offset: 0, 0
+  index: -1
+than_cay3
+  rotate: false
+  xy: 627, 52
+  size: 138, 265
+  orig: 138, 265
+  offset: 0, 0
+  index: -1
