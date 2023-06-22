@@ -1,3 +1,4 @@
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,8 @@ public static class GlobalValue
     public static int indexCharacterTransfer;
     public const int LIFE_HEART_RANK_MODE = 5;
     public const int ELO_RANK = 50;
+    public static Room previousRoom;
+    public static int masterClientID;
 }
 
 public static class MyPlayerValue

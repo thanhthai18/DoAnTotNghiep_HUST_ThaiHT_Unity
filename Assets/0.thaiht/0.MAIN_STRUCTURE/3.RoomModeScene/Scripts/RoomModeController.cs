@@ -144,6 +144,8 @@ public class RoomModeController : MonoBehaviour
     public void HandleOnJoinedRoom()
     {
         // joining (or entering) a room invalidates any cached lobby room list (even if LeaveLobby was not called due to just joining a room)
+        
+        
         cachedRoomList.Clear();
         Debug.Log("da tham gia phong");
         CallSetBannerRoomView();
@@ -197,19 +199,24 @@ public class RoomModeController : MonoBehaviour
         Debug.Log("Da tao phong: " + PhotonNetwork.CurrentRoom.Name);
     }
 
+
     public void HandleOnLeftRoom()
     {
-        ViewManager.Show<LobbyRoomView>();
-
-        PhotonNetwork.LocalPlayer.CustomProperties.Clear();
-
-        foreach (PlayerChoose entry in playerListChoose.Values)
+        if(SceneManagerHelper.ActiveSceneName == SceneGame.RoomModeScene)
         {
-            Destroy(entry.gameObject);
-        }
+            ViewManager.Show<LobbyRoomView>();
 
-        playerListChoose.Clear();
-        playerListChoose = null;
+            PhotonNetwork.LocalPlayer.CustomProperties.Clear();
+
+            foreach (PlayerChoose entry in playerListChoose.Values)
+            {
+                Destroy(entry.gameObject);
+            }
+
+            playerListChoose.Clear();
+            playerListChoose = null;
+        }
+        
     }
 
     public void HandleOnPlayerEnteredRoom(Player newPlayer)

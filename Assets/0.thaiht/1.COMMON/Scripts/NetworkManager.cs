@@ -8,7 +8,7 @@ using System.Reflection;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
-
+    public static NetworkManager Instance;
     public Dictionary<string, RoomInfo> cachedRoomList;
     public bool IsConnected => PhotonNetwork.IsConnected;
     public bool InLobby => PhotonNetwork.InLobby;
@@ -43,59 +43,70 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
 
 
-    #region Singleton
-    protected NetworkManager() { }
+    //    #region Singleton
+    //    protected NetworkManager() { }
 
-    private static NetworkManager f_instance;
+    //    private static NetworkManager f_instance;
 
-    /// <summary> Returns a reference to the UIPopupManager in the scene. If one does not exist, it gets created. </summary>
-    public static NetworkManager Instance
-    {
-        get
-        {
-            if (f_instance != null) return f_instance;
-            //if (ApplicationIsQuitting) return null;
-            f_instance = FindObjectOfType<NetworkManager>();
-            if (f_instance == null) DontDestroyOnLoad(AddToScene().gameObject);
-            return f_instance;
-        }
-    }
-    private static NetworkManager AddToScene(bool selectGameObjectAfterCreation = false) { return AddToScene<NetworkManager>($"{MethodBase.GetCurrentMethod().DeclaringType}", true, selectGameObjectAfterCreation); }
-    public static T AddToScene<T>(string gameObjectName, bool isSingleton, bool selectGameObjectAfterCreation = false) where T : MonoBehaviour
-    {
-        var component = FindObjectOfType<T>();
-        if (component != null && isSingleton)
-        {
-            Debug.Log("Cannot add another " + typeof(T).Name + " to this Scene because you don't need more than one.");
-#if UNITY_EDITOR
-            UnityEditor.Selection.activeObject = component;
-#endif
-            return component;
-        }
+    //    /// <summary> Returns a reference to the UIPopupManager in the scene. If one does not exist, it gets created. </summary>
+    //    public static NetworkManager Instance
+    //    {
+    //        get
+    //        {
+    //            if (f_instance != null) return f_instance;
+    //            //if (ApplicationIsQuitting) return null;
+    //            f_instance = FindObjectOfType<NetworkManager>();
+    //            if (f_instance == null) DontDestroyOnLoad(AddToScene().gameObject);
+    //            return f_instance;
+    //        }
+    //    }
+    //    private static NetworkManager AddToScene(bool selectGameObjectAfterCreation = false) { return AddToScene<NetworkManager>($"{MethodBase.GetCurrentMethod().DeclaringType}", true, selectGameObjectAfterCreation); }
+    //    public static T AddToScene<T>(string gameObjectName, bool isSingleton, bool selectGameObjectAfterCreation = false) where T : MonoBehaviour
+    //    {
+    //        var component = FindObjectOfType<T>();
+    //        if (component != null && isSingleton)
+    //        {
+    //            Debug.Log("Cannot add another " + typeof(T).Name + " to this Scene because you don't need more than one.");
+    //#if UNITY_EDITOR
+    //            UnityEditor.Selection.activeObject = component;
+    //#endif
+    //            return component;
+    //        }
 
-        component = new GameObject(gameObjectName, typeof(T)).GetComponent<T>();
+    //        component = new GameObject(gameObjectName, typeof(T)).GetComponent<T>();
 
-#if UNITY_EDITOR
-        UnityEditor.Undo.RegisterCreatedObjectUndo(component.gameObject, "Created " + gameObjectName);
-        if (selectGameObjectAfterCreation) UnityEditor.Selection.activeObject = component.gameObject;
-#endif
-        return component;
-    }
+    //#if UNITY_EDITOR
+    //        UnityEditor.Undo.RegisterCreatedObjectUndo(component.gameObject, "Created " + gameObjectName);
+    //        if (selectGameObjectAfterCreation) UnityEditor.Selection.activeObject = component.gameObject;
+    //#endif
+    //        return component;
+    //    }
+    //    private void Awake()
+    //    {
+    //        if (f_instance != null && f_instance != this)
+    //        {
+    //            Destroy(gameObject);
+    //            return;
+    //        }
+    //        f_instance = this;
+    //        DontDestroyOnLoad(gameObject);
+
+
+    //    }
+    //    public void InitInstance() { }
+    //    #endregion
+
     private void Awake()
     {
-        if (f_instance != null && f_instance != this)
+        if(Instance== null)
         {
-            Destroy(gameObject);
-            return;
+            Instance = this;
+            DontDestroyOnLoad(this.gameObject);
         }
-
-        f_instance = this;
-        DontDestroyOnLoad(gameObject);
+      
 
 
     }
-    public void InitInstance() { }
-    #endregion
 
     public void ConnectMasterServerToOpenMode(ModeGame enumModeGame)
     {
@@ -193,7 +204,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void CreateRoom(string roomName)
     {
-        PhotonNetwork.CreateRoom(roomName, new Photon.Realtime.RoomOptions() { MaxPlayers = 4 , BroadcastPropsChangeToAll = true});
+        PhotonNetwork.CreateRoom(roomName, new Photon.Realtime.RoomOptions() { MaxPlayers = 4, BroadcastPropsChangeToAll = true });
     }
 
     public void JoinRoom(string roomName)

@@ -1,12 +1,13 @@
 ﻿using DG.Tweening;
 using Photon.Pun;
+using Photon.Realtime;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 
 namespace thaiht20183826
 {
@@ -71,6 +72,7 @@ namespace thaiht20183826
 
         void Start()
         {
+            gamePlayTime = 10;
             listPlayersGamePlay = new List<PlayerGamePlay>(new PlayerGamePlay[PhotonNetwork.PlayerList.Length]);
             ChangeState(GamePlayState.IM_IN_GAME);
         }
@@ -129,7 +131,7 @@ namespace thaiht20183826
         }
         private void HandleEndGame()
         {
-            int[] arrScore = Helpers.GetAddScoreRank(gamePlayView.tabPlayerInfo.listHolderPlayerIconInTab.Count).ToArray(); 
+            int[] arrScore = Helpers.GetAddScoreRank(gamePlayView.tabPlayerInfo.listHolderPlayerIconInTab.Count).ToArray();
             photonView.RPC(nameof(GameEndRPC), RpcTarget.All, arrScore);
         }
 
@@ -219,7 +221,27 @@ namespace thaiht20183826
             isCounting = false;
             listPlayersGamePlay.ForEach(s => s.isCanControl = false);
             gamePlayView.ShowLeaderBoardEndGame(arrScore);
+            GlobalValue.previousRoom = PhotonNetwork.CurrentRoom;
+            GlobalValue.masterClientID = PhotonNetwork.MasterClient.ActorNumber;
+            this.Wait(5, () =>
+            {
+                LoaderSystem.Loading(true);
+                GlobalController.Instance.ReloadPreviousRoom();
+            });
+
         }
+
+
+
+
+        //public void OnReloadedSceneWhenReJoin(Scene a, LoadSceneMode b)
+        //{
+        //    //ViewManager.Show<RoomView>();
+        //    Debug.Log("loz me m");
+        //    PhotonNetwork.CreateRoom(GlobalValue.previousRoom.Name, new RoomOptions { MaxPlayers = GlobalValue.previousRoom.MaxPlayers }, TypedLobby.Default);
+        //    SceneManager.sceneLoaded -= OnReloadedSceneWhenReJoin;
+        //}
+
         /*---------------------------------------*/
     }
 }

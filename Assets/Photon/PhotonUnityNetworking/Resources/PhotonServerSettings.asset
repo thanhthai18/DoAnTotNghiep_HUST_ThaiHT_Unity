@@ -55,6 +55,7 @@ MonoBehaviour:
   - SetTextCountLifePlayer
   - GameEndRPC
   - UpdateTimeRPC
+  - MemberClientRejoining
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
