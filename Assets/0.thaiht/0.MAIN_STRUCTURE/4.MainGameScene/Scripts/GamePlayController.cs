@@ -221,7 +221,6 @@ namespace thaiht20183826
             isCounting = false;
             listPlayersGamePlay.ForEach(s => s.isCanControl = false);
             gamePlayView.ShowLeaderBoardEndGame(arrScore);
-            GlobalValue.previousRoom = PhotonNetwork.CurrentRoom;
             GlobalValue.masterClientID = PhotonNetwork.MasterClient.ActorNumber;
             this.Wait(5, () =>
             {

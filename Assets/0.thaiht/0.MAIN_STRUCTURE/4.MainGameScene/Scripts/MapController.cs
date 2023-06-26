@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -28,12 +29,13 @@ namespace thaiht20183826
 
         void Start()
         {
-            SetupMap(0);
+            //SetupMap(0);
+            SetupMap((int)PhotonNetwork.CurrentRoom.CustomProperties["indexMap"]);
         }
 
         public void SetupMap(int index)
         {
-            if(index >= dataMapScriptableObj.listMapInfo.Count || index < 0)
+            if (index >= dataMapScriptableObj.listMapInfo.Count || index < 0)
             {
                 return;
             }
@@ -48,7 +50,7 @@ namespace thaiht20183826
             if (Input.GetKeyDown(KeyCode.Z))
             {
                 indexCurrentMap++;
-                if(indexCurrentMap == dataMapScriptableObj.listMapInfo.Count)
+                if (indexCurrentMap == dataMapScriptableObj.listMapInfo.Count)
                 {
                     indexCurrentMap = 0;
                 }
@@ -56,7 +58,7 @@ namespace thaiht20183826
             }
         }
 
-        
+
 
     }
 }

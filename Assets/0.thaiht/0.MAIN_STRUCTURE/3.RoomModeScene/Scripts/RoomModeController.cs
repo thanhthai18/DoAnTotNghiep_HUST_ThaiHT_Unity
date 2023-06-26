@@ -47,7 +47,7 @@ public class RoomModeController : MonoBehaviour
 
     private void Start()
     {
-      
+
     }
 
     private void OnEnable()
@@ -72,7 +72,7 @@ public class RoomModeController : MonoBehaviour
         NetworkManager.ActionOnPlayerPropertiesUpdate += HandleOnPlayerPropertiesUpdate;
     }
 
- 
+
 
     private void OnDisable()
     {
@@ -144,11 +144,12 @@ public class RoomModeController : MonoBehaviour
     public void HandleOnJoinedRoom()
     {
         // joining (or entering) a room invalidates any cached lobby room list (even if LeaveLobby was not called due to just joining a room)
-        
-        
+
+
         cachedRoomList.Clear();
         Debug.Log("da tham gia phong");
         CallSetBannerRoomView();
+
         ViewManager.Show<RoomView>();
 
 
@@ -171,7 +172,6 @@ public class RoomModeController : MonoBehaviour
             if (p.CustomProperties.TryGetValue("characterIndex", out characterIndex))
             {
                 entry.SetPlayerCharacter(GlobalController.Instance.scriptableDataCharacter.listCharacter[(int)characterIndex]);
-                Debug.Log("Caccccc");
             }
             else
             {
@@ -188,7 +188,7 @@ public class RoomModeController : MonoBehaviour
         //CheckActiveBtnKickPlayer();
         CheckKeyHost();
         roomView.btnStartGame.gameObject.SetActive(CheckPlayersReady());
-
+        SetRoomMapProperties(0);
         //Hashtable props = new Hashtable
         //    {
         //        {"PlayerLoadedLevel", false}
@@ -202,7 +202,7 @@ public class RoomModeController : MonoBehaviour
 
     public void HandleOnLeftRoom()
     {
-        if(SceneManagerHelper.ActiveSceneName == SceneGame.RoomModeScene)
+        if (SceneManagerHelper.ActiveSceneName == SceneGame.RoomModeScene)
         {
             ViewManager.Show<LobbyRoomView>();
 
@@ -216,7 +216,7 @@ public class RoomModeController : MonoBehaviour
             playerListChoose.Clear();
             playerListChoose = null;
         }
-        
+
     }
 
     public void HandleOnPlayerEnteredRoom(Player newPlayer)
@@ -341,7 +341,7 @@ public class RoomModeController : MonoBehaviour
 
     }
 
-   
+
 
     private void ClearRoomListView()
     {
@@ -400,7 +400,7 @@ public class RoomModeController : MonoBehaviour
 
         foreach (Player p in PhotonNetwork.PlayerList)
         {
-            if(p != PhotonNetwork.MasterClient)
+            if (p != PhotonNetwork.MasterClient)
             {
                 object isPlayerReady;
                 if (p.CustomProperties.TryGetValue("isPlayerReady", out isPlayerReady))
@@ -415,7 +415,7 @@ public class RoomModeController : MonoBehaviour
                     return false;
                 }
             }
-            
+
         }
 
         return true;
@@ -453,12 +453,20 @@ public class RoomModeController : MonoBehaviour
     }
 
     //thai thai thai
-    public void SetRoomMapProperties()
+    public void SetRoomMapProperties(int index)
     {
         if (PhotonNetwork.LocalPlayer.IsMasterClient)
         {
-            Hashtable newProp = new Hashtable() { { "indexMap", (int)PhotonNetwork.LocalPlayer.CustomProperties["indexRoomChoose"] } };
-            PhotonNetwork.CurrentRoom.SetCustomProperties(newProp);
+            PhotonNetwork.CurrentRoom.CustomProperties["indexMap"] = index;
+            if (PhotonNetwork.CurrentRoom.CustomProperties["indexMap"] == null)
+            {
+                Hashtable newProp = new Hashtable() { { "indexMap", index } };
+                PhotonNetwork.CurrentRoom.SetCustomProperties(newProp);
+            }
+            else
+            {
+                PhotonNetwork.CurrentRoom.CustomProperties["indexMap"] = index;
+            }
         }
     }
 
@@ -474,6 +482,11 @@ public class RoomModeController : MonoBehaviour
 
             //PhotonNetwork.LoadLevel("DemoAsteroids-GameScene");
         }
+    }
+
+    private void OnDestroy()
+    {
+        Destroy(instance);
     }
 }
 

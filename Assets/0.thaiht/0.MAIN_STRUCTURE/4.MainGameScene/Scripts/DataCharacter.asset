@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   listCharacter:
   - id: 0
-    characterSprite: {fileID: 21300000, guid: ccc49337a90380847ac6a43455cd9b31, type: 3}
+    characterSprite: {fileID: 21300000, guid: 02060f91378d3b64f8835416c6364a9b, type: 3}
     weight: 5
     moveSpeed: 10
     dragRigidbody: 3
@@ -25,7 +25,7 @@ MonoBehaviour:
     characterPrefab: {fileID: 2154781857891577842, guid: e3d967e72f4fcfd41ae86b2841e29ba4,
       type: 3}
   - id: 1
-    characterSprite: {fileID: 21300000, guid: c39b937104c4d4c44a9df22daf290658, type: 3}
+    characterSprite: {fileID: 21300000, guid: 02bd0695f9d679c4fbc2a41e846870a9, type: 3}
     weight: 4
     moveSpeed: 10
     dragRigidbody: 3
@@ -36,7 +36,7 @@ MonoBehaviour:
     characterPrefab: {fileID: 8822590998322489314, guid: 895be4b584fc31b44ad3de592bf53973,
       type: 3}
   - id: 2
-    characterSprite: {fileID: 21300000, guid: 9f5b38a12b1926744be2a8924617a1db, type: 3}
+    characterSprite: {fileID: 21300000, guid: 7f82b611cc732d541acf6d12332c17ca, type: 3}
     weight: 6
     moveSpeed: 10
     dragRigidbody: 3
@@ -47,7 +47,7 @@ MonoBehaviour:
     characterPrefab: {fileID: 3377668862741075602, guid: 101c46d739eac824c9321746000d7a9e,
       type: 3}
   - id: 3
-    characterSprite: {fileID: 21300000, guid: c94a7b0afcacc4449991a71d9cbbcc27, type: 3}
+    characterSprite: {fileID: 21300000, guid: c2753d06bf7774f45aa2d9965fe141db, type: 3}
     weight: 10
     moveSpeed: 10
     dragRigidbody: 3

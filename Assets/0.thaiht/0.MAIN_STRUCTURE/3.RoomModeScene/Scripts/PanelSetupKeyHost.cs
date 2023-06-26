@@ -66,12 +66,14 @@ public class PanelSetupKeyHost : MonoBehaviourPunCallbacks
     {
         SetMapChoose(0);
         SetTimeChoose(0);
+        RoomModeController.instance.SetRoomMapProperties(0);
     }
 
     [PunRPC]
     public void SetMapChoose(int index)
     {
         imgMapChoose.sprite = dataMapScriptableObj.listMapInfo[index].spriteMap;
+        RoomModeController.instance.SetRoomMapProperties(index);
     }
     [PunRPC]
     public void SetTimeChoose(int index)
