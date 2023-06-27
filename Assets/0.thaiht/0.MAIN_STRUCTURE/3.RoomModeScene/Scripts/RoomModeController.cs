@@ -28,7 +28,7 @@ public class RoomModeController : MonoBehaviour
         if (!PhotonNetwork.InLobby)
         {
             PhotonNetwork.JoinLobby();
-            Debug.Log("JoinLobby");
+            Debug.Log("JoiningLobby");
         }
         if (instance == null)
         {
@@ -111,6 +111,8 @@ public class RoomModeController : MonoBehaviour
     public void HandleOnRoomListUpdate(List<RoomInfo> roomList)
     {
         Debug.Log("dua nhau a");
+        Debug.Log(roomList.Count);
+        roomList.ForEach(s => Debug.Log(s.Name));
         ClearRoomListView();
 
         UpdateCachedRoomList(roomList);
@@ -202,6 +204,7 @@ public class RoomModeController : MonoBehaviour
 
     public void HandleOnLeftRoom()
     {
+        Debug.Log("LeavedRoom");
         if (SceneManagerHelper.ActiveSceneName == SceneGame.RoomModeScene)
         {
             ViewManager.Show<LobbyRoomView>();
@@ -379,7 +382,7 @@ public class RoomModeController : MonoBehaviour
             }
         }
     }
-    private void UpdateRoomListView()
+    public void UpdateRoomListView()
     {
         foreach (RoomInfo info in cachedRoomList.Values)
         {
@@ -394,6 +397,10 @@ public class RoomModeController : MonoBehaviour
     private bool CheckPlayersReady()
     {
         if (!PhotonNetwork.IsMasterClient)
+        {
+            return false;
+        }
+        if (PhotonNetwork.PlayerList.Length < 2)
         {
             return false;
         }
@@ -448,6 +455,7 @@ public class RoomModeController : MonoBehaviour
 
     public void OnLeaveRoomButton()
     {
+        Debug.Log("LeavingRoom");
         PhotonNetwork.LeaveRoom();
 
     }
@@ -455,9 +463,8 @@ public class RoomModeController : MonoBehaviour
     //thai thai thai
     public void SetRoomMapProperties(int index)
     {
-        if (PhotonNetwork.LocalPlayer.IsMasterClient)
+        if (PhotonNetwork.CurrentRoom != null)
         {
-            PhotonNetwork.CurrentRoom.CustomProperties["indexMap"] = index;
             if (PhotonNetwork.CurrentRoom.CustomProperties["indexMap"] == null)
             {
                 Hashtable newProp = new Hashtable() { { "indexMap", index } };
@@ -468,6 +475,7 @@ public class RoomModeController : MonoBehaviour
                 PhotonNetwork.CurrentRoom.CustomProperties["indexMap"] = index;
             }
         }
+      
     }
 
 

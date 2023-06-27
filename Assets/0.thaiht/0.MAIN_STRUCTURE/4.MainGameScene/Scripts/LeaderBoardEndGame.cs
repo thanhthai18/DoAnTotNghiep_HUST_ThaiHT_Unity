@@ -1,3 +1,4 @@
+using Doozy.Runtime.UIManager.Components;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace thaiht20183826
         [SerializeField] ElementLeaderBoardEndGame elementLeaderBoardEndGamePrefab;
         public List<ElementLeaderBoardEndGame> listElementLeaderBoardEndGame = new List<ElementLeaderBoardEndGame>();
         public Transform holderElement;
+
 
         public void SpawnElement(List<HolderPlayerIconInTab> listPlayerOnTab, int[] listScoreRank)
         {

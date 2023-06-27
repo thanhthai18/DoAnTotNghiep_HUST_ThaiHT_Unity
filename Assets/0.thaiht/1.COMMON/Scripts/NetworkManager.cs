@@ -201,10 +201,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         ActionOnPLayerLeftRoom?.Invoke(otherPlayer);
     }
 
-
     public void CreateRoom(string roomName)
     {
-        PhotonNetwork.CreateRoom(roomName, new Photon.Realtime.RoomOptions() { MaxPlayers = 4, BroadcastPropsChangeToAll = true });
+        PhotonNetwork.CreateRoom(roomName, new Photon.Realtime.RoomOptions() { MaxPlayers = 4, BroadcastPropsChangeToAll = true, CleanupCacheOnLeave = false }); ;
     }
 
     public void JoinRoom(string roomName)

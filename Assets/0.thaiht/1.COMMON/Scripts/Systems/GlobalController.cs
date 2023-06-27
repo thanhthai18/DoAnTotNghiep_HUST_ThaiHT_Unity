@@ -30,13 +30,15 @@ public class GlobalController : MonoBehaviour
     {
         Debug.Log("reload");
         SceneManager.sceneLoaded += DelayReJoinRoom;
-        if (PhotonNetwork.LocalPlayer.ActorNumber == GlobalValue.masterClientID)
+
+        if (PhotonNetwork.IsMasterClient)
         {
             NetworkManager.Instance.ChangeScene(SceneGame.RoomModeScene);
-
-            //PhotonNetwork.LeaveRoom();
-            //NetworkManager.ActionOnConnectedToMaster += MasterClientReJoining;
         }
+
+        //PhotonNetwork.LeaveRoom();
+        //NetworkManager.ActionOnConnectedToMaster += MasterClientReJoining;
+
     }
 
 
@@ -51,6 +53,7 @@ public class GlobalController : MonoBehaviour
                 {
                     if (RoomModeController.instance != null)
                     {
+                        //PhotonNetwork.GetCustomRoomList(TypedLobby.Default, null);
                         RoomModeController.instance.HandleOnJoinedRoom();
                     }
                 }
@@ -63,9 +66,16 @@ public class GlobalController : MonoBehaviour
         {
             PhotonNetwork.LeaveRoom();
         }
-
-
     }
+
+    //private void Update()
+    //{
+    //    if (PhotonNetwork.IsConnected)
+    //    {
+    //        Debug.Log("Count Room " + PhotonNetwork.CountOfRooms);
+    //    }
+    //}
+
     #region Old Rejoin
     //public void MasterClientReJoining()
     //{

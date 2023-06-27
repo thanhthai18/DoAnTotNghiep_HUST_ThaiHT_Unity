@@ -10,7 +10,7 @@ public static class GlobalValue
     public static int indexCharacterTransfer;
     public const int LIFE_HEART_RANK_MODE = 5;
     public const int ELO_RANK = 50;
-    public static int masterClientID;
+    public const int TIME_TO_CONTINUE = 5;
 }
 
 public static class MyPlayerValue

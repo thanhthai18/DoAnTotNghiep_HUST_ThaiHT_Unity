@@ -38,6 +38,7 @@ namespace thaiht20183826
         private float currentTime;
         [SerializeField] private bool isCounting = false;
 
+        public static event Action<int> ActionOnGameContinueAfter;
 
         public GamePlayState State { get; private set; }
         void Awake()
@@ -52,7 +53,7 @@ namespace thaiht20183826
             }
         }
         #region SUBSCRIBE
-        private void OnEnable()
+        public override void OnEnable()
         {
             base.OnEnable();
             PlayerGamePlay.OnPlayerOutAreaMap += PlayerGamePlay_OnPlayerOutAreaMap;
@@ -61,7 +62,7 @@ namespace thaiht20183826
         }
 
 
-        private void OnDisable()
+        public override void OnDisable()
         {
             base.OnDisable();
             PlayerGamePlay.OnPlayerOutAreaMap -= PlayerGamePlay_OnPlayerOutAreaMap;
@@ -221,11 +222,12 @@ namespace thaiht20183826
             isCounting = false;
             listPlayersGamePlay.ForEach(s => s.isCanControl = false);
             gamePlayView.ShowLeaderBoardEndGame(arrScore);
-            GlobalValue.masterClientID = PhotonNetwork.MasterClient.ActorNumber;
-            this.Wait(5, () =>
+            ActionOnGameContinueAfter?.Invoke(GlobalValue.TIME_TO_CONTINUE);
+            this.Wait(GlobalValue.TIME_TO_CONTINUE, () =>
             {
                 LoaderSystem.Loading(true);
-                GlobalController.Instance.ReloadPreviousRoom();
+                this.Wait(0.5f, () => { GlobalController.Instance.ReloadPreviousRoom(); });
+                
             });
 
         }
