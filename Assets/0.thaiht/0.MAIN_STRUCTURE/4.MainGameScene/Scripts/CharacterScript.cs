@@ -65,10 +65,9 @@ namespace thaiht20183826
         {
             if (isSpine)
             {
-                if (anim.AnimationName != anim_idle)
-                {
-                    PlayAnim(anim, anim_idle, true);
-                }
+
+                PlayAnim(anim, anim_idle, true);
+
             }
 
         }
@@ -76,10 +75,7 @@ namespace thaiht20183826
         {
             if (isSpine)
             {
-                if (anim.AnimationName != anim_run)
-                {
-                    PlayAnim(anim, anim_run, true);
-                }
+                PlayAnim(anim, anim_run, true);
             }
 
         }
@@ -99,6 +95,28 @@ namespace thaiht20183826
             }
         }
 
+        public bool IsAnimRun()
+        {
+            if (anim.AnimationName != anim_run)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        public bool IsAnimIdle()
+        {
+            if (anim.AnimationName != anim_idle)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
 
+        }
     }
 }

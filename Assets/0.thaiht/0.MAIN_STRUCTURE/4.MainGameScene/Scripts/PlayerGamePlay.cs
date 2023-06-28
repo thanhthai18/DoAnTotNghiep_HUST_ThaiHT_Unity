@@ -12,7 +12,7 @@ namespace thaiht20183826
 {
 
 
-    public class PlayerGamePlay : MonoBehaviourPunCallbacks
+    public class PlayerGamePlay : MonoBehaviourPunCallbacks//, IPunObservable
     {
 
 
@@ -26,6 +26,7 @@ namespace thaiht20183826
         [Header("Components")]
         public Rigidbody2D rig;
         public CharacterScript selfCharacterScript;
+        public BoxCollider2D col;
 
         [Space(10)]
         [Header("Dash Info")]
@@ -55,7 +56,8 @@ namespace thaiht20183826
         public int countHeart;
         Vector3 beginScale;
         public int scoreRank;
-
+        private Vector3 networkPosition;
+        private Vector3 spawnPos;
 
         public static event Action<PlayerGamePlay> OnPlayerOutAreaMap;
         public static event Action<PlayerGamePlay> OnPlayerDaHoiSinh;
@@ -67,6 +69,7 @@ namespace thaiht20183826
         void Awake()
         {
             rig = GetComponent<Rigidbody2D>();
+            col = GetComponent<BoxCollider2D>();
             selfCharacterScript = GetComponent<CharacterScript>();
             playerFeedback_Dash_Particle = playerFeedback_Dash.GetComponent<MMFeedbackParticles>();
         }
@@ -118,6 +121,10 @@ namespace thaiht20183826
                 }
 
             }
+            else
+            {
+                //transform.position = Vector3.Lerp(transform.position, networkPosition, Time.deltaTime * 5f);
+            }
 
 
         }
@@ -126,6 +133,7 @@ namespace thaiht20183826
         public void InitPlayer(Player player, int indexDataCharacter)
         {
             //Player
+            spawnPos = transform.position;
             photonPlayer = player;
             id_Photon = player.ActorNumber;
             GamePlayController.instance.listPlayersGamePlay[id_Photon - 1] = this;
@@ -165,11 +173,17 @@ namespace thaiht20183826
             {
                 if (x != 0 || y != 0)
                 {
-                    selfCharacterScript.AnimRun();
+                    if (!selfCharacterScript.IsAnimRun())
+                    {
+                        photonView.RPC(nameof(CallAnimRun), RpcTarget.All);
+                    }
                 }
                 else if (x == 0 && y == 0)
                 {
-                    selfCharacterScript.AnimIdle();
+                    if (!selfCharacterScript.IsAnimIdle())
+                    {
+                        photonView.RPC(nameof(CallAnimIdle), RpcTarget.All);
+                    }
                 }
             }
             if (x > 0)
@@ -275,7 +289,7 @@ namespace thaiht20183826
             {
                 transform.DOScale(0, 0.1f).OnComplete(() =>
                 {
-                    transform.position = Vector3.zero;
+                    transform.position = spawnPos;
                     selfCharacterScript.AnimIdle();
                     transform.DOScale(beginScale, 0.1f).OnComplete(() =>
                     {
@@ -287,20 +301,68 @@ namespace thaiht20183826
 
         }
 
+        #region Call Anim PUN
+        [PunRPC]
+        public void CallAnimRun()
+        {
+            selfCharacterScript.AnimRun();
+        }
+        [PunRPC]
+        public void CallAnimIdle()
+        {
+            selfCharacterScript.AnimIdle();
+        }
+        #endregion
+
+        //public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        //{
+        //    if (stream.IsWriting)
+        //    {
+        //        stream.SendNext(transform.position);
+        //        stream.SendNext(rig.position);
+        //        stream.SendNext(rig.rotation);
+        //        stream.SendNext(rig.velocity);
+        //    }
+        //    else
+        //    {
+        //        networkPosition = (Vector3)stream.ReceiveNext();
+        //        rig.position = (Vector3)stream.ReceiveNext();
+        //        rig.rotation = (float)stream.ReceiveNext();
+        //        rig.velocity = (Vector3)stream.ReceiveNext();
+        //    }
+        //}
+
+
         private void OnCollisionEnter2D(Collision2D collision)
         {
             if (collision.gameObject.CompareTag("Player"))
             {
-                Rigidbody2D otherRigidbody = collision.collider.GetComponent<Rigidbody2D>();
-
-                if (otherRigidbody != null)
+                if (photonView.IsMine)
                 {
-                    Debug.Log("push");
-                    Vector2 pushDirection = otherRigidbody.transform.position - transform.position;
-                    pushDirection = pushDirection.normalized;
+                    Rigidbody2D otherRigidbody = collision.collider.GetComponent<Rigidbody2D>();
 
-                    otherRigidbody.AddForce(pushDirection * pushForce, ForceMode2D.Impulse);
+                    if (otherRigidbody != null)
+                    {
+                        Debug.Log("push");
+                        Vector2 pushDirection = otherRigidbody.transform.position - transform.position;
+                        pushDirection = pushDirection.normalized;
 
+                        otherRigidbody.AddForce(pushDirection * pushForce, ForceMode2D.Impulse);
+
+                    }
+                }
+
+
+
+            }
+        }
+        private void OnCollisionExit2D(Collision2D collision)
+        {
+            if (collision.gameObject.CompareTag("Player"))
+            {
+                if (photonView.IsMine)
+                {
+                    col.enabled = true;
                 }
             }
         }
@@ -320,7 +382,7 @@ namespace thaiht20183826
                     {
                         countHeart--;
                         OnSetCountScoreLifePlayer?.Invoke(id_Photon, countHeart);
-                        if(countHeart == 0)
+                        if (countHeart == 0)
                         {
                             OnPlayerLostByHeart?.Invoke();
                         }

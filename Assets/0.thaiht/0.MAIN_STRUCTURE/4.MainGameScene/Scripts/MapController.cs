@@ -6,16 +6,14 @@ using UnityEngine;
 
 namespace thaiht20183826
 {
-    public class MapController : MonoBehaviour
+    public class MapController : Singleton<MapController>
     {
         [SerializeField] private DataMapScriptableObj dataMapScriptableObj;
         [SerializeField] Map currentMap;
         [SerializeField] int indexCurrentMap;
+        [SerializeField] public List<Transform> listSpawnPlayer = new List<Transform>();
 
-        void Awake()
-        {
-
-        }
+        
         #region SUBSCRIBE
         private void OnEnable()
         {

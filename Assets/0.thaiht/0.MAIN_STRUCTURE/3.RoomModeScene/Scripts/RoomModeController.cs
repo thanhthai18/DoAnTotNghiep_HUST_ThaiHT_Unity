@@ -191,6 +191,7 @@ public class RoomModeController : MonoBehaviour
         CheckKeyHost();
         roomView.btnStartGame.gameObject.SetActive(CheckPlayersReady());
         SetRoomMapProperties(0);
+        SetRoomTimePlayProperties(int.Parse(panelSetupKeyHost_MapTime.txtTimeChoose.text.Replace("s","")));
         //Hashtable props = new Hashtable
         //    {
         //        {"PlayerLoadedLevel", false}
@@ -400,10 +401,10 @@ public class RoomModeController : MonoBehaviour
         {
             return false;
         }
-        if (PhotonNetwork.PlayerList.Length < 2)
-        {
-            return false;
-        }
+        //if (PhotonNetwork.PlayerList.Length < 2)
+        //{
+        //    return false;
+        //}
 
         foreach (Player p in PhotonNetwork.PlayerList)
         {
@@ -476,6 +477,21 @@ public class RoomModeController : MonoBehaviour
             }
         }
       
+    }
+    public void SetRoomTimePlayProperties(int time)
+    {
+        if (PhotonNetwork.CurrentRoom != null)
+        {
+            if (PhotonNetwork.CurrentRoom.CustomProperties["timePlay"] == null)
+            {
+                Hashtable newProp = new Hashtable() { { "timePlay", time } };
+                PhotonNetwork.CurrentRoom.SetCustomProperties(newProp);
+            }
+            else
+            {
+                PhotonNetwork.CurrentRoom.CustomProperties["timePlay"] = time;
+            }
+        }
     }
 
 

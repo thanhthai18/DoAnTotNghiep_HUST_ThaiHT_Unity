@@ -47,13 +47,14 @@ public class GlobalController : MonoBehaviour
     {
         try
         {
-            this.Wait(0.1f, () =>
+            this.Wait(0.3f, () =>
             {
                 if (arg0.name == SceneGame.RoomModeScene)
                 {
                     if (RoomModeController.instance != null)
                     {
-                        //PhotonNetwork.GetCustomRoomList(TypedLobby.Default, null);
+                        PhotonNetwork.CurrentRoom.IsOpen = true;
+                        PhotonNetwork.CurrentRoom.IsVisible = true;
                         RoomModeController.instance.HandleOnJoinedRoom();
                     }
                 }
@@ -68,60 +69,5 @@ public class GlobalController : MonoBehaviour
         }
     }
 
-    //private void Update()
-    //{
-    //    if (PhotonNetwork.IsConnected)
-    //    {
-    //        Debug.Log("Count Room " + PhotonNetwork.CountOfRooms);
-    //    }
-    //}
-
-    #region Old Rejoin
-    //public void MasterClientReJoining()
-    //{
-    //    Debug.Log("rejoin");
-    //    Debug.Log($"{PhotonNetwork.LocalPlayer.ActorNumber}, {GlobalValue.masterClientID}");
-
-    //    NetworkManager.Instance.ChangeScene(SceneGame.RoomModeScene);
-    //    NetworkManager.ActionOnJoinedLobby += OnMasterClientRejoinLobby;
-
-
-
-    //}
-
-    //public void OnMasterClientRejoinLobby()
-    //{
-    //    PhotonNetwork.CreateRoom(GlobalValue.previousRoom.Name, new RoomOptions { MaxPlayers = GlobalValue.previousRoom.MaxPlayers }, TypedLobby.Default);
-    //    NetworkManager.ActionOnJoinedRoom += MasterClientReJoined;
-    //    NetworkManager.ActionOnConnectedToMaster -= MasterClientReJoining;
-    //    NetworkManager.ActionOnJoinedLobby -= OnMasterClientRejoinLobby;
-    //}
-    //public void MasterClientReJoined()
-    //{
-    //    LoaderSystem.Loading(false);
-    //    NetworkManager.Instance.photonView.RPC(nameof(MemberClientRejoining), RpcTarget.Others); // Null?
-    //    NetworkManager.ActionOnJoinedRoom -= MasterClientReJoined;
-    //}
-
-    //[PunRPC]
-    //private void MemberClientRejoining()
-    //{
-    //    NetworkManager.Instance.ChangeScene(SceneGame.RoomModeScene);
-    //    PhotonNetwork.LeaveRoom();
-
-    //    NetworkManager.ActionOnJoinedLobby += CallMemberJoinRoom;
-    //    //NetworkManager.Instance.photonView.RPC(nameof(JoinRoom), RpcTarget.Others, GlobalValue.previousRoom.Name);
-    //}
-
-    //private void CallMemberJoinRoom()
-    //{
-    //    JoinRoom(GlobalValue.previousRoom.Name);
-    //    NetworkManager.ActionOnJoinedLobby -= CallMemberJoinRoom;
-    //}
-    //private void JoinRoom(string roomName)
-    //{
-    //    // Các người chơi khác sẽ tham gia lại vào phòng chơi với tên phòng chơi mới
-    //    PhotonNetwork.JoinRoom(roomName);
-    //}
-    #endregion
+    
 }

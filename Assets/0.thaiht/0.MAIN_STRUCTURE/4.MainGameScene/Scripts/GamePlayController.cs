@@ -34,7 +34,7 @@ namespace thaiht20183826
         public DataCharacter dataCharacterScriptableObj;
 
         [Header("General")]
-        public float gamePlayTime = 30; // Thời gian trò chơi (đơn vị: giây)
+        public float gamePlayTime = 30; 
         private float currentTime;
         [SerializeField] private bool isCounting = false;
 
@@ -56,6 +56,7 @@ namespace thaiht20183826
         public override void OnEnable()
         {
             base.OnEnable();
+            LoaderSystem.Loading(false);
             PlayerGamePlay.OnPlayerOutAreaMap += PlayerGamePlay_OnPlayerOutAreaMap;
             PlayerGamePlay.OnPlayerDaHoiSinh += PlayerGamePlay_OnPlayerDaHoiSinh;
             PlayerGamePlay.OnPlayerLostByHeart += PlayerGamePlay_OnPlayerLostByHeart;
@@ -73,7 +74,7 @@ namespace thaiht20183826
 
         void Start()
         {
-            gamePlayTime = 10;
+            gamePlayTime = (int)PhotonNetwork.CurrentRoom.CustomProperties["timePlay"];
             listPlayersGamePlay = new List<PlayerGamePlay>(new PlayerGamePlay[PhotonNetwork.PlayerList.Length]);
             ChangeState(GamePlayState.IM_IN_GAME);
         }
@@ -172,7 +173,8 @@ namespace thaiht20183826
             int indexData = (int)PhotonNetwork.LocalPlayer.CustomProperties["characterIndex"];
             var dataSpawn = dataCharacterScriptableObj.listCharacter[indexData];
             playerGamePlayPrefabPath = dataSpawn.characterPrefab.name;
-            PlayerGamePlay playerGamePlay = PhotonNetwork.Instantiate(playerGamePlayPrefabPath, Vector2.zero, Quaternion.identity).GetComponent<PlayerGamePlay>();
+            Debug.Log("Cao " + countPlayerInGame);
+            PlayerGamePlay playerGamePlay = PhotonNetwork.Instantiate(playerGamePlayPrefabPath, MapController.Instance.listSpawnPlayer[PhotonNetwork.LocalPlayer.ActorNumber-1].position, Quaternion.identity).GetComponent<PlayerGamePlay>();
             playerGamePlay.photonView.RPC(nameof(playerGamePlay.InitPlayer), RpcTarget.All, PhotonNetwork.LocalPlayer, indexData);
 
         }

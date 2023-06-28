@@ -10468,6 +10468,7 @@ MonoBehaviour:
   dragRigidbody: 3
   rig: {fileID: 2154781857891577849}
   selfCharacterScript: {fileID: 0}
+  col: {fileID: 0}
   dashingTime: 0.2
   dashDistance: 2
   DashCurve:
@@ -10550,7 +10551,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.07489228, y: 1.5727384}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -10561,7 +10562,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.67, y: 1}
+  m_Size: {x: 2.0679893, y: 3.3466249}
   m_EdgeRadius: 0
 --- !u!114 &2154781857891577844
 MonoBehaviour:
@@ -10583,6 +10584,7 @@ MonoBehaviour:
   observableSearch: 0
   ObservedComponents:
   - {fileID: 2154781857891577845}
+  - {fileID: 2154781857891577846}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -10598,10 +10600,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
+  m_SynchronizePosition: 0
   m_SynchronizeRotation: 0
   m_SynchronizeScale: 1
-  m_UseLocal: 1
+  m_UseLocal: 0
 --- !u!114 &2154781857891577846
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10616,7 +10618,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SynchronizeVelocity: 1
   m_SynchronizeAngularVelocity: 1
-  m_TeleportEnabled: 1
+  m_TeleportEnabled: 0
   m_TeleportIfDistanceGreaterThan: 3
 --- !u!33 &2154781857891577847
 MeshFilter:

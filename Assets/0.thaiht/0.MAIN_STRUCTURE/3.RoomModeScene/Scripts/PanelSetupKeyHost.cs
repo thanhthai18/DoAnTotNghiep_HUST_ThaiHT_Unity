@@ -16,8 +16,8 @@ public class PanelSetupKeyHost : MonoBehaviourPunCallbacks
 
     [Header("TimeChoose")]
     public int indexTime = 0;
-    private List<int> listTimeChooseData = new List<int>() { 30, 60, 90 };
-    [SerializeField] TextMeshProUGUI txtTimeChoose;
+    public List<int> listTimeChooseData = new List<int>() { 30, 60, 90 };
+    [SerializeField] public TextMeshProUGUI txtTimeChoose;
     [SerializeField] Button btnLeftTime, btnRightTime;
 
     [Header("DataMap")]
@@ -79,6 +79,7 @@ public class PanelSetupKeyHost : MonoBehaviourPunCallbacks
     public void SetTimeChoose(int index)
     {
         txtTimeChoose.text = listTimeChooseData[index].ToString() + "s";
+        RoomModeController.instance.SetRoomTimePlayProperties(listTimeChooseData[index]);
     }
 
     public void OnClickLeftMap()

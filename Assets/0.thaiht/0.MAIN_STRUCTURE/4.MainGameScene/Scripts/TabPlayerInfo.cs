@@ -113,12 +113,12 @@ namespace thaiht20183826
             if (listHolderPlayerIconInTab[0].isHeartIcon)
             {
                 listHolderPlayerIconInTab = listHolderPlayerIconInTab.OrderByDescending(s => int.Parse(s.txtCount.text)).ThenBy(s =>
-                    GamePlayController.instance.GetPlayer(s.idPhoton).scoreRank).ToList();
+                    GamePlayController.instance?.GetPlayer(s.idPhoton).scoreRank).ToList();
             }
             else
             {
                 listHolderPlayerIconInTab = listHolderPlayerIconInTab.OrderBy(s => int.Parse(s.txtCount.text)).ThenBy(s =>
-                    GamePlayController.instance.GetPlayer(s.idPhoton).scoreRank).ToList();
+                    GamePlayController.instance?.GetPlayer(s.idPhoton).scoreRank).ToList();
             }
             listHolderPlayerIconInTab.ForEach(s => s.gameObject.transform.SetAsLastSibling());
         }
