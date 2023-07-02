@@ -134,6 +134,7 @@ namespace thaiht20183826
         private void HandleEndGame()
         {
             int[] arrScore = Helpers.GetAddScoreRank(gamePlayView.tabPlayerInfo.listHolderPlayerIconInTab.Count).ToArray();
+
             photonView.RPC(nameof(GameEndRPC), RpcTarget.All, arrScore);
         }
 
@@ -224,6 +225,7 @@ namespace thaiht20183826
             isCounting = false;
             listPlayersGamePlay.ForEach(s => s.isCanControl = false);
             gamePlayView.ShowLeaderBoardEndGame(arrScore);
+            PlayFabController.SubmitScore(arrScore[PhotonNetwork.LocalPlayer.ActorNumber-1]);
             ActionOnGameContinueAfter?.Invoke(GlobalValue.TIME_TO_CONTINUE);
             this.Wait(GlobalValue.TIME_TO_CONTINUE, () =>
             {
