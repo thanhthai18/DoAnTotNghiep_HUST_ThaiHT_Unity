@@ -7,6 +7,7 @@ using PlayFab;
 using PlayFab.ClientModels;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
+using System.Linq;
 
 public class MenuController : StaticInstance<MenuController>
 {
@@ -24,6 +25,9 @@ public class MenuController : StaticInstance<MenuController>
 
     private void Start()
     {
+        GlobalController.ActionOnUpdatedGlobalLeaderboard += LoadOverviewData;
+        PlayFabController.GetLeaderboard();
+
         /*---Button Tool---*/
         btnRank.onClick.AddListener(() =>
         {
@@ -91,16 +95,8 @@ public class MenuController : StaticInstance<MenuController>
         /*---Button Login---*/
         btnLogout.onClick.AddListener(() => SceneManager.LoadScene(SceneGame.LoginScene));
 
-        overviewProfileData = new OverviewProfileData
-        {
-            displayName = MyPlayerValue.playerName,
-            displayRank = $"Rank: {"#1"}",
-            displayScore = $"Score: {MyPlayerValue.rankScore}",
-        };
 
-        LoadOverviewData();
-
-
+        //Invoke(nameof(LoadOverviewData), 0.1f);
 
         /*---Button Play (Select Mode)---*/
         btnPlay.onClick.AddListener(ClickButtonPlayMode);
@@ -108,10 +104,25 @@ public class MenuController : StaticInstance<MenuController>
 
     }
 
-   
+
 
     public void LoadOverviewData()
     {
+        string tmpRankPosition = "null";
+       
+        for (int i = 0; i < GlobalValue.listPlayerLeaderBoard.Count; i++)
+        {
+            if(GlobalValue.listPlayerLeaderBoard[i].DisplayName == MyPlayerValue.playerName)
+            {
+                tmpRankPosition = (GlobalValue.listPlayerLeaderBoard[i].Position + 1).ToString();
+            }
+        }
+        overviewProfileData = new OverviewProfileData
+        {
+            displayName = MyPlayerValue.playerName,
+            displayRank = $"Rank: {tmpRankPosition}",
+            displayScore = $"Score: {GlobalController.Instance.GetRankScorePlayer(MyPlayerValue.playerName)}",
+        };
         txtDisplayName.text = overviewProfileData.displayName;
         txtDisplayRank.text = overviewProfileData.displayRank;
         txtDisplayScore.text = overviewProfileData.displayScore;
@@ -133,6 +144,11 @@ public class MenuController : StaticInstance<MenuController>
             SceneManager.LoadScene(SceneGame.SelectModeScene);
             LoaderSystem.Loading(false);
         });
+    }
+
+    private void OnDestroy()
+    {
+        GlobalController.ActionOnUpdatedGlobalLeaderboard -= LoadOverviewData;
     }
 }
 

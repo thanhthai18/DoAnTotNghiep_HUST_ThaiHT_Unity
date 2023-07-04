@@ -5,6 +5,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using System;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using thaiht20183826;
 
 public class RoomModeController : MonoBehaviour
 {
@@ -47,7 +48,6 @@ public class RoomModeController : MonoBehaviour
 
     private void Start()
     {
-
     }
 
     private void OnEnable()
@@ -56,7 +56,7 @@ public class RoomModeController : MonoBehaviour
         lobbyRoomView.btnJoinRoom.onClick.AddListener(OnClickBtnJoinRoom);
         roomView.btnBack.onClick.AddListener(OnLeaveRoomButton);
         roomView.btnStartGame.onClick.AddListener(OnStartGameButton);
-
+        GlobalController.ActionOnUpdatedGlobalLeaderboard += OnUpdatedGlobalLeaderboard;
         NetworkManager.ActionOnConnectedToMaster += HandleOnConnectedToMaster;
         NetworkManager.ActionOnRoomListUpdate += HandleOnRoomListUpdate;
         NetworkManager.ActionOnJoinedLobby += HandleOnJoinedLobby;
@@ -70,9 +70,10 @@ public class RoomModeController : MonoBehaviour
         NetworkManager.ActionOnPLayerLeftRoom += HandleOnPlayerLeftRoom;
         NetworkManager.ActionOnMasterClientSwitched += HandleOnMasterClientSwitched;
         NetworkManager.ActionOnPlayerPropertiesUpdate += HandleOnPlayerPropertiesUpdate;
+        
     }
 
-
+ 
 
     private void OnDisable()
     {
@@ -80,7 +81,7 @@ public class RoomModeController : MonoBehaviour
         lobbyRoomView.btnJoinRoom.onClick.RemoveAllListeners();
         roomView.btnBack.onClick.RemoveAllListeners();
         roomView.btnStartGame.onClick.RemoveAllListeners();
-
+        GlobalController.ActionOnUpdatedGlobalLeaderboard -= OnUpdatedGlobalLeaderboard;
         NetworkManager.ActionOnConnectedToMaster -= HandleOnConnectedToMaster;
         NetworkManager.ActionOnRoomListUpdate -= HandleOnRoomListUpdate;
         NetworkManager.ActionOnJoinedLobby -= HandleOnJoinedLobby;
@@ -94,8 +95,16 @@ public class RoomModeController : MonoBehaviour
         NetworkManager.ActionOnPLayerLeftRoom -= HandleOnPlayerLeftRoom;
         NetworkManager.ActionOnMasterClientSwitched -= HandleOnMasterClientSwitched;
         NetworkManager.ActionOnPlayerPropertiesUpdate -= HandleOnPlayerPropertiesUpdate;
+   
     }
 
+    private void OnUpdatedGlobalLeaderboard()
+    {
+        foreach (var value in playerListChoose.Values)
+        {
+            value.txtScoreRankDisplay.text = GlobalController.Instance.GetRankScorePlayer(value.txtPlayerName.text).ToString();
+        }
+    }
 
     #region PUN CALLBACKS
 
@@ -164,7 +173,7 @@ public class RoomModeController : MonoBehaviour
         {
             PlayerChoose entry = Instantiate(PlayerListEntryPrefab);
             entry.transform.SetParent(roomView.playerChooseParent.transform);
-            entry.GetComponent<PlayerChoose>().Initialize(p.ActorNumber, p.NickName, MyPlayerValue.rankScore, p);
+            entry.GetComponent<PlayerChoose>().Initialize(p.ActorNumber, p.NickName, GlobalController.Instance.GetRankScorePlayer(p.NickName), p);
 
             object isPlayerReady, characterIndex;
             if (p.CustomProperties.TryGetValue("isPlayerReady", out isPlayerReady))
@@ -188,6 +197,8 @@ public class RoomModeController : MonoBehaviour
             playerListChoose.Add(p.ActorNumber, entry);
         }
         //CheckActiveBtnKickPlayer();
+        PlayFabController.GetLeaderboard();
+
         CheckKeyHost();
         roomView.btnStartGame.gameObject.SetActive(CheckPlayersReady());
         SetRoomMapProperties(0);
@@ -209,9 +220,7 @@ public class RoomModeController : MonoBehaviour
         if (SceneManagerHelper.ActiveSceneName == SceneGame.RoomModeScene)
         {
             ViewManager.Show<LobbyRoomView>();
-
             PhotonNetwork.LocalPlayer.CustomProperties.Clear();
-
             foreach (PlayerChoose entry in playerListChoose.Values)
             {
                 Destroy(entry.gameObject);
@@ -220,14 +229,13 @@ public class RoomModeController : MonoBehaviour
             playerListChoose.Clear();
             playerListChoose = null;
         }
-
     }
 
     public void HandleOnPlayerEnteredRoom(Player newPlayer)
     {
         PlayerChoose entry = Instantiate(PlayerListEntryPrefab);
         entry.transform.SetParent(roomView.playerChooseParent.transform);
-        entry.GetComponent<PlayerChoose>().Initialize(newPlayer.ActorNumber, newPlayer.NickName, MyPlayerValue.rankScore, newPlayer);
+        entry.GetComponent<PlayerChoose>().Initialize(newPlayer.ActorNumber, newPlayer.NickName, GlobalController.Instance.GetRankScorePlayer(newPlayer.NickName), newPlayer);
 
         entry.btnKick.gameObject.SetActive(false);
         entry.keyHostIcon.SetActive(false);
@@ -401,10 +409,10 @@ public class RoomModeController : MonoBehaviour
         {
             return false;
         }
-        //if (PhotonNetwork.PlayerList.Length < 2)
-        //{
-        //    return false;
-        //}
+        if (PhotonNetwork.PlayerList.Length < 2)
+        {
+            return false;
+        }
 
         foreach (Player p in PhotonNetwork.PlayerList)
         {
@@ -507,7 +515,6 @@ public class RoomModeController : MonoBehaviour
             //PhotonNetwork.LoadLevel("DemoAsteroids-GameScene");
         }
     }
-
     private void OnDestroy()
     {
         Destroy(instance);

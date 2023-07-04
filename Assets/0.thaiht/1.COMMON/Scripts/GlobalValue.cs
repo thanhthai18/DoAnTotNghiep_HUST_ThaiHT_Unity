@@ -1,4 +1,5 @@
 using Photon.Realtime;
+using PlayFab.ClientModels;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,12 +12,12 @@ public static class GlobalValue
     public const int LIFE_HEART_RANK_MODE = 5;
     public const int ELO_RANK = 50;
     public const int TIME_TO_CONTINUE = 5;
+    public static List<PlayerLeaderboardEntry> listPlayerLeaderBoard = new List<PlayerLeaderboardEntry>();
 }
 
 public static class MyPlayerValue
 {
     public static string playerName;
-    public static int rankScore;
 }
 
 public static class SceneGame

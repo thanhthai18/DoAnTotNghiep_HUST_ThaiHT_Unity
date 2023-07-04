@@ -143,7 +143,7 @@ namespace thaiht20183826
             }
             else
             {
-                scoreRank = MyPlayerValue.rankScore;
+                scoreRank = GlobalController.Instance.GetRankScorePlayer(player.NickName);
             }
 
             //Character
@@ -351,9 +351,6 @@ namespace thaiht20183826
 
                     }
                 }
-
-
-
             }
         }
         private void OnCollisionExit2D(Collision2D collision)
