@@ -136,7 +136,8 @@ namespace thaiht20183826
             spawnPos = transform.position;
             photonPlayer = player;
             id_Photon = player.ActorNumber;
-            GamePlayController.instance.listPlayersGamePlay[id_Photon - 1] = this;
+            //GamePlayController.instance.listPlayersGamePlay[id_Photon - 1] = this;
+            GamePlayController.instance.listPlayersGamePlay.Add(this);
             if (!photonView.IsMine)
             {
                 rig.isKinematic = true;
@@ -161,7 +162,11 @@ namespace thaiht20183826
 
 
             //Tab
-            GamePlayController.instance.gamePlayView.tabPlayerInfo.SpawnPlayerTab(id_Photon, player.NickName, myAvatar, GlobalValue.currentModeGame);
+            Invoke(nameof(DelaySpawnPlayerTab), 0.5f);
+        }
+        void DelaySpawnPlayerTab()
+        {
+            GamePlayController.instance.gamePlayView.tabPlayerInfo.SpawnPlayerTab(id_Photon, photonPlayer.NickName, myAvatar, GlobalValue.currentModeGame);
         }
 
 
@@ -289,7 +294,8 @@ namespace thaiht20183826
             {
                 transform.DOScale(0, 0.1f).OnComplete(() =>
                 {
-                    transform.position = spawnPos;
+                    //transform.position = spawnPos;
+                    transform.position = Vector3.zero;
                     selfCharacterScript.AnimIdle();
                     transform.DOScale(beginScale, 0.1f).OnComplete(() =>
                     {

@@ -16,6 +16,7 @@ namespace thaiht20183826
         public TextMeshProUGUI txtCount;
         public int idPhoton;
         [SerializeField] public bool isHeartIcon;
+        public PlayerGamePlay playerGamePlayReference;
 
         void Awake()
         {

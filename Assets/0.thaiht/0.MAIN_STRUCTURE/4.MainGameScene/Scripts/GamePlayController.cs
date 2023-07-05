@@ -75,7 +75,8 @@ namespace thaiht20183826
         void Start()
         {
             gamePlayTime = (int)PhotonNetwork.CurrentRoom.CustomProperties["timePlay"];
-            listPlayersGamePlay = new List<PlayerGamePlay>(new PlayerGamePlay[PhotonNetwork.PlayerList.Length]);
+            //listPlayersGamePlay = new List<PlayerGamePlay>(new PlayerGamePlay[PhotonNetwork.PlayerList.Length]);
+            listPlayersGamePlay = new List<PlayerGamePlay>();
             ChangeState(GamePlayState.IM_IN_GAME);
         }
 
@@ -170,20 +171,30 @@ namespace thaiht20183826
         }
         public void SpawnPlayer()
         {
-            Debug.Log($"Call InitPlayer + {(int)PhotonNetwork.LocalPlayer.CustomProperties["characterIndex"]}");
+            Debug.Log("ActorNumber: "+ PhotonNetwork.LocalPlayer.ActorNumber);
             int indexData = (int)PhotonNetwork.LocalPlayer.CustomProperties["characterIndex"];
             var dataSpawn = dataCharacterScriptableObj.listCharacter[indexData];
             playerGamePlayPrefabPath = dataSpawn.characterPrefab.name;
-            Debug.Log("Cao " + countPlayerInGame);
-            PlayerGamePlay playerGamePlay = PhotonNetwork.Instantiate(playerGamePlayPrefabPath, MapController.Instance.listSpawnPlayer[PhotonNetwork.LocalPlayer.ActorNumber-1].position, Quaternion.identity).GetComponent<PlayerGamePlay>();
+            PlayerGamePlay playerGamePlay = PhotonNetwork.Instantiate(playerGamePlayPrefabPath, MapController.Instance.listSpawnPlayer[GlobalValue.indexPosSpawnPlayerGamePlay].position, Quaternion.identity).GetComponent<PlayerGamePlay>();
             playerGamePlay.photonView.RPC(nameof(playerGamePlay.InitPlayer), RpcTarget.All, PhotonNetwork.LocalPlayer, indexData);
 
         }
 
-
         public PlayerGamePlay GetPlayer(int playerId)
         {
             return listPlayersGamePlay.First(s => s.id_Photon == playerId);
+        }
+   
+        public PlayerGamePlay GetPlayer(string namePlayer)
+        {
+            foreach (var value in listPlayersGamePlay)
+            {
+                if (value.photonPlayer.NickName == namePlayer)
+                {
+                    return value;
+                }
+            }
+            return null;
         }
 
         private void PlayerGamePlay_OnPlayerOutAreaMap(PlayerGamePlay playerGamePlay)
@@ -225,7 +236,17 @@ namespace thaiht20183826
             isCounting = false;
             listPlayersGamePlay.ForEach(s => s.isCanControl = false);
             gamePlayView.ShowLeaderBoardEndGame(arrScore);
-            PlayFabController.SubmitScore(arrScore[PhotonNetwork.LocalPlayer.ActorNumber-1]);
+            var tmpTrans = gamePlayView.leaderBoardEndGameView.holderElement;
+            Debug.Log(tmpTrans.childCount + ";;;;");
+            for (int i = 0; i < tmpTrans.childCount; i++)
+            {
+                if(PhotonNetwork.LocalPlayer.NickName == tmpTrans.GetChild(i).GetComponent<ElementLeaderBoardEndGame>().txtName.text)
+                {
+                    PlayFabController.SubmitScore(arrScore[i]);
+                }
+            }
+            
+            
             ActionOnGameContinueAfter?.Invoke(GlobalValue.TIME_TO_CONTINUE);
             this.Wait(GlobalValue.TIME_TO_CONTINUE, () =>
             {
@@ -236,6 +257,10 @@ namespace thaiht20183826
 
         }
 
+        private void OnDestroy()
+        {
+            Destroy(instance);
+        }
 
 
 

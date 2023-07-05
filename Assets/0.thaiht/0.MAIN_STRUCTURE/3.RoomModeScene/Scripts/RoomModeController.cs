@@ -167,10 +167,16 @@ public class RoomModeController : MonoBehaviour
         if (playerListChoose == null)
         {
             playerListChoose = new Dictionary<int, PlayerChoose>();
+        
         }
 
-        foreach (Player p in PhotonNetwork.PlayerList)
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
+            var p = PhotonNetwork.PlayerList[i];
+            if(PhotonNetwork.LocalPlayer == p)
+            {
+                GlobalValue.indexPosSpawnPlayerGamePlay = i;
+            }
             PlayerChoose entry = Instantiate(PlayerListEntryPrefab);
             entry.transform.SetParent(roomView.playerChooseParent.transform);
             entry.GetComponent<PlayerChoose>().Initialize(p.ActorNumber, p.NickName, GlobalController.Instance.GetRankScorePlayer(p.NickName), p);
@@ -196,6 +202,7 @@ public class RoomModeController : MonoBehaviour
 
             playerListChoose.Add(p.ActorNumber, entry);
         }
+   
         //CheckActiveBtnKickPlayer();
         PlayFabController.GetLeaderboard();
 
@@ -228,6 +235,7 @@ public class RoomModeController : MonoBehaviour
 
             playerListChoose.Clear();
             playerListChoose = null;
+
         }
     }
 
@@ -252,7 +260,6 @@ public class RoomModeController : MonoBehaviour
         //roomView.OnUpdateLobbyUI();
         Destroy(playerListChoose[otherPlayer.ActorNumber].gameObject);
         playerListChoose.Remove(otherPlayer.ActorNumber);
-
         roomView.btnStartGame.gameObject.SetActive(CheckPlayersReady());
     }
 
@@ -468,6 +475,8 @@ public class RoomModeController : MonoBehaviour
         PhotonNetwork.LeaveRoom();
 
     }
+
+
 
     //thai thai thai
     public void SetRoomMapProperties(int index)

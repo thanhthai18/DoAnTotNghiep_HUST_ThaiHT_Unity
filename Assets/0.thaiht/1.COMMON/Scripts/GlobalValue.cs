@@ -13,6 +13,7 @@ public static class GlobalValue
     public const int ELO_RANK = 50;
     public const int TIME_TO_CONTINUE = 5;
     public static List<PlayerLeaderboardEntry> listPlayerLeaderBoard = new List<PlayerLeaderboardEntry>();
+    public static int indexPosSpawnPlayerGamePlay;
 }
 
 public static class MyPlayerValue

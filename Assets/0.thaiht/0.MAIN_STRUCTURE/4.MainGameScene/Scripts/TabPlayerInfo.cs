@@ -95,8 +95,10 @@ namespace thaiht20183826
             tab.SetImgSpriteModeGame(enumModeGame);
             tab.txtPlayerName.text = namePlayer;
             tab.imgIconAvatar.sprite = imgIconAvatar;
-
+            tab.playerGamePlayReference = GamePlayController.instance.GetPlayer(idPlayer);
             listHolderPlayerIconInTab.Add(tab);
+
+
             if (tab.isHeartIcon)
             {
                 SetTextCountLifePlayer(idPlayer, GlobalValue.LIFE_HEART_RANK_MODE);
@@ -105,22 +107,27 @@ namespace thaiht20183826
             {
                 SetTextCountLifePlayer(idPlayer, 0);
             }
+
         }
 
 
         public void SortCountLifeTab()
         {
-            if (listHolderPlayerIconInTab[0].isHeartIcon)
+            if (listHolderPlayerIconInTab.Count > 0)
             {
-                listHolderPlayerIconInTab = listHolderPlayerIconInTab.OrderByDescending(s => int.Parse(s.txtCount.text)).ThenBy(s =>
-                    GamePlayController.instance?.GetPlayer(s.idPhoton).scoreRank).ToList();
+                if (listHolderPlayerIconInTab[0].isHeartIcon)
+                {
+                    listHolderPlayerIconInTab = listHolderPlayerIconInTab.OrderByDescending(s => int.Parse(s.txtCount.text)).ThenBy(s =>
+                        s.playerGamePlayReference.scoreRank)?.ToList();
+                }
+                else
+                {
+                    listHolderPlayerIconInTab = listHolderPlayerIconInTab.OrderBy(s => int.Parse(s.txtCount.text)).ThenBy(s =>
+                        s.playerGamePlayReference.scoreRank)?.ToList();
+                }
+                listHolderPlayerIconInTab.ForEach(s => s.gameObject.transform.SetAsLastSibling());
             }
-            else
-            {
-                listHolderPlayerIconInTab = listHolderPlayerIconInTab.OrderBy(s => int.Parse(s.txtCount.text)).ThenBy(s =>
-                    GamePlayController.instance?.GetPlayer(s.idPhoton).scoreRank).ToList();
-            }
-            listHolderPlayerIconInTab.ForEach(s => s.gameObject.transform.SetAsLastSibling());
+
         }
 
         public void CallSetTextCountLifePlayer(int idPlayer, int count)
@@ -130,9 +137,22 @@ namespace thaiht20183826
         [PunRPC]
         private void SetTextCountLifePlayer(int idPlayer, int count)
         {
-            var playerTab = listHolderPlayerIconInTab.First(s => s.idPhoton == idPlayer);
-            playerTab.SetTextCountLife(count);
-            SortCountLifeTab();
+            try
+            {
+                for (int i = 0; i < listHolderPlayerIconInTab.Count; i++)
+                {
+                    if (listHolderPlayerIconInTab[i].idPhoton == idPlayer)
+                    {
+                        listHolderPlayerIconInTab[i].SetTextCountLife(count);
+                        SortCountLifeTab();
+                    }
+                }
+            }
+            catch (System.Exception e)
+            {
+
+            }
+
         }
     }
 }

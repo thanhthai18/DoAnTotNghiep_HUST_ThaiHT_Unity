@@ -125,6 +125,10 @@ public class PlayerChoose : MonoBehaviour
 
     public void OnClickLeftBtn()
     {
+        if ((bool)playerProperties["isPlayerReady"])
+        {
+            return;
+        }
         if ((int)playerProperties["characterIndex"] == 0)
         {
             playerProperties["characterIndex"] = GlobalController.Instance.scriptableDataCharacter.listCharacter.Count - 1;
@@ -138,6 +142,10 @@ public class PlayerChoose : MonoBehaviour
     }
     public void OnClickRightBtn()
     {
+        if ((bool)playerProperties["isPlayerReady"])
+        {
+            return;
+        }
         if ((int)playerProperties["characterIndex"] == GlobalController.Instance.scriptableDataCharacter.listCharacter.Count - 1)
         {
             playerProperties["characterIndex"] = 0;
