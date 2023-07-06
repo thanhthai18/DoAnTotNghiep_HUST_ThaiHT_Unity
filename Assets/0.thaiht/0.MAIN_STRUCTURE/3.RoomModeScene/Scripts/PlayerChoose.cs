@@ -30,6 +30,9 @@ public class PlayerChoose : MonoBehaviour
     public Player myPlayerPhoton;
     public int myIndexCharacter;
 
+    [SerializeField] int characterIndexRankMode = 0;
+    [SerializeField] bool isPlayerOnWaitMatch = false;
+
     public Hashtable playerProperties = new Hashtable();
 
     #region UNITY
@@ -44,35 +47,56 @@ public class PlayerChoose : MonoBehaviour
 
     public void ApplyLocalPlayer(bool isApply)
     {
-        if (!isApply)
+        if (PhotonNetwork.IsConnected)
         {
-            btnReady.gameObject.SetActive(false);
-            btnLeft.gameObject.SetActive(false);
-            btnRight.gameObject.SetActive(false);
-            //PhotonNetwork.SetPlayerCustomProperties(playerProperties);
-        }
-        else
-        {
-            btnLeft.onClick.AddListener(OnClickLeftBtn);
-            btnRight.onClick.AddListener(OnClickRightBtn);
-
-            Hashtable initialProps = new Hashtable() { { "isPlayerReady", isPlayerReady }/*, { AsteroidsGame.PLAYER_LIVES, AsteroidsGame.PLAYER_MAX_LIVES }*/ };
-            PhotonNetwork.LocalPlayer.SetCustomProperties(initialProps);
-
-            btnReady.onClick.AddListener(() =>
+            if (!isApply)
             {
-                isPlayerReady = !isPlayerReady;
-                SetPlayerReady(isPlayerReady);
+                btnReady?.gameObject.SetActive(false);
+                btnLeft.gameObject.SetActive(false);
+                btnRight.gameObject.SetActive(false);
+                //PhotonNetwork.SetPlayerCustomProperties(playerProperties);
+            }
+            else
+            {
+                btnLeft.onClick.AddListener(OnClickLeftBtn);
+                btnRight.onClick.AddListener(OnClickRightBtn);
 
-                Hashtable props = new Hashtable() { { "isPlayerReady", isPlayerReady } };
-                PhotonNetwork.LocalPlayer.SetCustomProperties(props);
-
-                if (PhotonNetwork.IsMasterClient)
+                Hashtable initialProps = new Hashtable() { { "isPlayerReady", isPlayerReady }/*, { AsteroidsGame.PLAYER_LIVES, AsteroidsGame.PLAYER_MAX_LIVES }*/ };
+                if (myPlayerPhoton.CustomProperties["isPlayerReady"] == null)
                 {
-                    RoomModeController.instance.LocalPlayerPropertiesUpdated();
+                    myPlayerPhoton.SetCustomProperties(initialProps);
                 }
-            });
+                else
+                {
+                    PhotonNetwork.LocalPlayer.SetCustomProperties(initialProps);
+                }
+
+                btnReady?.onClick.AddListener(() =>
+                {
+                    isPlayerReady = !isPlayerReady;
+                    SetPlayerReady(isPlayerReady);
+
+                    Hashtable props = new Hashtable() { { "isPlayerReady", isPlayerReady } };
+                    if (myPlayerPhoton.CustomProperties["isPlayerReady"] == null)
+                    {
+                        myPlayerPhoton.SetCustomProperties(props);
+                    }
+                    else
+                    {
+                        myPlayerPhoton.CustomProperties["isPlayerReady"] = isPlayerReady;
+                    }
+                    if (SceneManagerHelper.ActiveSceneName == SceneGame.RoomModeScene)
+                    {
+                        if (PhotonNetwork.IsMasterClient)
+                        {
+                            RoomModeController.instance?.LocalPlayerPropertiesUpdated();
+                        }
+                    }
+
+                });
+            }
         }
+       
 
     }
 
@@ -89,14 +113,16 @@ public class PlayerChoose : MonoBehaviour
 
         //currentCharacter = GlobalController.Instance.scriptableDataCharacter.listCharacter[0];
         //SetPlayerCharacter(currentCharacter);
+
         playerProperties = new Hashtable()
-        {
-            { "characterIndex", 0}
-        };
-        if(myPlayerPhoton.CustomProperties["characterIndex"] == null)
+            {
+                { "characterIndex", 0}
+            };
+        if (myPlayerPhoton.CustomProperties["characterIndex"] == null)
         {
             myPlayerPhoton.SetCustomProperties(playerProperties);
         }
+
 
         if (PhotonNetwork.LocalPlayer.ActorNumber != ownerId)
         {
@@ -125,36 +151,38 @@ public class PlayerChoose : MonoBehaviour
 
     public void OnClickLeftBtn()
     {
-        if ((bool)playerProperties["isPlayerReady"])
+        if ((bool)myPlayerPhoton.CustomProperties["isPlayerReady"])
         {
             return;
         }
-        if ((int)playerProperties["characterIndex"] == 0)
+        if ((int)myPlayerPhoton.CustomProperties["characterIndex"] == 0)
         {
             playerProperties["characterIndex"] = GlobalController.Instance.scriptableDataCharacter.listCharacter.Count - 1;
         }
         else
         {
-            playerProperties["characterIndex"] = (int)playerProperties["characterIndex"] - 1;
+            playerProperties["characterIndex"] = (int)myPlayerPhoton.CustomProperties["characterIndex"] - 1;
         }
         myPlayerPhoton.SetCustomProperties(playerProperties);
-        //currentCharacter = GlobalController.Instance.scriptableDataCharacter.listCharacter[PhotonNetwork.LocalPlayer.CustomProperties(playerProperties["characterIndex"])]
+        SetPlayerCharacter(GlobalController.Instance.scriptableDataCharacter.listCharacter[(int)playerProperties["characterIndex"]]);
     }
     public void OnClickRightBtn()
     {
-        if ((bool)playerProperties["isPlayerReady"])
+        if ((bool)myPlayerPhoton.CustomProperties["isPlayerReady"])
         {
             return;
         }
-        if ((int)playerProperties["characterIndex"] == GlobalController.Instance.scriptableDataCharacter.listCharacter.Count - 1)
+
+        if ((int)myPlayerPhoton.CustomProperties["characterIndex"] == GlobalController.Instance.scriptableDataCharacter.listCharacter.Count - 1)
         {
             playerProperties["characterIndex"] = 0;
         }
         else
         {
-            playerProperties["characterIndex"] = (int)playerProperties["characterIndex"] + 1;
+            playerProperties["characterIndex"] = (int)myPlayerPhoton.CustomProperties["characterIndex"] + 1;
         }
         myPlayerPhoton.SetCustomProperties(playerProperties);
+        SetPlayerCharacter(GlobalController.Instance.scriptableDataCharacter.listCharacter[(int)playerProperties["characterIndex"]]);
     }
 }
 

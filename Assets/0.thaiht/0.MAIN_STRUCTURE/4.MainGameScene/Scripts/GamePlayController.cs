@@ -34,7 +34,7 @@ namespace thaiht20183826
         public DataCharacter dataCharacterScriptableObj;
 
         [Header("General")]
-        public float gamePlayTime = 30; 
+        public float gamePlayTime = 30;
         private float currentTime;
         [SerializeField] private bool isCounting = false;
 
@@ -74,7 +74,14 @@ namespace thaiht20183826
 
         void Start()
         {
-            gamePlayTime = (int)PhotonNetwork.CurrentRoom.CustomProperties["timePlay"];
+            if (SceneManagerHelper.ActiveSceneName == SceneGame.RoomModeScene)
+            {
+                gamePlayTime = (int)PhotonNetwork.CurrentRoom.CustomProperties["timePlay"];
+            }
+            else if (SceneManagerHelper.ActiveSceneName == SceneGame.RankModeScene)
+            {
+                gamePlayTime = GlobalValue.TIME_PLAY_RANK_MODE;
+            }
             //listPlayersGamePlay = new List<PlayerGamePlay>(new PlayerGamePlay[PhotonNetwork.PlayerList.Length]);
             listPlayersGamePlay = new List<PlayerGamePlay>();
             ChangeState(GamePlayState.IM_IN_GAME);
@@ -171,7 +178,7 @@ namespace thaiht20183826
         }
         public void SpawnPlayer()
         {
-            Debug.Log("ActorNumber: "+ PhotonNetwork.LocalPlayer.ActorNumber);
+            Debug.Log("ActorNumber: " + PhotonNetwork.LocalPlayer.ActorNumber);
             int indexData = (int)PhotonNetwork.LocalPlayer.CustomProperties["characterIndex"];
             var dataSpawn = dataCharacterScriptableObj.listCharacter[indexData];
             playerGamePlayPrefabPath = dataSpawn.characterPrefab.name;
@@ -184,7 +191,7 @@ namespace thaiht20183826
         {
             return listPlayersGamePlay.First(s => s.id_Photon == playerId);
         }
-   
+
         public PlayerGamePlay GetPlayer(string namePlayer)
         {
             foreach (var value in listPlayersGamePlay)
@@ -211,6 +218,7 @@ namespace thaiht20183826
         private void PlayerGamePlay_OnPlayerLostByHeart()
         {
             Debug.Log("End Game Rank");
+            HandleEndGame();
         }
 
 
@@ -234,25 +242,38 @@ namespace thaiht20183826
         {
             // Thực hiện các hành động sau khi kết thúc trò chơi (ví dụ: hiển thị kết quả cuối cùng, trở về menu, vv.)
             isCounting = false;
-            listPlayersGamePlay.ForEach(s => s.isCanControl = false);
+            
+            listPlayersGamePlay.ForEach(s => { s.isCanControl = false; s.enabled = false; });
             gamePlayView.ShowLeaderBoardEndGame(arrScore);
             var tmpTrans = gamePlayView.leaderBoardEndGameView.holderElement;
             Debug.Log(tmpTrans.childCount + ";;;;");
             for (int i = 0; i < tmpTrans.childCount; i++)
             {
-                if(PhotonNetwork.LocalPlayer.NickName == tmpTrans.GetChild(i).GetComponent<ElementLeaderBoardEndGame>().txtName.text)
+                if (PhotonNetwork.LocalPlayer.NickName == tmpTrans.GetChild(i).GetComponent<ElementLeaderBoardEndGame>().txtName.text)
                 {
                     PlayFabController.SubmitScore(arrScore[i]);
                 }
             }
-            
-            
+
+
             ActionOnGameContinueAfter?.Invoke(GlobalValue.TIME_TO_CONTINUE);
             this.Wait(GlobalValue.TIME_TO_CONTINUE, () =>
             {
                 LoaderSystem.Loading(true);
-                this.Wait(0.5f, () => { GlobalController.Instance.ReloadPreviousRoom(); });
-                
+                this.Wait(0.5f, () =>
+                {
+                    if (GlobalValue.currentModeGame == ModeGame.RoomMode)
+                    {
+                        GlobalController.Instance.ReloadPreviousRoom();
+                    }
+                    else if(GlobalValue.currentModeGame == ModeGame.RankMode)
+                    {
+                        PhotonNetwork.LeaveRoom();
+                        PhotonNetwork.LeaveLobby();
+                        SceneManager.LoadScene(SceneGame.SelectModeScene);
+                    }
+                });
+
             });
 
         }

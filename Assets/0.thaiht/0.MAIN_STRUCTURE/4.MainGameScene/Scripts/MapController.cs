@@ -12,7 +12,6 @@ namespace thaiht20183826
         [SerializeField] Map currentMap;
         [SerializeField] int indexCurrentMap;
         [SerializeField] public List<Transform> listSpawnPlayer = new List<Transform>();
-
         
         #region SUBSCRIBE
         private void OnEnable()
@@ -41,6 +40,11 @@ namespace thaiht20183826
             var data = dataMapScriptableObj.listMapInfo[indexCurrentMap];
             currentMap.Init(data);
 
+        }
+
+        public int GetNumberOfMap()
+        {
+            return dataMapScriptableObj.listMapInfo.Count;
         }
 
         private void Update()

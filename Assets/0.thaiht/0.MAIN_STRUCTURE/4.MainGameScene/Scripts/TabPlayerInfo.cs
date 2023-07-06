@@ -34,14 +34,16 @@ namespace thaiht20183826
             archorPosShow = new Vector2(-selfRectTransform.sizeDelta.x / 2, 0);
         }
         #region SUBSCRIBE
-        private void OnEnable()
+        public override void OnEnable()
         {
+            base.OnEnable();
             PlayerGamePlay.OnSetCountScoreLifePlayer += CallSetTextCountLifePlayer;
         }
 
 
-        private void OnDisable()
+        public override void OnDisable()
         {
+            base.OnDisable();
             PlayerGamePlay.OnSetCountScoreLifePlayer -= CallSetTextCountLifePlayer;
         }
         #endregion

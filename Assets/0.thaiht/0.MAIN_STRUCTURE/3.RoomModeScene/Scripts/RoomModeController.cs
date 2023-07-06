@@ -15,8 +15,6 @@ public class RoomModeController : MonoBehaviour
     [SerializeField] private RoomView roomView;
     [SerializeField] SlotRoomSelect slotRoomPrefab;
     [SerializeField] Dictionary<string, SlotRoomSelect> listRoomEntry;
-    [SerializeField] float timeStepUpdateRoom = 1.0f;
-    private float nextTimeUpdateRoom;
 
     private Dictionary<string, RoomInfo> cachedRoomList;
     public PlayerChoose PlayerListEntryPrefab;
@@ -274,7 +272,6 @@ public class RoomModeController : MonoBehaviour
 
     public void HandleOnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
-
         if (playerListChoose == null)
         {
             playerListChoose = new Dictionary<int, PlayerChoose>();

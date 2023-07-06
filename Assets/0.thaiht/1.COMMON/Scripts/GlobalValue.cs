@@ -14,6 +14,7 @@ public static class GlobalValue
     public const int TIME_TO_CONTINUE = 5;
     public static List<PlayerLeaderboardEntry> listPlayerLeaderBoard = new List<PlayerLeaderboardEntry>();
     public static int indexPosSpawnPlayerGamePlay;
+    public const int TIME_PLAY_RANK_MODE = 60;
 }
 
 public static class MyPlayerValue

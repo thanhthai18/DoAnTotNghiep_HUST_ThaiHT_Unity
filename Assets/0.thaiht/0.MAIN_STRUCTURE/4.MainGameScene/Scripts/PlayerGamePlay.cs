@@ -133,6 +133,8 @@ namespace thaiht20183826
         public void InitPlayer(Player player, int indexDataCharacter)
         {
             //Player
+            countDead = 0;
+            countHeart = GlobalValue.LIFE_HEART_RANK_MODE;
             spawnPos = transform.position;
             photonPlayer = player;
             id_Photon = player.ActorNumber;
@@ -343,8 +345,8 @@ namespace thaiht20183826
         {
             if (collision.gameObject.CompareTag("Player"))
             {
-                if (photonView.IsMine)
-                {
+                //if (photonView.IsMine)
+                //{
                     Rigidbody2D otherRigidbody = collision.collider.GetComponent<Rigidbody2D>();
 
                     if (otherRigidbody != null)
@@ -356,22 +358,23 @@ namespace thaiht20183826
                         otherRigidbody.AddForce(pushDirection * pushForce, ForceMode2D.Impulse);
 
                     }
-                }
+                //}
             }
         }
-        private void OnCollisionExit2D(Collision2D collision)
-        {
-            if (collision.gameObject.CompareTag("Player"))
-            {
-                if (photonView.IsMine)
-                {
-                    col.enabled = true;
-                }
-            }
-        }
+        //private void OnCollisionExit2D(Collision2D collision)
+        //{
+        //    if (collision.gameObject.CompareTag("Player"))
+        //    {
+        //        if (photonView.IsMine)
+        //        {
+        //            col.enabled = true;
+        //        }
+        //    }
+        //}
 
         private void OnTriggerExit2D(Collider2D collision)
         {
+            Debug.Log(GlobalValue.currentModeGame);
             if (collision.CompareTag("Map"))
             {
                 if (GlobalValue.currentModeGame == ModeGame.RoomMode)
