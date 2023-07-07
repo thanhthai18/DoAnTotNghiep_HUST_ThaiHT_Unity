@@ -40,7 +40,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public static event Action ActionOnCreateRoom;
     public static event Action<Player> ActionOnPlayerEnterRoom;
     public static event Action<Player> ActionOnPLayerLeftRoom;
-
+    public static event Action<ExitGames.Client.Photon.Hashtable> ActionOnRoomUpdateProperties;
 
 
     //    #region Singleton
@@ -199,6 +199,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         ActionOnPLayerLeftRoom?.Invoke(otherPlayer);
+    }
+    public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
+    {
+        ActionOnRoomUpdateProperties?.Invoke(propertiesThatChanged);
     }
 
     public void CreateRoom(string roomName)

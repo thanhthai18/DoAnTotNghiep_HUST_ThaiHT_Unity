@@ -28,7 +28,7 @@ namespace thaiht20183826
         {
             if(stt <= 3)
             {
-                imgCup.sprite = spritesCup[stt];
+                imgCup.sprite = spritesCup[stt-1];
             }
             else
             {

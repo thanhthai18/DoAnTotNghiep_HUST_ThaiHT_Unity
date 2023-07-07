@@ -8,6 +8,7 @@ using PlayFab.ClientModels;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
 using System.Linq;
+using Photon.Pun;
 
 public class MenuController : StaticInstance<MenuController>
 {
@@ -93,7 +94,7 @@ public class MenuController : StaticInstance<MenuController>
 
 
         /*---Button Login---*/
-        btnLogout.onClick.AddListener(() => SceneManager.LoadScene(SceneGame.LoginScene));
+        btnLogout.onClick.AddListener(() => { PhotonNetwork.Disconnect(); SceneManager.LoadScene(SceneGame.LoginScene); });
 
 
         //Invoke(nameof(LoadOverviewData), 0.1f);

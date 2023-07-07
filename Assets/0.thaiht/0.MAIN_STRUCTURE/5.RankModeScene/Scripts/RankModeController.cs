@@ -10,7 +10,7 @@ using Random = UnityEngine.Random;
 
 namespace thaiht20183826
 {
-    public class RankModeController : MonoBehaviour
+    public class RankModeController : MonoBehaviourPunCallbacks
     {
         public static RankModeController instance;
         [SerializeField] private RankModeView rankModeView;
@@ -38,8 +38,9 @@ namespace thaiht20183826
         }
 
 
-        private void OnEnable()
+        public override void OnEnable()
         {
+            base.OnEnable();
             rankModeView.btnBack.onClick.AddListener(OnLeaveLobbyButton);
             rankModeView.btnPlay.onClick.AddListener(OnFindMatch);
             GlobalController.ActionOnUpdatedGlobalLeaderboard += OnUpdatedGlobalLeaderboard;
@@ -56,13 +57,14 @@ namespace thaiht20183826
             //NetworkManager.ActionOnPLayerLeftRoom += HandleOnPlayerLeftRoom;
             //NetworkManager.ActionOnMasterClientSwitched += HandleOnMasterClientSwitched;
             NetworkManager.ActionOnPlayerPropertiesUpdate += HandleOnPlayerPropertiesUpdate;
-
+            NetworkManager.ActionOnRoomUpdateProperties += HandleOnRoomUpdateProperties;
         }
 
 
 
-        private void OnDisable()
+        public override void OnDisable()
         {
+            base.OnDisable();
             rankModeView.btnBack.onClick.RemoveAllListeners();
             rankModeView.btnPlay.onClick.RemoveAllListeners();
             GlobalController.ActionOnUpdatedGlobalLeaderboard -= OnUpdatedGlobalLeaderboard;
@@ -79,7 +81,7 @@ namespace thaiht20183826
             //NetworkManager.ActionOnPLayerLeftRoom -= HandleOnPlayerLeftRoom;
             //NetworkManager.ActionOnMasterClientSwitched -= HandleOnMasterClientSwitched;
             NetworkManager.ActionOnPlayerPropertiesUpdate -= HandleOnPlayerPropertiesUpdate;
-
+            NetworkManager.ActionOnRoomUpdateProperties -= HandleOnRoomUpdateProperties;
         }
 
         public void HandleOnJoinedLobby()
@@ -163,8 +165,8 @@ namespace thaiht20183826
             }
             else
             {
-                StartCoroutine(CheckFindMatchSuccess());
-                PhotonNetwork.JoinRoom(countRoomCreateRank+"_FindRoom_");
+                coroutineCheckMatchSuccess = StartCoroutine(CheckFindMatchSuccess());
+                PhotonNetwork.JoinRoom(countRoomCreateRank + "_FindRoom_");
             }
         }
 
@@ -172,28 +174,40 @@ namespace thaiht20183826
         {
             PhotonNetwork.JoinLobby();
         }
+        private void HandleOnRoomUpdateProperties(Hashtable obj)
+        {
+            if (obj.ContainsKey("indexMap"))
+            {
+                NetworkManager.Instance.ChangeScene("MainGameScene");
+            }
+        }
         IEnumerator CheckFindMatchSuccess()
         {
             while (true)
             {
                 yield return new WaitForSeconds(1);
-                int randomIndexMap = Random.Range(0, dataMapScriptableObj.listMapInfo.Count);
-                
-                
+
+
 
                 if (PhotonNetwork.IsMasterClient)
                 {
-                   
+                    GlobalValue.indexPosSpawnPlayerGamePlay = 0;
                     if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
                     {
-                        SetRoomMapProperties(randomIndexMap);
-                        NetworkManager.Instance.ChangeScene("MainGameScene");
+                        int randomIndexMap = Random.Range(0, dataMapScriptableObj.listMapInfo.Count);
+                        photonView.RPC(nameof(SetRoomMapProperties), RpcTarget.All, randomIndexMap);
+                        //=>ChangeScene
                     }
                 }
+                else
+                {
+                    GlobalValue.indexPosSpawnPlayerGamePlay = 1;
+                }
             }
-          
+
         }
 
+        [PunRPC]
         public void SetRoomMapProperties(int index)
         {
             if (PhotonNetwork.CurrentRoom != null)
@@ -207,8 +221,11 @@ namespace thaiht20183826
                 {
                     PhotonNetwork.CurrentRoom.CustomProperties["indexMap"] = index;
                 }
+
+
             }
 
         }
+
     }
 }

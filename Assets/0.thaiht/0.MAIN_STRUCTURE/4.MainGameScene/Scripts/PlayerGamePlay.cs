@@ -289,10 +289,12 @@ namespace thaiht20183826
         public void HoiSinh()
         {
             isCanControl = false;
+            rig.velocity = Vector2.zero;
+            col.isTrigger = true;
             var beginScale = transform.localScale;
             selfCharacterScript.AnimDie();
             FeedBackGamePlay.instance.PlayFlicker();
-            transform.DOMoveZ(transform.position.z, 1.3f).OnComplete(() =>
+            this.Wait(1.3f, () =>
             {
                 transform.DOScale(0, 0.1f).OnComplete(() =>
                 {
@@ -301,11 +303,14 @@ namespace thaiht20183826
                     selfCharacterScript.AnimIdle();
                     transform.DOScale(beginScale, 0.1f).OnComplete(() =>
                     {
+                        rig.position = Vector2.zero;
+                        col.isTrigger = false;
                         isCanControl = true;
                         OnPlayerDaHoiSinh?.Invoke(this);
                     });
                 });
             });
+
 
         }
 
@@ -340,24 +345,39 @@ namespace thaiht20183826
         //    }
         //}
 
-
+        bool isTriggerPlayer = false;
+        void DelayTriggerPlayerTrue()
+        {
+            isTriggerPlayer = true;
+        }
         private void OnCollisionEnter2D(Collision2D collision)
         {
             if (collision.gameObject.CompareTag("Player"))
             {
                 //if (photonView.IsMine)
                 //{
-                    Rigidbody2D otherRigidbody = collision.collider.GetComponent<Rigidbody2D>();
+                Rigidbody2D otherRigidbody = collision.collider.GetComponent<Rigidbody2D>();
 
-                    if (otherRigidbody != null)
+                if (otherRigidbody != null && !isTriggerPlayer)
+                {
+                    col.isTrigger = true;
+           
+                    isTriggerPlayer = true;
+                    Invoke(nameof(DelayTriggerPlayerTrue), 0.2f);
+                    Debug.Log("push");
+                    Vector2 pushDirection = otherRigidbody.transform.position - transform.position;
+                    pushDirection = pushDirection.normalized;
+
+                    if (isDashing)
                     {
-                        Debug.Log("push");
-                        Vector2 pushDirection = otherRigidbody.transform.position - transform.position;
-                        pushDirection = pushDirection.normalized;
-
-                        otherRigidbody.AddForce(pushDirection * pushForce, ForceMode2D.Impulse);
-
+                        otherRigidbody.AddForce(pushDirection * pushForce * 20, ForceMode2D.Impulse);
                     }
+                    else
+                    {
+                        otherRigidbody.AddForce(pushDirection * pushForce, ForceMode2D.Impulse);
+                    }
+                    col.isTrigger = false;
+                }
                 //}
             }
         }

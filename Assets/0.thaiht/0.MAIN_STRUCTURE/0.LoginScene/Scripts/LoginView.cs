@@ -64,9 +64,10 @@ public class LoginView : View
         {
             name = result.InfoResultPayload.PlayerProfile.DisplayName;
             MyPlayerValue.playerName = name;
+            PlayFabController.GetLeaderboard();
+            LoadNextScene();
         }
-        PlayFabController.GetLeaderboard();
-        LoadNextScene();
+
     }
 
     private void OnLoginError(PlayFabError error)

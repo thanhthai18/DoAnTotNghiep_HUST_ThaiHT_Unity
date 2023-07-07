@@ -44,7 +44,7 @@ public class RankView : View
         foreach (var value in GlobalValue.listPlayerLeaderBoard)
         {
             var t = Instantiate(playerRankPrefab, content.transform);
-            t.InitPlayerRank(value.Position.ToString(), value.DisplayName, value.StatValue.ToString());
+            t.InitPlayerRank((value.Position+1).ToString(), value.DisplayName, value.StatValue.ToString());
         }
     }
 

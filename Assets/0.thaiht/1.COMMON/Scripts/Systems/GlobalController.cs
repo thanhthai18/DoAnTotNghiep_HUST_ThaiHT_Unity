@@ -97,6 +97,4 @@ public class GlobalController : MonoBehaviour
     {
         PlayFabController.ActionOnLoadSuccess -= SetGlobalValueLeaderboard;
     }
-
-
 }
