@@ -1,4 +1,5 @@
 using Doozy.Runtime.UIManager.Components;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,8 +23,9 @@ namespace thaiht20183826
                 element.transform.SetAsLastSibling();
 
                 element.Init(i, listPlayerOnTab.Count, listPlayerOnTab[i].txtPlayerName.text, listPlayerOnTab[i].imgIconAvatar.sprite, listScoreRank[i], listPlayerOnTab[i].txtCount.text);
+
             }
-            
+
         }
     }
 

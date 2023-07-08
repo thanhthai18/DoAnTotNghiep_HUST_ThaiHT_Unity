@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using System;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 namespace thaiht20183826
 {
@@ -114,8 +115,8 @@ namespace thaiht20183826
                         //rig.AddForce(dashingDir.normalized * 0.5f, ForceMode2D.Impulse);
                         newPositionDash = Vector3.Lerp(dashOrigin, dashDestination, DashCurve.Evaluate(dashTimer / dashingTime));
                         dashTimer += Time.deltaTime;
-                        rig.MovePosition(newPositionDash);
-                        //transform.position = Vector2.Lerp(transform.position, newPositionDash, dashTimer);
+                        //rig.MovePosition(newPositionDash);
+                        transform.position = Vector2.Lerp(transform.position, newPositionDash, dashTimer);
                         return;
                     }
                 }
@@ -220,7 +221,8 @@ namespace thaiht20183826
                 x *= 2;
                 y *= 2;
             }
-            rig.velocity += new Vector2(x, y) * moveSpeed * Time.deltaTime;
+            //rig.velocity += new Vector2(x, y) * moveSpeed * Time.deltaTime;
+            rig.AddForce(new Vector2(x, y) * moveSpeed * 3, ForceMode2D.Force);
         }
 
 
@@ -286,30 +288,45 @@ namespace thaiht20183826
             }
         }
 
+        bool isInMap = true;
         public void HoiSinh()
         {
-            isCanControl = false;
-            rig.velocity = Vector2.zero;
-            col.isTrigger = true;
-            var beginScale = transform.localScale;
-            selfCharacterScript.AnimDie();
-            FeedBackGamePlay.instance.PlayFlicker();
-            this.Wait(1.3f, () =>
+            if(gameObject != null && this != null)
             {
-                transform.DOScale(0, 0.1f).OnComplete(() =>
+                var beginScale = transform.localScale;
+                isCanControl = false;
+                selfCharacterScript.AnimDie();
+                FeedBackGamePlay.instance.PlayFlicker();
+                if (gameObject != null)
                 {
-                    //transform.position = spawnPos;
-                    transform.position = Vector3.zero;
-                    selfCharacterScript.AnimIdle();
-                    transform.DOScale(beginScale, 0.1f).OnComplete(() =>
+                    GlobalController.Instance.Wait(1.3f, () =>
                     {
-                        rig.position = Vector2.zero;
-                        col.isTrigger = false;
-                        isCanControl = true;
-                        OnPlayerDaHoiSinh?.Invoke(this);
+                        //    transform.DOMoveZ(transform.position.z, 1.3f).OnComplete(() =>
+                        //{
+                        //transform.DOScale(0, 0.1f).OnComplete(() =>
+                        //{
+                        try
+                        {
+                            transform.position = Vector3.zero;
+                            selfCharacterScript.AnimIdle();
+                            //transform.DOScale(beginScale, 0.1f).OnComplete(() =>
+                            //{
+                            col.isTrigger = false;
+                            isCanControl = true;
+                            OnPlayerDaHoiSinh?.Invoke(this);
+                            isInMap = true;
+                            //});
+                            //});
+                        }catch(Exception e) { }
+
+
                     });
-                });
-            });
+                }
+            }
+           
+           
+
+            //});
 
 
         }
@@ -345,42 +362,42 @@ namespace thaiht20183826
         //    }
         //}
 
-        bool isTriggerPlayer = false;
-        void DelayTriggerPlayerTrue()
-        {
-            isTriggerPlayer = true;
-        }
+
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            if (collision.gameObject.CompareTag("Player"))
+            if (isInMap)
             {
-                //if (photonView.IsMine)
-                //{
-                Rigidbody2D otherRigidbody = collision.collider.GetComponent<Rigidbody2D>();
-
-                if (otherRigidbody != null && !isTriggerPlayer)
+                if (collision.gameObject.CompareTag("Player"))
                 {
-                    col.isTrigger = true;
-           
-                    isTriggerPlayer = true;
-                    Invoke(nameof(DelayTriggerPlayerTrue), 0.2f);
-                    Debug.Log("push");
-                    Vector2 pushDirection = otherRigidbody.transform.position - transform.position;
-                    pushDirection = pushDirection.normalized;
 
-                    if (isDashing)
+                    if (collision.gameObject.GetComponent<PlayerGamePlay>().isInMap)
                     {
-                        otherRigidbody.AddForce(pushDirection * pushForce * 20, ForceMode2D.Impulse);
+                        Rigidbody2D otherRigidbody = collision.collider.GetComponent<Rigidbody2D>();
+
+                        if (otherRigidbody != null && !col.isTrigger)
+                        {
+                            col.isTrigger = true;
+
+                            Debug.Log("push");
+                            Vector2 pushDirection = otherRigidbody.transform.position - transform.position;
+                            pushDirection = pushDirection.normalized;
+                            if (isDashing)
+                            {
+                                otherRigidbody.AddForce(pushDirection * pushForce * 50, ForceMode2D.Impulse);
+                            }
+                            else
+                            {
+                                otherRigidbody.AddForce(pushDirection * pushForce * 5, ForceMode2D.Impulse);
+                            }
+                            col.isTrigger = false;
+                        }
+
                     }
-                    else
-                    {
-                        otherRigidbody.AddForce(pushDirection * pushForce, ForceMode2D.Impulse);
-                    }
-                    col.isTrigger = false;
+
                 }
-                //}
             }
         }
+        
         //private void OnCollisionExit2D(Collision2D collision)
         //{
         //    if (collision.gameObject.CompareTag("Player"))
@@ -394,30 +411,44 @@ namespace thaiht20183826
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            Debug.Log(GlobalValue.currentModeGame);
-            if (collision.CompareTag("Map"))
+            try
             {
-                if (GlobalValue.currentModeGame == ModeGame.RoomMode)
+                if (gameObject != null && this != null)
                 {
-                    countDead++;
-                    OnSetCountScoreLifePlayer?.Invoke(id_Photon, countDead);
-                }
-                else if (GlobalValue.currentModeGame == ModeGame.RankMode)
-                {
-                    if (countHeart > 0)
+                    if (collision.CompareTag("Map"))
                     {
-                        countHeart--;
-                        OnSetCountScoreLifePlayer?.Invoke(id_Photon, countHeart);
-                        if (countHeart == 0)
+                        if (isInMap)
                         {
-                            OnPlayerLostByHeart?.Invoke();
+                            isInMap = false;
+                            col.isTrigger = true;
+                            rig.velocity = Vector2.zero;
+                            rig.angularVelocity = 0;
+                            if (GlobalValue.currentModeGame == ModeGame.RoomMode)
+                            {
+                                countDead++;
+                                OnSetCountScoreLifePlayer?.Invoke(id_Photon, countDead);
+                            }
+                            else if (GlobalValue.currentModeGame == ModeGame.RankMode)
+                            {
+                                if (countHeart > 0)
+                                {
+                                    countHeart--;
+                                    OnSetCountScoreLifePlayer?.Invoke(id_Photon, countHeart);
+                                    if (countHeart == 0)
+                                    {
+                                        OnPlayerLostByHeart?.Invoke();
+                                    }
+                                }
+                            }
+                            HoiSinh();
+                            OnPlayerOutAreaMap?.Invoke(this);
                         }
                     }
                 }
-                HoiSinh();
-                OnPlayerOutAreaMap?.Invoke(this);
             }
+            catch(Exception e) { }
+           
+        
         }
-
     }
 }

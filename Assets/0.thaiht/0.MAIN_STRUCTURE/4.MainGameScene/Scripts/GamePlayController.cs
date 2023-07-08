@@ -62,6 +62,7 @@ namespace thaiht20183826
             PlayerGamePlay.OnPlayerLostByHeart += PlayerGamePlay_OnPlayerLostByHeart;
         }
 
+        
 
         public override void OnDisable()
         {
@@ -176,6 +177,15 @@ namespace thaiht20183826
             }
 
         }
+        public override void OnMasterClientSwitched(Player newMasterClient)
+        {
+            base.OnMasterClientSwitched(newMasterClient);
+            if (PhotonNetwork.LocalPlayer == newMasterClient)
+            {
+                isCounting = true;
+            }
+                
+        }
         public void SpawnPlayer()
         {
             Debug.Log("ActorNumber: " + PhotonNetwork.LocalPlayer.ActorNumber);
@@ -237,45 +247,52 @@ namespace thaiht20183826
         }
 
 
+        bool isGameEnd = false;
         [PunRPC]
         private void GameEndRPC(int[] arrScore)
         {
             // Thực hiện các hành động sau khi kết thúc trò chơi (ví dụ: hiển thị kết quả cuối cùng, trở về menu, vv.)
-            isCounting = false;
-            
-            listPlayersGamePlay.ForEach(s => { s.isCanControl = false; s.enabled = false; });
-            gamePlayView.ShowLeaderBoardEndGame(arrScore);
-            var tmpTrans = gamePlayView.leaderBoardEndGameView.holderElement;
-            Debug.Log(tmpTrans.childCount + ";;;;");
-            for (int i = 0; i < tmpTrans.childCount; i++)
-            {
-                if (PhotonNetwork.LocalPlayer.NickName == tmpTrans.GetChild(i).GetComponent<ElementLeaderBoardEndGame>().txtName.text)
+  
+                if (!isGameEnd)
                 {
-                    PlayFabController.SubmitScore(arrScore[i]);
+                    isGameEnd = true;
+
+                    isCounting = false;
+
+                    listPlayersGamePlay.ForEach(s => { if (s != null) { s.isCanControl = false; s.enabled = false; } });
+                    gamePlayView.ShowLeaderBoardEndGame(arrScore);
+                    var tmpTrans = gamePlayView.leaderBoardEndGameView.holderElement;
+                    for (int i = 0; i < tmpTrans.childCount; i++)
+                    {
+                        if (PhotonNetwork.LocalPlayer.NickName == tmpTrans.GetChild(i).GetComponent<ElementLeaderBoardEndGame>().txtName.text)
+                        {
+                            PlayFabController.SubmitScore(arrScore[i]);
+                        }
+                    }
+
+
+                    ActionOnGameContinueAfter?.Invoke(GlobalValue.TIME_TO_CONTINUE);
+                    this.Wait(GlobalValue.TIME_TO_CONTINUE, () =>
+                    {
+                        LoaderSystem.Loading(true);
+                        this.Wait(0.5f, () =>
+                        {
+                            if (GlobalValue.currentModeGame == ModeGame.RoomMode)
+                            {
+                                GlobalController.Instance.ReloadPreviousRoom();
+                            }
+                            else if (GlobalValue.currentModeGame == ModeGame.RankMode)
+                            {
+                                PhotonNetwork.LeaveRoom();
+                                PhotonNetwork.LeaveLobby();
+                                SceneManager.LoadScene(SceneGame.SelectModeScene);
+                            }
+                        });
+
+                    });
                 }
-            }
-
-
-            ActionOnGameContinueAfter?.Invoke(GlobalValue.TIME_TO_CONTINUE);
-            this.Wait(GlobalValue.TIME_TO_CONTINUE, () =>
-            {
-                LoaderSystem.Loading(true);
-                this.Wait(0.5f, () =>
-                {
-                    if (GlobalValue.currentModeGame == ModeGame.RoomMode)
-                    {
-                        GlobalController.Instance.ReloadPreviousRoom();
-                    }
-                    else if(GlobalValue.currentModeGame == ModeGame.RankMode)
-                    {
-                        PhotonNetwork.LeaveRoom();
-                        PhotonNetwork.LeaveLobby();
-                        SceneManager.LoadScene(SceneGame.SelectModeScene);
-                    }
-                });
-
-            });
-
+            
+         
         }
 
         private void OnDestroy()

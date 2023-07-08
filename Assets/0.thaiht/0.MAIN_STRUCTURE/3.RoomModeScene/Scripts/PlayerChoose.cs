@@ -84,6 +84,7 @@ public class PlayerChoose : MonoBehaviour
                     else
                     {
                         myPlayerPhoton.CustomProperties["isPlayerReady"] = isPlayerReady;
+                        myPlayerPhoton.SetCustomProperties(props);
                     }
                     if (SceneManagerHelper.ActiveSceneName == SceneGame.RoomModeScene)
                     {

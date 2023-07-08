@@ -41,7 +41,7 @@ namespace thaiht20183826
         public override void OnEnable()
         {
             base.OnEnable();
-            rankModeView.btnBack.onClick.AddListener(OnLeaveLobbyButton);
+            rankModeView.btnBack.onClick.AddListener(OnBackButton);
             rankModeView.btnPlay.onClick.AddListener(OnFindMatch);
             GlobalController.ActionOnUpdatedGlobalLeaderboard += OnUpdatedGlobalLeaderboard;
             //NetworkManager.ActionOnConnectedToMaster += HandleOnConnectedToMaster;
@@ -108,11 +108,12 @@ namespace thaiht20183826
                 SceneManager.LoadScene(SceneGame.SelectModeScene);
             }
         }
-        public void OnLeaveLobbyButton()
+        public void OnBackButton()
         {
-            Debug.Log("LeavingLobby");
+            Debug.Log("Back");
             PhotonNetwork.LocalPlayer.CustomProperties.Clear();
-            PhotonNetwork.LeaveLobby();
+            PhotonNetwork.Disconnect();
+            SceneManager.LoadScene(SceneGame.SelectModeScene);
 
         }
 

@@ -291,7 +291,6 @@ public class RoomModeController : MonoBehaviour
                 Debug.Log("Update properties character");
             }
         }
-
         roomView.btnStartGame.gameObject.SetActive(CheckPlayersReady());
     }
 
