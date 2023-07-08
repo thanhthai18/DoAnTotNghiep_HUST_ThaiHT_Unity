@@ -112,11 +112,12 @@ namespace thaiht20183826
                     if (isDashing)
                     {
                         //rig.velocity = dashingDir.normalized * dashingVelocity;
-                        //rig.AddForce(dashingDir.normalized * 0.5f, ForceMode2D.Impulse);
-                        newPositionDash = Vector3.Lerp(dashOrigin, dashDestination, DashCurve.Evaluate(dashTimer / dashingTime));
+                        rig.AddForce(dashingDir.normalized * dashDistance, ForceMode2D.Impulse);
+                        //newPositionDash = Vector3.Lerp(dashOrigin, dashDestination, DashCurve.Evaluate(dashTimer / dashingTime));
                         dashTimer += Time.deltaTime;
                         //rig.MovePosition(newPositionDash);
-                        transform.position = Vector2.Lerp(transform.position, newPositionDash, dashTimer);
+                        //transform.position = Vector2.Lerp(transform.position, newPositionDash, dashTimer);
+                        //rig.AddForce(new Vector2(x, y) * moveSpeed * 3, ForceMode2D.Force);
                         return;
                     }
                 }
@@ -383,11 +384,11 @@ namespace thaiht20183826
                             pushDirection = pushDirection.normalized;
                             if (isDashing)
                             {
-                                otherRigidbody.AddForce(pushDirection * pushForce * 50, ForceMode2D.Impulse);
+                                otherRigidbody.AddForce(pushDirection * pushForce * 3, ForceMode2D.Impulse);
                             }
                             else
                             {
-                                otherRigidbody.AddForce(pushDirection * pushForce * 5, ForceMode2D.Impulse);
+                                otherRigidbody.AddForce(pushDirection * pushForce, ForceMode2D.Impulse);
                             }
                             col.isTrigger = false;
                         }
