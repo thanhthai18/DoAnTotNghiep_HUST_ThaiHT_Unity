@@ -69,6 +69,7 @@ namespace thaiht20183826
 
         void Awake()
         {
+            SetupPlayerTrainingMode();
             rig = GetComponent<Rigidbody2D>();
             col = GetComponent<BoxCollider2D>();
             selfCharacterScript = GetComponent<CharacterScript>();
@@ -95,40 +96,52 @@ namespace thaiht20183826
 
         private void Update()
         {
-            if (photonView.IsMine)
+            if (photonView != null)
             {
-                if (isCanControl)
+                if (!photonView.IsMine)
                 {
-                    Move();
+                    return;
+                }
+            }
 
-                    if (Input.GetKeyDown(KeyCode.Space))
-                    {
+            if (isCanControl)
+            {
+                Move();
 
-                        DashSkill();
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
 
-                    }
+                    DashSkill();
 
-
-                    if (isDashing)
-                    {
-                        //rig.velocity = dashingDir.normalized * dashingVelocity;
-                        rig.AddForce(dashingDir.normalized * dashDistance, ForceMode2D.Impulse);
-                        //newPositionDash = Vector3.Lerp(dashOrigin, dashDestination, DashCurve.Evaluate(dashTimer / dashingTime));
-                        dashTimer += Time.deltaTime;
-                        //rig.MovePosition(newPositionDash);
-                        //transform.position = Vector2.Lerp(transform.position, newPositionDash, dashTimer);
-                        //rig.AddForce(new Vector2(x, y) * moveSpeed * 3, ForceMode2D.Force);
-                        return;
-                    }
                 }
 
+
+                if (isDashing)
+                {
+                    //rig.velocity = dashingDir.normalized * dashingVelocity;
+                    rig.AddForce(dashingDir.normalized * dashDistance, ForceMode2D.Impulse);
+                    //newPositionDash = Vector3.Lerp(dashOrigin, dashDestination, DashCurve.Evaluate(dashTimer / dashingTime));
+                    dashTimer += Time.deltaTime;
+                    //rig.MovePosition(newPositionDash);
+                    //transform.position = Vector2.Lerp(transform.position, newPositionDash, dashTimer);
+                    //rig.AddForce(new Vector2(x, y) * moveSpeed * 3, ForceMode2D.Force);
+                    return;
+                }
+            }
+        }
+        public void SetupPlayerTrainingMode()
+        {
+            if (GlobalValue.currentModeGame == ModeGame.TrainingMode)
+            {
+                PhotonNetwork.OfflineMode = true;
+                Destroy(GetComponent<PhotonRigidbody2DView>());
+                Destroy(GetComponent<PhotonTransformView>());
+                Destroy(GetComponent<PhotonView>());
             }
             else
             {
-                //transform.position = Vector3.Lerp(transform.position, networkPosition, Time.deltaTime * 5f);
+                PhotonNetwork.OfflineMode = false;
             }
-
-
         }
 
         [PunRPC]
@@ -184,14 +197,28 @@ namespace thaiht20183826
                 {
                     if (!selfCharacterScript.IsAnimRun())
                     {
-                        photonView.RPC(nameof(CallAnimRun), RpcTarget.All);
+                        if (!PhotonNetwork.OfflineMode)
+                        {
+                            photonView.RPC(nameof(CallAnimRun), RpcTarget.All);
+                        }
+                        else
+                        {
+                            CallAnimRun();
+                        }
                     }
                 }
                 else if (x == 0 && y == 0)
                 {
                     if (!selfCharacterScript.IsAnimIdle())
                     {
-                        photonView.RPC(nameof(CallAnimIdle), RpcTarget.All);
+                        if (!PhotonNetwork.OfflineMode)
+                        {
+                            photonView?.RPC(nameof(CallAnimIdle), RpcTarget.All);
+                        }
+                        else
+                        {
+                            CallAnimIdle();
+                        }
                     }
                 }
             }
@@ -245,7 +272,7 @@ namespace thaiht20183826
                 dashOrigin = transform.position;
                 dashDestination = (Vector2)transform.position + dashingDir.normalized * dashDistance;
 
-                if (PhotonNetwork.IsConnected)
+                if (!PhotonNetwork.OfflineMode)
                 {
                     photonView.RPC(nameof(DashFeedbackEffect), RpcTarget.All, true);
                 }
@@ -279,7 +306,7 @@ namespace thaiht20183826
             isDashing = false;
             canDash = true;
             dashTimer = 0;
-            if (PhotonNetwork.IsConnected)
+            if (!PhotonNetwork.OfflineMode) //PhotonNetwork.IsConnected
             {
                 photonView.RPC(nameof(DashFeedbackEffect), RpcTarget.All, false);
             }
@@ -292,7 +319,7 @@ namespace thaiht20183826
         bool isInMap = true;
         public void HoiSinh()
         {
-            if(gameObject != null && this != null)
+            if (gameObject != null && this != null)
             {
                 var beginScale = transform.localScale;
                 isCanControl = false;
@@ -318,14 +345,15 @@ namespace thaiht20183826
                             isInMap = true;
                             //});
                             //});
-                        }catch(Exception e) { }
+                        }
+                        catch (Exception e) { }
 
 
                     });
                 }
             }
-           
-           
+
+
 
             //});
 
@@ -366,7 +394,33 @@ namespace thaiht20183826
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            if (isInMap)
+            if (GlobalValue.currentModeGame == ModeGame.TrainingMode)
+            {
+                if (collision.gameObject.CompareTag("Ball"))
+                {
+                    Ball ball = collision.collider.GetComponent<Ball>();
+                    Rigidbody2D otherRigidbody = ball.rig;
+
+                    if (otherRigidbody != null && !col.isTrigger)
+                    {
+                        col.isTrigger = true;
+
+                        Debug.Log("push");
+                        Vector2 pushDirection = otherRigidbody.transform.position - transform.position;
+                        pushDirection = pushDirection.normalized;
+                        if (isDashing)
+                        {
+                            otherRigidbody.AddForce(pushDirection * pushForce * 3, ForceMode2D.Impulse);
+                        }
+                        else
+                        {
+                            otherRigidbody.AddForce(pushDirection * pushForce, ForceMode2D.Impulse);
+                        }
+                        col.isTrigger = false;
+                    }
+                }
+            }
+            else if (isInMap)
             {
                 if (collision.gameObject.CompareTag("Player"))
                 {
@@ -397,8 +451,9 @@ namespace thaiht20183826
 
                 }
             }
+
         }
-        
+
         //private void OnCollisionExit2D(Collision2D collision)
         //{
         //    if (collision.gameObject.CompareTag("Player"))
@@ -447,9 +502,9 @@ namespace thaiht20183826
                     }
                 }
             }
-            catch(Exception e) { }
-           
-        
+            catch (Exception e) { }
+
+
         }
     }
 }

@@ -71,6 +71,7 @@ public class SelectModeView : View
         Debug.Log("Open Training Mode");
         using (new LoaderSystem.Load())
         {
+            GlobalValue.currentModeGame = ModeGame.TrainingMode;
             SceneManager.LoadScene(SceneGame.TrainingModeScene);
         }
     }

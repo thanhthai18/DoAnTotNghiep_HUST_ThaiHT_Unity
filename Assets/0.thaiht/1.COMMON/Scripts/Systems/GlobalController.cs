@@ -16,12 +16,14 @@ public class GlobalController : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        GlobalValue.currentModeGame = ModeGame.TrainingMode; //test
     }
     private void Start()
     {
         Debug.Log("Khoi tao GlobalController");
         SceneManager.sceneLoaded += SceneManager_sceneLoaded;
         PlayFabController.ActionOnLoadSuccess += SetGlobalValueLeaderboard;
+        
     }
 
 

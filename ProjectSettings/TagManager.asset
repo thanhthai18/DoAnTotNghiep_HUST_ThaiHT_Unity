@@ -10,6 +10,9 @@ TagManager:
   - World
   - NoMask
   - Map
+  - Goal
+  - Bien
+  - Ball
   layers:
   - Default
   - TransparentFX
