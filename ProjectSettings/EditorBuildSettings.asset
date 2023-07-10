@@ -131,4 +131,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/0.thaiht/0.MAIN_STRUCTURE/5.RankModeScene/RankModeScene.unity
     guid: 722f6bcfb1dcc374ba3f284829d1c497
+  - enabled: 1
+    path: Assets/0.thaiht/0.MAIN_STRUCTURE/6.TrainingModeScene/TrainingModeScene_Select.unity
+    guid: e64f334b97235524ebb014e9bb2cbe01
+  - enabled: 1
+    path: Assets/0.thaiht/0.MAIN_STRUCTURE/6.TrainingModeScene/Minigame0/TrainingScene_Minigame0.unity
+    guid: 84fc5325327f5cf43988fb3d535c63de
   m_configObjects: {}

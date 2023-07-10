@@ -103,9 +103,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             Instance = this;
             DontDestroyOnLoad(this.gameObject);
         }
-      
-
-
     }
 
     public void ConnectMasterServerToOpenMode(ModeGame enumModeGame)

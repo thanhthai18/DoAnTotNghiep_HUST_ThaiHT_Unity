@@ -29,7 +29,8 @@ public static class SceneGame
     public static readonly string SelectModeScene = "SelectModeScene";
     public static readonly string RoomModeScene = "RoomModeScene";
     public static readonly string RankModeScene = "RankModeScene";
-    public static readonly string TrainingModeScene = "TrainingModeScene";
+    public static readonly string TrainingModeScene = "TrainingModeScene_Select";
+    public static readonly string TrainingScene_Mninigame0 = "TrainingScene_Mninigame0";
     public static readonly string MainGameScene = "MainGameScene";
 }
 
