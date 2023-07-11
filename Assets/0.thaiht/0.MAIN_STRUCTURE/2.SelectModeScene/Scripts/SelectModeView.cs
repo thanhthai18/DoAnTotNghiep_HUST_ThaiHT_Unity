@@ -35,7 +35,7 @@ public class SelectModeView : View
     public void OpenMode(int indexMode)
     {
         //btn.AnimButton(-1);
-        
+
         switch (indexMode)
         {
             case 0:
@@ -69,11 +69,14 @@ public class SelectModeView : View
     public void OpenTrainingMode()
     {
         Debug.Log("Open Training Mode");
-        using (new LoaderSystem.Load())
+        LoaderSystem.Loading(true);
+        this.Wait(0.5f, () =>
         {
+            LoaderSystem.Loading(false);
             GlobalValue.currentModeGame = ModeGame.TrainingMode;
             SceneManager.LoadScene(SceneGame.TrainingModeScene);
-        }
+        });
+ 
     }
 
 }

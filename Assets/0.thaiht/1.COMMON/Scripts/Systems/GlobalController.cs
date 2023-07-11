@@ -16,7 +16,6 @@ public class GlobalController : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        GlobalValue.currentModeGame = ModeGame.TrainingMode; //test
     }
     private void Start()
     {

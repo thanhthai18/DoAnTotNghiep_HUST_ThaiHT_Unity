@@ -15,6 +15,7 @@ public static class GlobalValue
     public static List<PlayerLeaderboardEntry> listPlayerLeaderBoard = new List<PlayerLeaderboardEntry>();
     public static int indexPosSpawnPlayerGamePlay;
     public const int TIME_PLAY_RANK_MODE = 60;
+    public const int MAX_TIME_MINIGAME_SOCCER = 60;
 }
 
 public static class MyPlayerValue
@@ -32,6 +33,12 @@ public static class SceneGame
     public static readonly string TrainingModeScene = "TrainingModeScene_Select";
     public static readonly string TrainingScene_Mninigame0 = "TrainingScene_Mninigame0";
     public static readonly string MainGameScene = "MainGameScene";
+}
+public enum MinigameSceneEnum
+{
+    None,
+    TrainingScene_Minigame0,
+
 }
 
 
