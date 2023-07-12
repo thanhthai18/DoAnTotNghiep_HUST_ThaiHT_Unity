@@ -69,7 +69,6 @@ namespace thaiht20183826
 
         void Awake()
         {
-            SetupPlayerTrainingMode();
             rig = GetComponent<Rigidbody2D>();
             col = GetComponent<BoxCollider2D>();
             selfCharacterScript = GetComponent<CharacterScript>();
@@ -88,6 +87,7 @@ namespace thaiht20183826
 
         void Start()
         {
+            SetupPlayerTrainingMode();
             rig.drag = dragRigidbody;
             isCanControl = true;
             beginScale = transform.localScale;
@@ -137,6 +137,17 @@ namespace thaiht20183826
                 Destroy(GetComponent<PhotonRigidbody2DView>());
                 Destroy(GetComponent<PhotonTransformView>());
                 Destroy(GetComponent<PhotonView>());
+                var data = GlobalController.Instance.scriptableDataCharacter.listCharacter[GlobalValue.indexCharacterTransfer];
+                if (data != null)
+                {
+                    id_Character = data.id;
+                    moveSpeed = data.moveSpeed;
+                    dashingTime = data.dashingTime;
+                    dashDistance = data.dashDistance;
+                    myTypeSkill = data.mySkill;
+                    rig.mass = data.weight;
+                    myAvatar = data.characterSprite;
+                }
             }
             else
             {
@@ -251,6 +262,13 @@ namespace thaiht20183826
             }
             //rig.velocity += new Vector2(x, y) * moveSpeed * Time.deltaTime;
             rig.AddForce(new Vector2(x, y) * moveSpeed * 3, ForceMode2D.Force);
+            if (GlobalValue.currentModeGame == ModeGame.TrainingMode)
+            {
+                if (SceneManagerHelper.ActiveSceneName == MinigameSceneEnum.TrainingScene_Minigame0.ToString())
+                {
+                    transform.position = new Vector2(Mathf.Clamp(transform.position.x, -8.53f, 6.37f), Mathf.Clamp(transform.position.y, -5.58f, 4.84f));
+                }
+            }
         }
 
 

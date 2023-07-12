@@ -9,7 +9,7 @@ using UnityEngine;
 public class PlayFabController : PersistentSingleton<PlayFabController>
 {
     public static event Action<List<PlayerLeaderboardEntry>> ActionOnLoadSuccess;
-
+    public static event Action<List<PlayerLeaderboardEntry>> ActionOnLoadSuccessMinigameSoccer;
     public static void SubmitScore(int playerScore)
     {
         PlayFabClientAPI.UpdatePlayerStatistics(new UpdatePlayerStatisticsRequest
@@ -17,6 +17,18 @@ public class PlayFabController : PersistentSingleton<PlayFabController>
             Statistics = new List<StatisticUpdate> {
             new StatisticUpdate {
                 StatisticName = "RankScore",
+                Value = playerScore
+            }
+        }
+        }, result => OnStatisticsUpdated(result), FailureCallback);
+    }
+    public static void SubmitScoreMinigame(int playerScore, MinigameSceneEnum minigameName)
+    {
+        PlayFabClientAPI.UpdatePlayerStatistics(new UpdatePlayerStatisticsRequest
+        {
+            Statistics = new List<StatisticUpdate> {
+            new StatisticUpdate {
+                StatisticName = minigameName.ToString(),
                 Value = playerScore
             }
         }
@@ -41,6 +53,21 @@ public class PlayFabController : PersistentSingleton<PlayFabController>
         request.StatisticName = "RankScore";
         PlayFabClientAPI.GetLeaderboard(request, OnLeaderboardSuccess, OnPlayFabError);
     }
+    public static void GetLeaderboardMinigame(MinigameSceneEnum minigameName)
+    {
+        var request = new GetLeaderboardRequest();
+        request.StartPosition = 0;
+        request.StatisticName = minigameName.ToString();
+        switch (minigameName)
+        {
+            case MinigameSceneEnum.None:
+                break;
+            case MinigameSceneEnum.TrainingScene_Minigame0:
+                PlayFabClientAPI.GetLeaderboard(request, OnLeaderboardSuccess_MinigameSoccer, OnPlayFabError);
+                break;
+        }
+    }
+
 
 
 
@@ -54,7 +81,14 @@ public class PlayFabController : PersistentSingleton<PlayFabController>
         //        MyPlayerValue.rankScore = value.StatValue;
         //    }
         //}
-        ActionOnLoadSuccess?.Invoke(obj.Leaderboard);
+
+            ActionOnLoadSuccess?.Invoke(obj.Leaderboard);
+
+        ActionOnLoadSuccessMinigameSoccer?.Invoke(obj.Leaderboard);      
+    }
+    private static void OnLeaderboardSuccess_MinigameSoccer(GetLeaderboardResult obj)
+    {
+        ActionOnLoadSuccessMinigameSoccer?.Invoke(obj.Leaderboard);
     }
 
     private static void OnPlayFabError(PlayFabError obj)

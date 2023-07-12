@@ -513,6 +513,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba58447a57616d14db10641ea11d6d95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selfButton: {fileID: 0}
+  minigame: 0
+  txtHighScore: {fileID: 3069722139804709640}
+  txtGlobalHighScore: {fileID: 3069722140415383275}
 --- !u!114 &3069722140738848897
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -17,20 +17,18 @@ namespace thaiht20183826
     
         void Awake()
         {
-        
+            
         }
         public override void Initialize()
         {
             btnBack.onClickEvent.AddListener(Back);
+            playerChoose.txtPlayerName.text = MyPlayerValue.playerName;
+            playerChoose.txtScoreRankDisplay.text = GlobalController.Instance.GetRankScorePlayer(MyPlayerValue.playerName).ToString();
         }
         #region SUBSCRIBE
         private void OnEnable()
         {
        
-        }
-        private void OnDisable()
-        {
-            btnBack.onClickEvent.RemoveListener(Back);
         }
         #endregion
     

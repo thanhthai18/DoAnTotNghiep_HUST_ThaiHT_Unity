@@ -39,6 +39,10 @@ namespace thaiht20183826
         }
         public void SetTextTime(int time)
         {
+            if(time <= 0)
+            {
+                time = 0;
+            }
             txtTime.text = "Time: " + time + "s";
         }
 

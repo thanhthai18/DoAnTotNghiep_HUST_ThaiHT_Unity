@@ -131,4 +131,12 @@ public static class Helpers
         }
         return listScore;
     }
+
+    public static Vector3 GetMousePosWorld(Camera camera)
+    {
+        Vector3 mousePosScreen = Input.mousePosition;
+        Vector3 mousePosWord = camera.ScreenToWorldPoint(mousePosScreen);
+        mousePosWord.z = 0;
+        return mousePosWord;
+    }
 }
