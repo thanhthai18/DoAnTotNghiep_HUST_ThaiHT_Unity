@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
@@ -98,7 +98,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
-        if(Instance== null)
+        if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(this.gameObject);
@@ -131,20 +131,23 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
     }
 
+    public void ConnectToMaster()
+    {
+        PhotonNetwork.ConnectUsingSettings();
+    }
 
     public override void OnConnectedToMaster()
     {
         Debug.Log("Da ket noi toi master server");
         ActionOnConnectedToMaster?.Invoke();
         PhotonNetwork.EnableCloseConnection = true;
+        GlobalController.Instance.HidePopupDisconnect();
     }
-
     public override void OnDisconnected(DisconnectCause cause)
     {
         Debug.Log("Da mat ket noi toi mater server");
         ActionOnDisconnected?.Invoke();
     }
-
     public override void OnJoinedLobby()
     {
         ActionOnJoinedLobby?.Invoke();
@@ -201,6 +204,18 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         ActionOnRoomUpdateProperties?.Invoke(propertiesThatChanged);
     }
+
+    private void FixedUpdate()
+    {
+        if (PhotonNetwork.NetworkClientState == ClientState.Disconnected)
+        {
+            Debug.Log("Đã mất kết nối với Photon Server");
+            LoaderSystem.Loading(false);
+            GlobalController.Instance.ShowPopupDisconnect();
+        }
+    }
+
+    
 
     public void CreateRoom(string roomName)
     {

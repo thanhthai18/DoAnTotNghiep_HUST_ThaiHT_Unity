@@ -3,8 +3,10 @@ using Photon.Realtime;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using thaiht20183826;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
 
 public class GlobalController : MonoBehaviour
 {
@@ -12,6 +14,7 @@ public class GlobalController : MonoBehaviour
     public Scene currentScene;
     public DataCharacter scriptableDataCharacter;
     public static event Action ActionOnUpdatedGlobalLeaderboard;
+    [SerializeField] PopupDisconnect popupDisconnect;
 
     private void Awake()
     {
@@ -22,7 +25,7 @@ public class GlobalController : MonoBehaviour
         Debug.Log("Khoi tao GlobalController");
         SceneManager.sceneLoaded += SceneManager_sceneLoaded;
         PlayFabController.ActionOnLoadSuccess += SetGlobalValueLeaderboard;
-        
+
     }
 
 
@@ -84,9 +87,9 @@ public class GlobalController : MonoBehaviour
 
     public int GetRankScorePlayer(string namePlayer)
     {
-        foreach(var value in GlobalValue.listPlayerLeaderBoard)
+        foreach (var value in GlobalValue.listPlayerLeaderBoard)
         {
-            if(value.DisplayName == namePlayer)
+            if (value.DisplayName == namePlayer)
             {
                 return value.StatValue;
             }
@@ -94,8 +97,19 @@ public class GlobalController : MonoBehaviour
         return 0;
     }
 
+    public void ShowPopupDisconnect()
+    {
+        popupDisconnect.Show();
+    }
+    public void HidePopupDisconnect()
+    {
+        popupDisconnect.Hide();
+    }
+
     private void OnDestroy()
     {
         PlayFabController.ActionOnLoadSuccess -= SetGlobalValueLeaderboard;
     }
 }
+
+
