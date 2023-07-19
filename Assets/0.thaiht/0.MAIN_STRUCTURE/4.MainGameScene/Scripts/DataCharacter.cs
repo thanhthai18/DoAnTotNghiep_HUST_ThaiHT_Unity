@@ -22,6 +22,7 @@ public class CharacterData
     public float dashingTime;
     public float dashDistance;
     public float pushForce;
+    public float countDownDash;
     public SkillCharacter mySkill;
     public GameObject characterPrefab;
 }

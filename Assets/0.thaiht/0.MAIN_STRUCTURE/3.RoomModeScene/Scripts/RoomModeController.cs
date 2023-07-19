@@ -117,7 +117,6 @@ public class RoomModeController : MonoBehaviour
 
     public void HandleOnRoomListUpdate(List<RoomInfo> roomList)
     {
-        Debug.Log("dua nhau a");
         Debug.Log(roomList.Count);
         roomList.ForEach(s => Debug.Log(s.Name));
         ClearRoomListView();
@@ -175,8 +174,8 @@ public class RoomModeController : MonoBehaviour
             {
                 GlobalValue.indexPosSpawnPlayerGamePlay = i;
             }
-            PlayerChoose entry = Instantiate(PlayerListEntryPrefab);
-            entry.transform.SetParent(roomView.playerChooseParent.transform);
+            PlayerChoose entry = Instantiate(PlayerListEntryPrefab, roomView.playerChooseParent.transform);
+            //entry.transform.SetParent(roomView.playerChooseParent.transform);
             entry.GetComponent<PlayerChoose>().Initialize(p.ActorNumber, p.NickName, GlobalController.Instance.GetRankScorePlayer(p.NickName), p);
 
             object isPlayerReady, characterIndex;
@@ -193,7 +192,6 @@ public class RoomModeController : MonoBehaviour
                 //entry.playerProperties = new Hashtable() { { "characterIndex", 0 } };
                 //p.SetCustomProperties(entry.playerProperties);
                 //entry.SetPlayerCharacter(GlobalController.Instance.scriptableDataCharacter.listCharacter[0]);
-                //Debug.Log("Lozzzzzzzzzz");
             }
 
             entry.btnKick.gameObject.SetActive(false);

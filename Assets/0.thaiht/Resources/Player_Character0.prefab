@@ -10506,6 +10506,8 @@ MonoBehaviour:
   countDead: 0
   countHeart: 0
   scoreRank: 0
+  imgArrowPlayer: {fileID: 9059629122933731838}
+  txtDisplayPlayerName: {fileID: 8671042855820304465}
 --- !u!50 &2154781857891577849
 Rigidbody2D:
   serializedVersion: 4
@@ -10860,7 +10862,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8994757860500631419
 RectTransform:
   m_ObjectHideFlags: 0

@@ -8,6 +8,7 @@ using UnityEngine;
 using Photon.Pun;
 using System;
 using static UnityEngine.RuleTile.TilingRuleOutput;
+using TMPro;
 
 namespace thaiht20183826
 {
@@ -35,6 +36,8 @@ namespace thaiht20183826
         private Vector2 dashingDir;
         private bool isDashing;
         private bool canDash = true;
+        private float countDownDash = 1;
+        private float timerCountDownDash = 0;
         [SerializeField] private float dashDistance = 6f;
         Vector2 dashDestination;
         Vector2 dashOrigin;
@@ -44,6 +47,7 @@ namespace thaiht20183826
         [SerializeField] private MMF_Player playerFeedback_Dash;
         [SerializeField] private MMFeedbackParticles playerFeedback_Dash_Particle;
         public float pushForce;
+        private ButtonDash btnDashReference;
 
         [Space(10)]
         [Header("General")]
@@ -59,6 +63,8 @@ namespace thaiht20183826
         public int scoreRank;
         private Vector3 networkPosition;
         private Vector3 spawnPos;
+        public GameObject imgArrowPlayer;
+        public TextMeshProUGUI txtDisplayPlayerName;
 
         public static event Action<PlayerGamePlay> OnPlayerOutAreaMap;
         public static event Action<PlayerGamePlay> OnPlayerDaHoiSinh;
@@ -92,6 +98,11 @@ namespace thaiht20183826
             isCanControl = true;
             beginScale = transform.localScale;
             selfCharacterScript.AnimIdle();
+            if (photonView.IsMine)
+            {
+                ButtonDash.Instance.btnSelf.onClickEvent.AddListener(DashSkill);
+                btnDashReference = ButtonDash.Instance;
+            }
         }
 
         private void Update()
@@ -122,10 +133,18 @@ namespace thaiht20183826
                     rig.AddForce(dashingDir.normalized * dashDistance, ForceMode2D.Impulse);
                     //newPositionDash = Vector3.Lerp(dashOrigin, dashDestination, DashCurve.Evaluate(dashTimer / dashingTime));
                     dashTimer += Time.deltaTime;
+                   
                     //rig.MovePosition(newPositionDash);
                     //transform.position = Vector2.Lerp(transform.position, newPositionDash, dashTimer);
                     //rig.AddForce(new Vector2(x, y) * moveSpeed * 3, ForceMode2D.Force);
                     return;
+                }
+                if(timerCountDownDash > 0 && !isDashing)
+                {
+                    timerCountDownDash -= Time.deltaTime;
+                    if (timerCountDownDash < 0)
+                        timerCountDownDash = 0;
+                    btnDashReference.SetFillImgCountDown(timerCountDownDash * 1.0f / countDownDash);
                 }
             }
         }
@@ -133,7 +152,6 @@ namespace thaiht20183826
         {
             if (GlobalValue.currentModeGame == ModeGame.TrainingMode)
             {
-                PhotonNetwork.OfflineMode = true;
                 Destroy(GetComponent<PhotonRigidbody2DView>());
                 Destroy(GetComponent<PhotonTransformView>());
                 Destroy(GetComponent<PhotonView>());
@@ -147,11 +165,12 @@ namespace thaiht20183826
                     myTypeSkill = data.mySkill;
                     rig.mass = data.weight;
                     myAvatar = data.characterSprite;
+                    countDownDash = data.countDownDash;
                 }
-            }
-            else
-            {
-                PhotonNetwork.OfflineMode = false;
+                txtDisplayPlayerName.text = MyPlayerValue.playerName;
+                imgArrowPlayer.SetActive(true);
+                ButtonDash.Instance.btnSelf.onClickEvent.AddListener(DashSkill);
+                btnDashReference = ButtonDash.Instance;
             }
         }
 
@@ -164,6 +183,12 @@ namespace thaiht20183826
             spawnPos = transform.position;
             photonPlayer = player;
             id_Photon = player.ActorNumber;
+            txtDisplayPlayerName.text = player.NickName;
+       
+            if (photonView.IsMine)
+            {
+                imgArrowPlayer.SetActive(true);
+            }
             //GamePlayController.instance.listPlayersGamePlay[id_Photon - 1] = this;
             GamePlayController.instance.listPlayersGamePlay.Add(this);
             if (!photonView.IsMine)
@@ -186,8 +211,9 @@ namespace thaiht20183826
                 myTypeSkill = data.mySkill;
                 rig.mass = data.weight;
                 myAvatar = data.characterSprite;
+                countDownDash = data.countDownDash;
             }
-
+            timerCountDownDash = 0;
 
             //Tab
             Invoke(nameof(DelaySpawnPlayerTab), 0.5f);
@@ -195,6 +221,14 @@ namespace thaiht20183826
         void DelaySpawnPlayerTab()
         {
             GamePlayController.instance.gamePlayView.tabPlayerInfo.SpawnPlayerTab(id_Photon, photonPlayer.NickName, myAvatar, GlobalValue.currentModeGame);
+            if (GlobalValue.currentModeGame == ModeGame.RoomMode)
+            {
+                OnSetCountScoreLifePlayer?.Invoke(id_Photon, countDead);
+            }
+            else if (GlobalValue.currentModeGame == ModeGame.RankMode)
+            {
+                OnSetCountScoreLifePlayer?.Invoke(id_Photon, countHeart);
+            }
         }
 
 
@@ -208,7 +242,7 @@ namespace thaiht20183826
                 {
                     if (!selfCharacterScript.IsAnimRun())
                     {
-                        if (!PhotonNetwork.OfflineMode)
+                        if (GlobalValue.currentModeGame != ModeGame.TrainingMode)
                         {
                             photonView.RPC(nameof(CallAnimRun), RpcTarget.All);
                         }
@@ -222,7 +256,7 @@ namespace thaiht20183826
                 {
                     if (!selfCharacterScript.IsAnimIdle())
                     {
-                        if (!PhotonNetwork.OfflineMode)
+                        if (GlobalValue.currentModeGame != ModeGame.TrainingMode)
                         {
                             photonView?.RPC(nameof(CallAnimIdle), RpcTarget.All);
                         }
@@ -276,31 +310,35 @@ namespace thaiht20183826
         {
             if (canDash)
             {
-                Debug.Log("Dash");
-                selfCharacterScript.AnimSkill();
-                isDashing = true; //trigger dash
-                canDash = false;
-                dashingDir = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-                if (dashingDir == Vector2.zero)
+                if(timerCountDownDash <= 0)
                 {
-                    dashingDir = new Vector2(transform.localScale.x, 0f);
+                    Debug.Log("Dash");
+                    timerCountDownDash = countDownDash;
+                    selfCharacterScript.AnimSkill();
+                    isDashing = true; //trigger dash
+                    canDash = false;
+                    dashingDir = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+                    if (dashingDir == Vector2.zero)
+                    {
+                        dashingDir = new Vector2(transform.localScale.x, 0f);
+                    }
+                    dashTimer = 0;
+                    dashOrigin = transform.position;
+                    dashDestination = (Vector2)transform.position + dashingDir.normalized * dashDistance;
+
+                    if (GlobalValue.currentModeGame != ModeGame.TrainingMode)
+                    {
+                        photonView.RPC(nameof(DashFeedbackEffect), RpcTarget.All, true);
+                    }
+                    else
+                    {
+                        DashFeedbackEffect(true);
+                    }
+
+
+                    StartCoroutine(StopDashing());
                 }
-
-                dashTimer = 0;
-                dashOrigin = transform.position;
-                dashDestination = (Vector2)transform.position + dashingDir.normalized * dashDistance;
-
-                if (!PhotonNetwork.OfflineMode)
-                {
-                    photonView.RPC(nameof(DashFeedbackEffect), RpcTarget.All, true);
-                }
-                else
-                {
-                    DashFeedbackEffect(true);
-                }
-
-
-                StartCoroutine(StopDashing());
+                
             }
         }
         [PunRPC]
@@ -322,9 +360,9 @@ namespace thaiht20183826
         {
             yield return new WaitForSeconds(dashingTime);
             isDashing = false;
-            canDash = true;
             dashTimer = 0;
-            if (!PhotonNetwork.OfflineMode) //PhotonNetwork.IsConnected
+            canDash = true;
+            if (GlobalValue.currentModeGame != ModeGame.TrainingMode) //PhotonNetwork.IsConnected
             {
                 photonView.RPC(nameof(DashFeedbackEffect), RpcTarget.All, false);
             }

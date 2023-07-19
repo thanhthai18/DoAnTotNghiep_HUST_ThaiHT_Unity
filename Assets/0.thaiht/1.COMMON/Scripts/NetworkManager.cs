@@ -209,6 +209,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.NetworkClientState == ClientState.Disconnected)
         {
+            //if(SceneManagerHelper.ActiveSceneName == SceneGame.RoomModeScene || SceneManagerHelper.ActiveSceneName == SceneGame.RankModeScene || SceneManagerHelper.ActiveSceneName == SceneGame.MainGameScene)
             Debug.Log("Đã mất kết nối với Photon Server");
             LoaderSystem.Loading(false);
             GlobalController.Instance.ShowPopupDisconnect();

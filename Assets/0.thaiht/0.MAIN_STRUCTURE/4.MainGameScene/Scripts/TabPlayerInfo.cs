@@ -101,14 +101,16 @@ namespace thaiht20183826
             listHolderPlayerIconInTab.Add(tab);
 
 
-            if (tab.isHeartIcon)
-            {
-                SetTextCountLifePlayer(idPlayer, GlobalValue.LIFE_HEART_RANK_MODE);
-            }
-            else
-            {
-                SetTextCountLifePlayer(idPlayer, 0);
-            }
+            //if (tab.isHeartIcon)
+            //{
+            //    //SetTextCountLifePlayer(idPlayer, GlobalValue.LIFE_HEART_RANK_MODE);
+            //    photonView.RPC(nameof(SetTextCountLifePlayer), RpcTarget.AllBuffered, idPlayer, GlobalValue.LIFE_HEART_RANK_MODE);
+            //}
+            //else
+            //{
+            //    //SetTextCountLifePlayer(idPlayer, 0);
+            //    photonView.RPC(nameof(SetTextCountLifePlayer), RpcTarget.AllBuffered, idPlayer, 0);
+            //}
 
         }
 
@@ -120,12 +122,12 @@ namespace thaiht20183826
                 if (listHolderPlayerIconInTab[0].isHeartIcon)
                 {
                     listHolderPlayerIconInTab = listHolderPlayerIconInTab.OrderByDescending(s => int.Parse(s.txtCount.text)).ThenBy(s =>
-                        s.playerGamePlayReference.scoreRank)?.ToList();
+                        GlobalController.Instance.GetRankScorePlayer(s.txtPlayerName.text))?.ToList();
                 }
                 else
                 {
                     listHolderPlayerIconInTab = listHolderPlayerIconInTab.OrderBy(s => int.Parse(s.txtCount.text)).ThenBy(s =>
-                        s.playerGamePlayReference.scoreRank)?.ToList();
+                        GlobalController.Instance.GetRankScorePlayer(s.txtPlayerName.text))?.ToList();
                 }
                 listHolderPlayerIconInTab.ForEach(s => s.gameObject.transform.SetAsLastSibling());
             }
@@ -146,9 +148,10 @@ namespace thaiht20183826
                     if (listHolderPlayerIconInTab[i].idPhoton == idPlayer)
                     {
                         listHolderPlayerIconInTab[i].SetTextCountLife(count);
-                        SortCountLifeTab();
+                     
                     }
                 }
+                SortCountLifeTab();
             }
             catch (System.Exception e)
             {

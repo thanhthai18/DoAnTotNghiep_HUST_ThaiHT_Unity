@@ -817,7 +817,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -180}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -38.3, y: -0}
+  m_AnchoredPosition: {x: -38.300003, y: 0}
   m_SizeDelta: {x: 64.828, y: 43.6884}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &441559800
@@ -1004,7 +1004,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents: []
-  sceneViewId: 2
+  sceneViewId: 1
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &480435449
@@ -1709,7 +1709,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents: []
-  sceneViewId: 3
+  sceneViewId: 4
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!1 &1016099727
@@ -2070,7 +2070,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 8388407
 --- !u!114 &1221727970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2103,8 +2103,8 @@ Canvas:
   m_GameObject: {fileID: 1221727968}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 1138277085}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -3071,7 +3071,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -180}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -38.3, y: -0}
+  m_AnchoredPosition: {x: -38.300003, y: 0}
   m_SizeDelta: {x: 64.828, y: 43.6884}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &1780968620
@@ -4026,7 +4026,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: -26.7, y: 0.0000033379}
+  m_AnchoredPosition: {x: -26.699997, y: 0.0000033379}
   m_SizeDelta: {x: 64.828, y: 43.6884}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!1 &5586313294218306729
@@ -4464,7 +4464,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -180}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -38.3, y: -0}
+  m_AnchoredPosition: {x: -38.300003, y: 0}
   m_SizeDelta: {x: 64.828, y: 43.6884}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!224 &7640390574810526436
@@ -4568,6 +4568,7 @@ MonoBehaviour:
     dashingTime: 0
     dashDistance: 0
     pushForce: 0
+    countDownDash: 0
     mySkill: 0
     characterPrefab: {fileID: 0}
   myIndexCharacter: 0

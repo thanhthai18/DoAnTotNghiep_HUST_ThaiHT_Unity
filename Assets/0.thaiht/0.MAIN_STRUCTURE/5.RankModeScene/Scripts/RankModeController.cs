@@ -112,9 +112,16 @@ namespace thaiht20183826
         {
             Debug.Log("Back");
             PhotonNetwork.LocalPlayer.CustomProperties.Clear();
-            PhotonNetwork.Disconnect();
+            if (PhotonNetwork.InRoom)
+            {
+                PhotonNetwork.LeaveRoom();
+            }
+            if (PhotonNetwork.InLobby)
+            {
+                PhotonNetwork.LeaveLobby();
+            }
             LoaderSystem.Loading(true);
-            this.Wait(0.5f, () =>
+            GlobalController.Instance.Wait(0.5f, () =>
             {
                 LoaderSystem.Loading(false);
                 SceneManager.LoadScene(SceneGame.SelectModeScene);

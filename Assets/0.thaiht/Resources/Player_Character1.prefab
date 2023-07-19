@@ -153,7 +153,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6061306963284976436
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10616,6 +10616,8 @@ MonoBehaviour:
   countDead: 0
   countHeart: 0
   scoreRank: 0
+  imgArrowPlayer: {fileID: 7679407081424471529}
+  txtDisplayPlayerName: {fileID: 4284361176956970638}
 --- !u!50 &8822590998322489321
 Rigidbody2D:
   serializedVersion: 4
@@ -10758,7 +10760,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 489e8b7ef811f4d4cbddb6e586dbbfec, type: 2}
+  - {fileID: 2100000, guid: 7482de641a57dca4aaae3631340b5f97, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
