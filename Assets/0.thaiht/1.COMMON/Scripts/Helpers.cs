@@ -27,6 +27,10 @@ public static class Helpers
     {
         txt.color = isSucces ? Color.green : Color.red;
         txt.text = text;
+        if (!txt.gameObject.activeSelf)
+        {
+            txt.gameObject.SetActive(true);
+        }
     }
 
     public static void AnimButton(this Button btn, int indexChild = -1)

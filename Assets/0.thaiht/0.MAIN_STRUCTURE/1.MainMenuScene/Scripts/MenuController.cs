@@ -9,8 +9,9 @@ using UnityEngine.SceneManagement;
 using DG.Tweening;
 using System.Linq;
 using Photon.Pun;
+using System;
 
-public class MenuController : StaticInstance<MenuController>
+public class MenuController : Singleton<MenuController>
 {
     [SerializeField] Button btnRank;
     [SerializeField] Button btnProfile;
@@ -23,6 +24,7 @@ public class MenuController : StaticInstance<MenuController>
     [SerializeField] TextMeshProUGUI txtDisplayScore;
     [SerializeField] Button btnLogout;
     public OverviewProfileData overviewProfileData;
+    public static event Action<OverviewProfileData> ActionOnSetOverviewProfileData;
 
     private void Start()
     {
@@ -127,6 +129,11 @@ public class MenuController : StaticInstance<MenuController>
         txtDisplayName.text = overviewProfileData.displayName;
         txtDisplayRank.text = overviewProfileData.displayRank;
         txtDisplayScore.text = overviewProfileData.displayScore;
+        ActionOnSetOverviewProfileData?.Invoke(overviewProfileData);
+    }
+    public void SetNewNamePlayer(string newName)
+    {
+        txtDisplayName.text = newName;
     }
 
 
