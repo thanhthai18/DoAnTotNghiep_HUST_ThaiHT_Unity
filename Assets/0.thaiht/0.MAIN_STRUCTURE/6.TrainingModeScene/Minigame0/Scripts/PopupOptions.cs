@@ -1,5 +1,6 @@
 using Doozy.Runtime.UIManager.Components;
 using Doozy.Runtime.UIManager.Containers;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -32,7 +33,17 @@ namespace thaiht20183826
             this.Wait(0.5f, () =>
             {
                 LoaderSystem.Loading(false);
-                SceneManager.LoadScene(SceneGame.TrainingModeScene);
+                AudioController.Instance.PlayBackgroundMusicCommon();
+                if (GlobalValue.currentModeGame == ModeGame.TrainingMode)
+                {
+                    SceneManager.LoadScene(SceneGame.TrainingModeScene);
+                }
+                else
+                {
+                    PhotonNetwork.LeaveRoom();
+                    PhotonNetwork.LeaveLobby();
+                    SceneManager.LoadScene(SceneGame.SelectModeScene);
+                }
             });
         }
         public void Show()

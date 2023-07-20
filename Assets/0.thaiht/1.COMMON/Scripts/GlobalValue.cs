@@ -16,6 +16,8 @@ public static class GlobalValue
     public static int indexPosSpawnPlayerGamePlay;
     public const int TIME_PLAY_RANK_MODE = 60;
     public const int MAX_TIME_MINIGAME_SOCCER = 60;
+    public static bool isMuteMusic = false;
+    public static bool isMuteSound = false;
 }
 
 public static class MyPlayerValue

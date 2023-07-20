@@ -27,6 +27,7 @@ namespace thaiht20183826
             currentTime = maxTime;
             minigameSoccerView.SetTextTime(currentTime);
             StartCoroutine(StartCountTime());
+            AudioController.Instance.PlayBackgroundMusicMinigame();
         }
 
         private void OnOutSide()
@@ -75,6 +76,7 @@ namespace thaiht20183826
             this.Wait(1, () =>
             {
                 LoaderSystem.Loading(false);
+                AudioController.Instance.PlayBackgroundMusicCommon();
                 SceneManager.LoadScene(SceneGame.TrainingModeScene);
             });
         }

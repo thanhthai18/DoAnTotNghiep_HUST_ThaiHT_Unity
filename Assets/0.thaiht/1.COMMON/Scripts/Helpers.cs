@@ -1,6 +1,8 @@
 using DG.Tweening;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -142,5 +144,18 @@ public static class Helpers
         Vector3 mousePosWord = camera.ScreenToWorldPoint(mousePosScreen);
         mousePosWord.z = 0;
         return mousePosWord;
+    }
+
+    public static int GetRandomNumber(List<int> source, List<int> randomed)
+    {
+        if (source.Count <= randomed.Count)
+        {
+            randomed.Clear();
+        }
+        var range = source.Where(x => !randomed.Contains(x));
+        int index = Random.Range(0, range.Count());
+        int result = range.ElementAt(index);
+        randomed.Add(result);
+        return result;
     }
 }

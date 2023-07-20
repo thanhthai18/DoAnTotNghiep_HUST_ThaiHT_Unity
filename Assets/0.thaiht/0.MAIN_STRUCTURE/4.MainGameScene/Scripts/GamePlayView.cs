@@ -16,8 +16,8 @@ namespace thaiht20183826
         public TextMeshProUGUI txtTimeCounting;
         public LeaderBoardEndGame leaderBoardEndGameView;
         public Button btnOptions;
-        public UIView viewOptions;
-        public Button btnQuitGame;
+        //public Button btnQuitGame;
+        public PopupOptions popupOptions;
         public Button btnSound, btnMusic;
         public UIButton btnClose;
 
@@ -45,28 +45,22 @@ namespace thaiht20183826
         {
             GamePlayController.OnGetKey += GamePlayController_OnGetKey;
             btnOptions.onClick.AddListener(OpenViewOptions);
-            btnQuitGame.onClick.AddListener(QuitGame);
-            btnClose.onClickEvent.AddListener(CloseViewOptions);
-            viewOptions.InstantHide();
+            //btnQuitGame.onClick.AddListener(QuitGame);
         }
         public void OpenViewOptions()
         {
-            viewOptions.Show();
+            popupOptions.Show();
         }
-        public void CloseViewOptions()
-        {
-            viewOptions.Hide();
-        }
-        public void QuitGame()
-        {
-            PhotonNetwork.LeaveRoom();
-            PhotonNetwork.LeaveLobby();
-            PhotonNetwork.Disconnect();
-            this.Wait(0.5f, () =>
-            {
-                SceneManager.LoadScene(SceneGame.SelectModeScene);
-            });
-        }
+        //public void QuitGame()
+        //{
+        //    PhotonNetwork.LeaveRoom();
+        //    PhotonNetwork.LeaveLobby();
+        //    //PhotonNetwork.Disconnect();
+        //    this.Wait(0.5f, () =>
+        //    {
+        //        SceneManager.LoadScene(SceneGame.SelectModeScene);
+        //    });
+        //}
 
         private void GamePlayController_OnGetKey(KeyCode obj)
         {
