@@ -109,6 +109,14 @@ namespace thaiht20183826
             sourceMusic.Stop();
             sourceMusic.clip = dataCommom.FindClip(AudioClipEnum.DataSound_BGMusicCommon);
             sourceMusic.Play();
+            sourceMusic.mute = GlobalValue.isMuteMusic;
+        }
+        public void PlayBackgroundMusicOnGamePlay()
+        {
+            sourceMusic.Stop();
+            sourceMusic.clip = dataCommom.FindClip(AudioClipEnum.DataSound_BGMusicOnGamePlay);
+            sourceMusic.Play();
+            sourceMusic.mute = GlobalValue.isMuteMusic;
         }
         public void StopBackgroundMusic()
         {
@@ -133,6 +141,7 @@ namespace thaiht20183826
                 dataCurrentSound = Resources.Load<DataSoundSciptableObj>("Sound/" + temp);
             sourceMusic.clip = dataCurrentSound.FindClip(AudioClipEnum.Minigame_BGMusic);
             sourceMusic.Play();
+            sourceMusic.mute = GlobalValue.isMuteMusic;
         }
 
         public void SetMuteMusic(bool isMute)

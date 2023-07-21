@@ -60,9 +60,10 @@ namespace thaiht20183826
             PlayerGamePlay.OnPlayerOutAreaMap += PlayerGamePlay_OnPlayerOutAreaMap;
             PlayerGamePlay.OnPlayerDaHoiSinh += PlayerGamePlay_OnPlayerDaHoiSinh;
             PlayerGamePlay.OnPlayerLostByHeart += PlayerGamePlay_OnPlayerLostByHeart;
+            AudioController.Instance.PlayBackgroundMusicOnGamePlay();
         }
 
-        
+
 
         public override void OnDisable()
         {
@@ -184,7 +185,7 @@ namespace thaiht20183826
             {
                 isCounting = true;
             }
-                
+
         }
         public void SpawnPlayer()
         {
@@ -252,47 +253,55 @@ namespace thaiht20183826
         private void GameEndRPC(int[] arrScore)
         {
             // Thực hiện các hành động sau khi kết thúc trò chơi (ví dụ: hiển thị kết quả cuối cùng, trở về menu, vv.)
-  
-                if (!isGameEnd)
+
+            if (!isGameEnd)
+            {
+                isGameEnd = true;
+
+                isCounting = false;
+
+                listPlayersGamePlay.ForEach(s => { if (s != null) { s.isCanControl = false; s.enabled = false; } });
+                gamePlayView.ShowLeaderBoardEndGame(arrScore);
+                var tmpTrans = gamePlayView.leaderBoardEndGameView.holderElement;
+                for (int i = 0; i < tmpTrans.childCount; i++)
                 {
-                    isGameEnd = true;
-
-                    isCounting = false;
-
-                    listPlayersGamePlay.ForEach(s => { if (s != null) { s.isCanControl = false; s.enabled = false; } });
-                    gamePlayView.ShowLeaderBoardEndGame(arrScore);
-                    var tmpTrans = gamePlayView.leaderBoardEndGameView.holderElement;
-                    for (int i = 0; i < tmpTrans.childCount; i++)
+                    if (PhotonNetwork.LocalPlayer.NickName == tmpTrans.GetChild(i).GetComponent<ElementLeaderBoardEndGame>().txtName.text)
                     {
-                        if (PhotonNetwork.LocalPlayer.NickName == tmpTrans.GetChild(i).GetComponent<ElementLeaderBoardEndGame>().txtName.text)
-                        {
-                            PlayFabController.SubmitScore(arrScore[i]);
-                        }
+                        PlayFabController.SubmitScore(arrScore[i]);
                     }
+                }
 
 
-                    ActionOnGameContinueAfter?.Invoke(GlobalValue.TIME_TO_CONTINUE);
-                    this.Wait(GlobalValue.TIME_TO_CONTINUE, () =>
+                ActionOnGameContinueAfter?.Invoke(GlobalValue.TIME_TO_CONTINUE);
+                this.Wait(GlobalValue.TIME_TO_CONTINUE, () =>
+                {
+                    LoaderSystem.Loading(true);
+                    this.Wait(0.5f, () =>
                     {
-                        LoaderSystem.Loading(true);
-                        this.Wait(0.5f, () =>
+                        LoaderSystem.Loading(false);
+                        AudioController.Instance.PlayBackgroundMusicCommon();
+                        if (GlobalValue.currentModeGame == ModeGame.RoomMode)
                         {
-                            if (GlobalValue.currentModeGame == ModeGame.RoomMode)
-                            {
-                                GlobalController.Instance.ReloadPreviousRoom();
-                            }
-                            else if (GlobalValue.currentModeGame == ModeGame.RankMode)
+                            GlobalController.Instance.ReloadPreviousRoom();
+                        }
+                        else if (GlobalValue.currentModeGame == ModeGame.RankMode)
+                        {
+                            if (PhotonNetwork.InRoom)
                             {
                                 PhotonNetwork.LeaveRoom();
-                                PhotonNetwork.LeaveLobby();
-                                SceneManager.LoadScene(SceneGame.SelectModeScene);
                             }
-                        });
-
+                            if (PhotonNetwork.InLobby)
+                            {
+                                PhotonNetwork.LeaveLobby();
+                            }
+                            SceneManager.LoadScene(SceneGame.SelectModeScene);
+                        }
                     });
-                }
-            
-         
+
+                });
+            }
+
+
         }
 
         private void OnDestroy()

@@ -237,8 +237,7 @@ public class RoomModeController : MonoBehaviour
 
     public void HandleOnPlayerEnteredRoom(Player newPlayer)
     {
-        PlayerChoose entry = Instantiate(PlayerListEntryPrefab);
-        entry.transform.SetParent(roomView.playerChooseParent.transform);
+        PlayerChoose entry = Instantiate(PlayerListEntryPrefab, roomView.playerChooseParent.transform);
         entry.GetComponent<PlayerChoose>().Initialize(newPlayer.ActorNumber, newPlayer.NickName, GlobalController.Instance.GetRankScorePlayer(newPlayer.NickName), newPlayer);
 
         entry.btnKick.gameObject.SetActive(false);

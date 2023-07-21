@@ -23,6 +23,7 @@ public class GlobalController : MonoBehaviour
     private void Start()
     {
         Debug.Log("Khoi tao GlobalController");
+        Application.targetFrameRate = GlobalValue.DEFAULT_FPS;
         SceneManager.sceneLoaded += SceneManager_sceneLoaded;
         PlayFabController.ActionOnLoadSuccess += SetGlobalValueLeaderboard;
 
@@ -45,7 +46,7 @@ public class GlobalController : MonoBehaviour
         Debug.Log("reload");
         SceneManager.sceneLoaded += DelayReJoinRoom;
 
-        if (PhotonNetwork.IsMasterClient)
+        //if (PhotonNetwork.IsMasterClient)
         {
             NetworkManager.Instance.ChangeScene(SceneGame.RoomModeScene);
         }

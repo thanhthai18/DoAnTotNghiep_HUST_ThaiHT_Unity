@@ -16,3 +16,6 @@ MonoBehaviour:
   - nameClip: BGMusicCommon
     audioClip: {fileID: 8300000, guid: 9dca7254edf0eba4f8306039101d4e41, type: 3}
     type: 0
+  - nameClip: BGMusicOnGamePlay
+    audioClip: {fileID: 8300000, guid: d9bd6fc8739e8504482affb6f0c2d2a9, type: 3}
+    type: 3
