@@ -76,11 +76,11 @@ namespace thaiht20183826
 
         void Start()
         {
-            if (SceneManagerHelper.ActiveSceneName == SceneGame.RoomModeScene)
+            if (GlobalValue.currentModeGame == ModeGame.RoomMode)
             {
                 gamePlayTime = (int)PhotonNetwork.CurrentRoom.CustomProperties["timePlay"];
             }
-            else if (SceneManagerHelper.ActiveSceneName == SceneGame.RankModeScene)
+            else if (GlobalValue.currentModeGame == ModeGame.RankMode)
             {
                 gamePlayTime = GlobalValue.TIME_PLAY_RANK_MODE;
             }
@@ -99,7 +99,7 @@ namespace thaiht20183826
             switch (newState)
             {
                 case GamePlayState.IM_IN_GAME:
-                    photonView.RPC(nameof(HandleImInGame), RpcTarget.AllBuffered);
+                    photonView.RPC(nameof(HandleImInGame), RpcTarget.All);
                     break;
                 case GamePlayState.INTRO:
                     HandleIntro();
@@ -173,10 +173,8 @@ namespace thaiht20183826
                         isEndGame = true;
                         ChangeState(GamePlayState.ENDGAME);
                     }
-
                 }
             }
-
         }
         public override void OnMasterClientSwitched(Player newMasterClient)
         {
@@ -195,7 +193,6 @@ namespace thaiht20183826
             playerGamePlayPrefabPath = dataSpawn.characterPrefab.name;
             PlayerGamePlay playerGamePlay = PhotonNetwork.Instantiate(playerGamePlayPrefabPath, MapController.Instance.listSpawnPlayer[GlobalValue.indexPosSpawnPlayerGamePlay].position, Quaternion.identity).GetComponent<PlayerGamePlay>();
             playerGamePlay.photonView.RPC(nameof(playerGamePlay.InitPlayer), RpcTarget.All, PhotonNetwork.LocalPlayer, indexData);
-
         }
 
         public PlayerGamePlay GetPlayer(int playerId)
@@ -259,9 +256,10 @@ namespace thaiht20183826
                 isGameEnd = true;
 
                 isCounting = false;
-
-                listPlayersGamePlay.ForEach(s => { if (s != null) { s.isCanControl = false; s.enabled = false; } });
+                gamePlayView.popupOptions.Hide();
+                AudioController.Instance.PlaySoundCommom(AudioClipEnum.DataSound_leaderboardendgame);
                 gamePlayView.ShowLeaderBoardEndGame(arrScore);
+                listPlayersGamePlay.ForEach(s => { if (s != null) { s.isCanControl = false; s.enabled = false; PhotonNetwork.Destroy(s.gameObject); } });
                 var tmpTrans = gamePlayView.leaderBoardEndGameView.holderElement;
                 for (int i = 0; i < tmpTrans.childCount; i++)
                 {
@@ -270,7 +268,6 @@ namespace thaiht20183826
                         PlayFabController.SubmitScore(arrScore[i]);
                     }
                 }
-
 
                 ActionOnGameContinueAfter?.Invoke(GlobalValue.TIME_TO_CONTINUE);
                 this.Wait(GlobalValue.TIME_TO_CONTINUE, () =>

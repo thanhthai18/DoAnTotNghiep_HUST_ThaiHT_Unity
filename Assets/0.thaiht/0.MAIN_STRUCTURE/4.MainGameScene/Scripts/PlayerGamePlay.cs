@@ -1,23 +1,15 @@
-﻿using DG.Tweening;
-using MoreMountains.Feedbacks;
-using MoreMountains.FeedbacksForThirdParty;
-using Photon.Realtime;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using MoreMountains.Feedbacks;
 using Photon.Pun;
+using Photon.Realtime;
 using System;
-using static UnityEngine.RuleTile.TilingRuleOutput;
+using System.Collections;
 using TMPro;
+using UnityEngine;
 
 namespace thaiht20183826
 {
-
-
     public class PlayerGamePlay : MonoBehaviourPunCallbacks//, IPunObservable
     {
-
-
         [Space(10)]
         [Header("Move Info")]
         public float moveSpeed;
@@ -29,6 +21,7 @@ namespace thaiht20183826
         public Rigidbody2D rig;
         public CharacterScript selfCharacterScript;
         public BoxCollider2D col;
+        [SerializeField] private AudioPlayer audioPlayer;
 
         [Space(10)]
         [Header("Dash Info")]
@@ -133,13 +126,13 @@ namespace thaiht20183826
                     rig.AddForce(dashingDir.normalized * dashDistance, ForceMode2D.Impulse);
                     //newPositionDash = Vector3.Lerp(dashOrigin, dashDestination, DashCurve.Evaluate(dashTimer / dashingTime));
                     dashTimer += Time.deltaTime;
-                   
+
                     //rig.MovePosition(newPositionDash);
                     //transform.position = Vector2.Lerp(transform.position, newPositionDash, dashTimer);
                     //rig.AddForce(new Vector2(x, y) * moveSpeed * 3, ForceMode2D.Force);
                     return;
                 }
-                if(timerCountDownDash > 0 && !isDashing)
+                if (timerCountDownDash > 0 && !isDashing)
                 {
                     timerCountDownDash -= Time.deltaTime;
                     if (timerCountDownDash < 0)
@@ -184,7 +177,7 @@ namespace thaiht20183826
             photonPlayer = player;
             id_Photon = player.ActorNumber;
             txtDisplayPlayerName.text = player.NickName;
-       
+
             if (photonView.IsMine)
             {
                 imgArrowPlayer.SetActive(true);
@@ -245,10 +238,12 @@ namespace thaiht20183826
                         if (GlobalValue.currentModeGame != ModeGame.TrainingMode)
                         {
                             photonView.RPC(nameof(CallAnimRun), RpcTarget.All);
+                            photonView.RPC(nameof(CallSoundRun), RpcTarget.All, true);
                         }
                         else
                         {
                             CallAnimRun();
+                            CallSoundRun(true);
                         }
                     }
                 }
@@ -259,10 +254,12 @@ namespace thaiht20183826
                         if (GlobalValue.currentModeGame != ModeGame.TrainingMode)
                         {
                             photonView?.RPC(nameof(CallAnimIdle), RpcTarget.All);
+                            photonView.RPC(nameof(CallSoundRun), RpcTarget.All, false);
                         }
                         else
                         {
                             CallAnimIdle();
+                            CallSoundRun(false);
                         }
                     }
                 }
@@ -310,7 +307,7 @@ namespace thaiht20183826
         {
             if (canDash)
             {
-                if(timerCountDownDash <= 0)
+                if (timerCountDownDash <= 0)
                 {
                     Debug.Log("Dash");
                     timerCountDownDash = countDownDash;
@@ -329,16 +326,18 @@ namespace thaiht20183826
                     if (GlobalValue.currentModeGame != ModeGame.TrainingMode)
                     {
                         photonView.RPC(nameof(DashFeedbackEffect), RpcTarget.All, true);
+                        photonView.RPC(nameof(CallSoundDash), RpcTarget.All);
                     }
                     else
                     {
                         DashFeedbackEffect(true);
+                        CallSoundDash();
                     }
 
 
                     StartCoroutine(StopDashing());
                 }
-                
+
             }
         }
         [PunRPC]
@@ -426,6 +425,24 @@ namespace thaiht20183826
         public void CallAnimIdle()
         {
             selfCharacterScript.AnimIdle();
+        }
+        #endregion
+
+        #region Call Audio
+        [PunRPC]
+        public void CallSoundRun(bool isRun)
+        {
+            audioPlayer.PlaySoundRun(isRun);
+        }
+        [PunRPC]
+        public void CallSoundDash()
+        {
+            audioPlayer.PlaySoundDash();
+        }
+        [PunRPC]
+        public void CallSoundDie()
+        {
+            audioPlayer.PlaySoundDie();
         }
         #endregion
 
@@ -552,6 +569,7 @@ namespace thaiht20183826
                                     }
                                 }
                             }
+                            photonView.RPC(nameof(CallSoundDie), RpcTarget.All);
                             HoiSinh();
                             OnPlayerOutAreaMap?.Invoke(this);
                         }

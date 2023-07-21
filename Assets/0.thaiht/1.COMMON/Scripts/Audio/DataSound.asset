@@ -19,3 +19,21 @@ MonoBehaviour:
   - nameClip: BGMusicOnGamePlay
     audioClip: {fileID: 8300000, guid: d9bd6fc8739e8504482affb6f0c2d2a9, type: 3}
     type: 3
+  - nameClip: click
+    audioClip: {fileID: 8300000, guid: 916b68a506a00bd4a9fd15eeb0470b18, type: 3}
+    type: 4
+  - nameClip: leaderboardendgame
+    audioClip: {fileID: 8300000, guid: f822fac3ba8db4849bb5507c1bde70e6, type: 3}
+    type: 5
+  - nameClip: die
+    audioClip: {fileID: 8300000, guid: b1a19577c3ab22840968d8855096c22b, type: 3}
+    type: 6
+  - nameClip: running
+    audioClip: {fileID: 8300000, guid: f5b8ec9b1bf692345886b44084e2100d, type: 3}
+    type: 7
+  - nameClip: wallfx
+    audioClip: {fileID: 8300000, guid: 3009ca52b9b69de48bccc1699e4229a7, type: 3}
+    type: 8
+  - nameClip: dash
+    audioClip: {fileID: 8300000, guid: 6f401e6d35cd3364298c497cdfea358c, type: 3}
+    type: 9

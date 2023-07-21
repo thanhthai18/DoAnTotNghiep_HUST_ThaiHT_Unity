@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +14,11 @@ namespace thaiht20183826
         public AudioSource sourceMusic;
         public List<AudioSource> listSourceSound = new List<AudioSource>();
         public List<AudioSource> listSourceSoundLoop = new List<AudioSource>();
-
+        private List<AudioSource> listAllSourceSound = new List<AudioSource>();
         public DataSoundSciptableObj dataCommom;
 
         private DataSoundSciptableObj dataCurrentSound;
+        public static event Action<bool> ActionOnMuteSound;
 
         private float VolumeSound
         {
@@ -27,8 +29,7 @@ namespace thaiht20183826
             set
             {
                 PlayerPrefs.SetFloat("VolumeSound", value);
-                listSourceSound.ForEach(s => s.volume = value);
-                listSourceSoundLoop.ForEach(s => s.volume = value);
+                listAllSourceSound.ForEach(s => s.volume = value);
             }
         }
 
@@ -44,12 +45,16 @@ namespace thaiht20183826
                 sourceMusic.volume = value * 0.4f;
             }
         }
-
+        protected override void Awake()
+        {
+            base.Awake();
+            listAllSourceSound.AddRange(listSourceSound);
+            listAllSourceSound.AddRange(listSourceSoundLoop);
+        }
         private void Start()
         {
             SetVolSound(VolumeSound);
             SetVolMusic(VolumeMusic);
-            PlayBackgroundMusicCommon();
             GlobalValue.isMuteSound = listSourceSound[0].mute;
             GlobalValue.isMuteMusic = sourceMusic.mute;
         }
@@ -75,10 +80,19 @@ namespace thaiht20183826
 
         void SetupVolume()
         {
-            listSourceSound.ForEach(s => s.volume = 1);
-            listSourceSoundLoop.ForEach(s => s.volume = 1);
+            listAllSourceSound.ForEach(s => s.volume = 1);
             sourceMusic.volume = 0.2f;
         }
+        public void SetMuteMusic(bool isMute)
+        {
+            sourceMusic.mute = isMute;
+        }
+        public void SetMuteSound(bool isMute)
+        {
+            listAllSourceSound.ForEach(s => s.mute = isMute);
+            ActionOnMuteSound?.Invoke(isMute);
+        }
+
 
         public AudioSource GetAudioSourceFXReady()
         {
@@ -88,6 +102,20 @@ namespace thaiht20183826
                 source = listSourceSound[0];
             }
             return source;
+        }
+        public AudioSource GetAudioSourceLoopReady()
+        {
+            var source = listSourceSoundLoop.First(s => !s.isPlaying);
+            if (source == null)
+            {
+                source = listSourceSoundLoop[0];
+            }
+            return source;
+        }
+
+        public AudioClip GetAudioClipInCommon(AudioClipEnum enumAudioClip)
+        {
+            return dataCommom.FindClip(enumAudioClip);
         }
 
         public void PlaySoundCommom(AudioClipEnum type)
@@ -106,17 +134,15 @@ namespace thaiht20183826
         }
         public void PlayBackgroundMusicCommon()
         {
-            sourceMusic.Stop();
             sourceMusic.clip = dataCommom.FindClip(AudioClipEnum.DataSound_BGMusicCommon);
             sourceMusic.Play();
-            sourceMusic.mute = GlobalValue.isMuteMusic;
+            Invoke(nameof(DelayCallMuteMusic), 0.01f);
         }
         public void PlayBackgroundMusicOnGamePlay()
         {
-            sourceMusic.Stop();
             sourceMusic.clip = dataCommom.FindClip(AudioClipEnum.DataSound_BGMusicOnGamePlay);
             sourceMusic.Play();
-            sourceMusic.mute = GlobalValue.isMuteMusic;
+            Invoke(nameof(DelayCallMuteMusic), 0.01f);
         }
         public void StopBackgroundMusic()
         {
@@ -141,17 +167,46 @@ namespace thaiht20183826
                 dataCurrentSound = Resources.Load<DataSoundSciptableObj>("Sound/" + temp);
             sourceMusic.clip = dataCurrentSound.FindClip(AudioClipEnum.Minigame_BGMusic);
             sourceMusic.Play();
+            Invoke(nameof(DelayCallMuteMusic), 0.01f);
+        }
+
+
+        public void PlaySound(AudioClipEnum type, bool loop = false, string scene = null)
+        {
+            var temp = scene;
+            if (string.IsNullOrEmpty(temp))
+            {
+                temp = SceneManager.GetActiveScene().name;
+            }
+            try
+            {
+                if (dataCurrentSound == null || dataCurrentSound.name != temp)
+                    dataCurrentSound = Resources.Load<DataSoundSciptableObj>("Sound/" + temp);
+            }
+            catch (System.Exception e)
+            {
+                dataCurrentSound = dataCommom;
+            }
+
+            if (!loop)
+            {
+                GetAudioSourceFXReady().PlayOneShot(dataCurrentSound.FindClip(type));
+            }
+            else
+            {
+                var sourceSoundLoop = GetAudioSourceLoopReady();
+                sourceSoundLoop.clip = dataCurrentSound.FindClip(type);
+                sourceSoundLoop.loop = true;
+                sourceSoundLoop.Play();
+            }
+        }
+
+        private void DelayCallMuteMusic()
+        {
             sourceMusic.mute = GlobalValue.isMuteMusic;
         }
 
-        public void SetMuteMusic(bool isMute)
-        {
-            sourceMusic.mute = isMute;
-        }
-        public void SetMuteSound(bool isMute)
-        {
-            listSourceSound.ForEach(s => s.mute = isMute);
-        }
+
 
 
         //public void PlaySound(AudioClipEnum type, string scene = null, bool loop = false)

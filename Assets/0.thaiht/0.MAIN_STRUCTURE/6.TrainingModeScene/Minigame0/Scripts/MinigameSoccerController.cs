@@ -43,6 +43,7 @@ namespace thaiht20183826
             minigameSoccerView.SetTextTime(currentTime);
             minigameSoccerView.SetTextScore(score);
             Instantiate(particleGoal, ball.transform.position, Quaternion.identity);
+            AudioController.Instance.PlaySound(AudioClipEnum.TrainingScene_Minigame0_Goal);
         }
 
         public IEnumerator StartCountTime()

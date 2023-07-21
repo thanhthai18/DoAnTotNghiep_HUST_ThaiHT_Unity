@@ -59,6 +59,7 @@ public class LoginView : View
     {
         LoaderSystem.Loading(false);
         txtMessageLogin.ShowMessageText("Dang nhap thanh cong!", true);
+        PlayFabController.SetTimeByServer();
         string name = null;
         if (result.InfoResultPayload != null)
         {

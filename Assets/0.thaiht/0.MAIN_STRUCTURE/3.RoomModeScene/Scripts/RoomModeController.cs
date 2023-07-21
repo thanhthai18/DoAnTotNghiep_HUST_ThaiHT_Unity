@@ -38,7 +38,9 @@ public class RoomModeController : MonoBehaviour
             Destroy(gameObject);
         }
 
+
         PhotonNetwork.AutomaticallySyncScene = true;
+
 
         cachedRoomList = new Dictionary<string, RoomInfo>();
         listRoomEntry = new Dictionary<string, SlotRoomSelect>();
@@ -68,10 +70,10 @@ public class RoomModeController : MonoBehaviour
         NetworkManager.ActionOnPLayerLeftRoom += HandleOnPlayerLeftRoom;
         NetworkManager.ActionOnMasterClientSwitched += HandleOnMasterClientSwitched;
         NetworkManager.ActionOnPlayerPropertiesUpdate += HandleOnPlayerPropertiesUpdate;
-        
+
     }
 
- 
+
 
     private void OnDisable()
     {
@@ -93,7 +95,7 @@ public class RoomModeController : MonoBehaviour
         NetworkManager.ActionOnPLayerLeftRoom -= HandleOnPlayerLeftRoom;
         NetworkManager.ActionOnMasterClientSwitched -= HandleOnMasterClientSwitched;
         NetworkManager.ActionOnPlayerPropertiesUpdate -= HandleOnPlayerPropertiesUpdate;
-   
+
     }
 
     private void OnUpdatedGlobalLeaderboard()
@@ -153,7 +155,6 @@ public class RoomModeController : MonoBehaviour
     {
         // joining (or entering) a room invalidates any cached lobby room list (even if LeaveLobby was not called due to just joining a room)
 
-
         cachedRoomList.Clear();
         Debug.Log("da tham gia phong");
         CallSetBannerRoomView();
@@ -164,13 +165,13 @@ public class RoomModeController : MonoBehaviour
         if (playerListChoose == null)
         {
             playerListChoose = new Dictionary<int, PlayerChoose>();
-        
+
         }
 
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
             var p = PhotonNetwork.PlayerList[i];
-            if(PhotonNetwork.LocalPlayer == p)
+            if (PhotonNetwork.LocalPlayer == p)
             {
                 GlobalValue.indexPosSpawnPlayerGamePlay = i;
             }
@@ -198,18 +199,19 @@ public class RoomModeController : MonoBehaviour
 
             playerListChoose.Add(p.ActorNumber, entry);
         }
-   
+
         //CheckActiveBtnKickPlayer();
         PlayFabController.GetLeaderboard();
 
         CheckKeyHost();
         roomView.btnStartGame.gameObject.SetActive(CheckPlayersReady());
         SetRoomMapProperties(0);
-        SetRoomTimePlayProperties(int.Parse(panelSetupKeyHost_MapTime.txtTimeChoose.text.Replace("s","")));
+        SetRoomTimePlayProperties(int.Parse(panelSetupKeyHost_MapTime.txtTimeChoose.text.Replace("s", "")));
         //Hashtable props = new Hashtable
         //    {
         //        {"PlayerLoadedLevel", false}
         //    };
+
     }
     public void HandleOnCreatedRoom()
     {
@@ -486,7 +488,7 @@ public class RoomModeController : MonoBehaviour
                 PhotonNetwork.CurrentRoom.CustomProperties["indexMap"] = index;
             }
         }
-      
+
     }
     public void SetRoomTimePlayProperties(int time)
     {

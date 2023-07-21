@@ -46,30 +46,14 @@ namespace thaiht20183826
         {           
             if (isMusic)
             {
-                if (GlobalValue.isMuteMusic)
-                {
-                    GlobalValue.isMuteMusic = false;
-                    muteImg.gameObject.SetActive(false);
-                }
-                else
-                {
-                    GlobalValue.isMuteMusic = true;
-                    muteImg.gameObject.SetActive(true);
-                }
+                GlobalValue.isMuteMusic = !GlobalValue.isMuteMusic;
+                muteImg.gameObject.SetActive(GlobalValue.isMuteMusic);             
                 AudioController.Instance.SetMuteMusic(GlobalValue.isMuteMusic);
             }
             else
             {
-                if (GlobalValue.isMuteSound)
-                {
-                    GlobalValue.isMuteSound = false;
-                    muteImg.gameObject.SetActive(false);
-                }
-                else
-                {
-                    GlobalValue.isMuteSound = true;
-                    muteImg.gameObject.SetActive(true);
-                }
+                GlobalValue.isMuteSound = !GlobalValue.isMuteSound;
+                muteImg.gameObject.SetActive(GlobalValue.isMuteSound);               
                 AudioController.Instance.SetMuteSound(GlobalValue.isMuteSound);
             }
         }

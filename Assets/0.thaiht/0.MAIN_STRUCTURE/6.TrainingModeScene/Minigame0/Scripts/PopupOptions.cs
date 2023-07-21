@@ -40,8 +40,14 @@ namespace thaiht20183826
                 }
                 else
                 {
-                    PhotonNetwork.LeaveRoom();
-                    PhotonNetwork.LeaveLobby();
+                    if (PhotonNetwork.InRoom)
+                    {
+                        PhotonNetwork.LeaveRoom();
+                    }
+                    if (PhotonNetwork.InLobby)
+                    {
+                        PhotonNetwork.LeaveLobby();
+                    }
                     SceneManager.LoadScene(SceneGame.SelectModeScene);
                 }
             });

@@ -10,6 +10,17 @@ public class PlayFabController : PersistentSingleton<PlayFabController>
 {
     public static event Action<List<PlayerLeaderboardEntry>> ActionOnLoadSuccess;
     public static event Action<List<PlayerLeaderboardEntry>> ActionOnLoadSuccessMinigameSoccer;
+
+    private void Start()
+    {
+
+    }
+
+    public static void SetTimeByServer()
+    {
+        PlayFabClientAPI.GetTitleData(new GetTitleDataRequest(),
+          OnGetTitleDataSuccess, OnGetTitleDataFailure);
+    }
     public static void SubmitScore(int playerScore)
     {
         PlayFabClientAPI.UpdatePlayerStatistics(new UpdatePlayerStatisticsRequest
@@ -82,9 +93,9 @@ public class PlayFabController : PersistentSingleton<PlayFabController>
         //    }
         //}
 
-            ActionOnLoadSuccess?.Invoke(obj.Leaderboard);
+        ActionOnLoadSuccess?.Invoke(obj.Leaderboard);
 
-        ActionOnLoadSuccessMinigameSoccer?.Invoke(obj.Leaderboard);      
+        ActionOnLoadSuccessMinigameSoccer?.Invoke(obj.Leaderboard);
     }
     private static void OnLeaderboardSuccess_MinigameSoccer(GetLeaderboardResult obj)
     {
@@ -96,5 +107,28 @@ public class PlayFabController : PersistentSingleton<PlayFabController>
     }
 
 
+    #region TitleKeyData
+    private static void OnGetTitleDataSuccess(GetTitleDataResult result)
+    {
+        if (result.Data.TryGetValue("TIME_PLAY_RANK_MODE", out string titleDataValue0))
+        {
+            GlobalValue.TIME_PLAY_RANK_MODE = int.Parse(titleDataValue0);
+            Debug.Log("TIME_PLAY_RANK_MODE: "+GlobalValue.TIME_PLAY_RANK_MODE);
+        }
+        if (result.Data.TryGetValue("MAX_TIME_MINIGAME_SOCCER", out string titleDataValue1))
+        {
+            GlobalValue.MAX_TIME_MINIGAME_SOCCER = int.Parse(titleDataValue1);
+            Debug.Log("MAX_TIME_MINIGAME_SOCCER: " + GlobalValue.MAX_TIME_MINIGAME_SOCCER);
+        }
+
+
+    }
+
+    private static void OnGetTitleDataFailure(PlayFabError error)
+    {
+        Debug.LogError("GetTitleData failed: " + error.ErrorMessage);
+    }
+
+    #endregion
 }
 

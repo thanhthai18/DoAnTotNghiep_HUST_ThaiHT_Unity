@@ -45,11 +45,14 @@ public class GlobalController : MonoBehaviour
     {
         Debug.Log("reload");
         SceneManager.sceneLoaded += DelayReJoinRoom;
-
         //if (PhotonNetwork.IsMasterClient)
         {
-            NetworkManager.Instance.ChangeScene(SceneGame.RoomModeScene);
+            //NetworkManager.Instance.ChangeScene(SceneGame.RoomModeScene);
+            SceneManager.LoadScene(SceneGame.RoomModeScene);
         }
+       
+
+        
 
         //PhotonNetwork.LeaveRoom();
         //NetworkManager.ActionOnConnectedToMaster += MasterClientReJoining;
@@ -62,28 +65,35 @@ public class GlobalController : MonoBehaviour
     {
         try
         {
-            this.Wait(0.3f, () =>
+            //this.Wait(0.5f, () =>
+            //{
+            if (arg0.name == SceneGame.RoomModeScene)
             {
-                if (arg0.name == SceneGame.RoomModeScene)
-                {
-                    if (RoomModeController.instance != null)
-                    {
-                        PhotonNetwork.CurrentRoom.IsOpen = true;
-                        PhotonNetwork.CurrentRoom.IsVisible = true;
-                        PlayFabController.GetLeaderboard();
+                //if (RoomModeController.instance != null)
+                //{
+                PhotonNetwork.CurrentRoom.IsOpen = true;
+                PhotonNetwork.CurrentRoom.IsVisible = true;
+               
+                Invoke(nameof(DelayCallJoin), 0.5f);
+                //}
+            }
+            LoaderSystem.Loading(false);
+            SceneManager.sceneLoaded -= DelayReJoinRoom;
 
-                        RoomModeController.instance.HandleOnJoinedRoom();
-                    }
-                }
-                LoaderSystem.Loading(false);
-                SceneManager.sceneLoaded -= DelayReJoinRoom;
-            });
+            //});
 
         }
         catch (System.Exception e)
         {
             PhotonNetwork.LeaveRoom();
         }
+    }
+
+    void DelayCallJoin()
+    {
+        PlayFabController.GetLeaderboard();
+        RoomModeController.instance.HandleOnJoinedRoom();
+
     }
 
     public int GetRankScorePlayer(string namePlayer)
