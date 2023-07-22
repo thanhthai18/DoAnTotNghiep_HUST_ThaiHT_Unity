@@ -12,14 +12,20 @@ namespace thaiht20183826
 {
     public class GamePlayView : View
     {
-        public TabPlayerInfo tabPlayerInfo;
-        public TextMeshProUGUI txtTimeCounting;
-        public LeaderBoardEndGame leaderBoardEndGameView;
-        public Button btnOptions;
+        [SerializeField] public TabPlayerInfo tabPlayerInfo;
+        [SerializeField] public TextMeshProUGUI txtTimeCounting;
+        [SerializeField] public LeaderBoardEndGame leaderBoardEndGameView;
+        [SerializeField] public Button btnOptions;
         //public Button btnQuitGame;
-        public PopupOptions popupOptions;
-        public Button btnSound, btnMusic;
-        public UIButton btnClose;
+        [SerializeField] public PopupOptions popupOptions;
+        [SerializeField] public Button btnSound, btnMusic;
+        [SerializeField] public UIButton btnClose;
+        [Header("Item Effect")]
+        [SerializeField] GameObject panelCurrentEffectItem;
+        [SerializeField] ItemEffectApplyingUI itemEffectApplyingUIPrefab;
+
+
+
 
         void Awake()
         {
@@ -84,6 +90,14 @@ namespace thaiht20183826
 
 
             leaderBoardEndGameView.GetComponent<UIView>().Show();
+        }
+
+        public ItemEffectApplyingUI SpawnItemEffectApplyingUI(Sprite spriteItem)
+        {
+            Debug.Log("show item effect UI");
+            var tmp = Instantiate(itemEffectApplyingUIPrefab, panelCurrentEffectItem.transform);
+            tmp.Init(spriteItem);
+            return tmp;
         }
 
         private void OnDestroy()

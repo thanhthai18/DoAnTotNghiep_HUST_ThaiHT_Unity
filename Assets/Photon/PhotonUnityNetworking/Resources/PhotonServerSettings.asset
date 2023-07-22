@@ -63,6 +63,13 @@ MonoBehaviour:
   - CallSoundRun
   - CallSoundDash
   - CallSoundDie
+  - SpawnSpeedDown
+  - SpawnSpeedUp
+  - HideImgItemEffectOnPlayer
+  - ShowImgItemEffectOnPlayer
+  - Pun_CallHideItemFXSpeedOnPlayer
+  - Pun_CallShowItemFXSpeedOnPlayer
+  - SetSpriteTmpItemEffect
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

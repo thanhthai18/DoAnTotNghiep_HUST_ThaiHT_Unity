@@ -37,3 +37,9 @@ MonoBehaviour:
   - nameClip: dash
     audioClip: {fileID: 8300000, guid: 6f401e6d35cd3364298c497cdfea358c, type: 3}
     type: 9
+  - nameClip: push
+    audioClip: {fileID: 8300000, guid: e5cad0a387c794f44b3164a1d6b4340d, type: 3}
+    type: 10
+  - nameClip: ping
+    audioClip: {fileID: 8300000, guid: 34de9f7c7149821489f5cd4c866d2530, type: 3}
+    type: 11

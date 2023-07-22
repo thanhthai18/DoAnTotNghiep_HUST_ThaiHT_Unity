@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace thaiht20183826
 {
@@ -14,6 +15,7 @@ namespace thaiht20183826
         [Header("Move Info")]
         public float moveSpeed;
         public float dragRigidbody;
+        private float originalMoveSpeed;
 
 
         [Space(10)]
@@ -58,29 +60,34 @@ namespace thaiht20183826
         private Vector3 spawnPos;
         public GameObject imgArrowPlayer;
         public TextMeshProUGUI txtDisplayPlayerName;
+        [SerializeField] Image imgItemEffect;
 
         public static event Action<PlayerGamePlay> OnPlayerOutAreaMap;
         public static event Action<PlayerGamePlay> OnPlayerDaHoiSinh;
         public static event Action<int, int> OnSetCountScoreLifePlayer;
         public static event Action OnPlayerLostByHeart;
-
+        public static event Action<int, int> ActionOnPlayerApplyItemEffectSpeed;
+        public static event Action<int> ActionOnPlayerUnApplyItemEffectSpeed;
 
 
         void Awake()
         {
             rig = GetComponent<Rigidbody2D>();
             col = GetComponent<BoxCollider2D>();
+            imgItemEffect.gameObject.SetActive(false);
             selfCharacterScript = GetComponent<CharacterScript>();
             playerFeedback_Dash_Particle = playerFeedback_Dash.GetComponent<MMFeedbackParticles>();
         }
         #region SUBSCRIBE
-        private void OnEnable()
+        public override void OnEnable()
         {
-
+            base.OnEnable();
+            //SpeedItem.ActionOnChangeSpeed += this.ChangeSpeedItem;
         }
-        private void OnDisable()
+        public override void OnDisable()
         {
-
+            base.OnDisable();
+            //SpeedItem.ActionOnChangeSpeed -= this.ChangeSpeedItem;
         }
         #endregion
 
@@ -207,7 +214,7 @@ namespace thaiht20183826
                 countDownDash = data.countDownDash;
             }
             timerCountDownDash = 0;
-
+            originalMoveSpeed = moveSpeed;
             //Tab
             Invoke(nameof(DelaySpawnPlayerTab), 0.5f);
         }
@@ -301,7 +308,6 @@ namespace thaiht20183826
                 }
             }
         }
-
 
         void DashSkill()
         {
@@ -415,6 +421,66 @@ namespace thaiht20183826
 
         }
 
+
+        Coroutine coroutineSpeedItemEffect;
+        void ChangeSpeedItem(float ratioScale, float timeAppyEffect,int idSprite)
+        {
+            if (photonView.IsMine)
+            {
+                moveSpeed = originalMoveSpeed;
+                moveSpeed *= ratioScale;
+
+                if (coroutineSpeedItemEffect != null)
+                {
+                    StopCoroutine(coroutineSpeedItemEffect);
+                }
+                var sprite = GamePlayController.instance.spriteItemEffectSpeed[idSprite];
+                var itemEffectUI = GamePlayController.instance.gamePlayView.SpawnItemEffectApplyingUI(sprite);
+                ActionOnPlayerApplyItemEffectSpeed?.Invoke(id_Photon, idSprite); 
+                coroutineSpeedItemEffect = StartCoroutine(CountTimeApplyEffectItem(timeAppyEffect, itemEffectUI));
+            }
+        }
+
+        private ItemEffectApplyingUI preItemEffect;
+
+        IEnumerator CountTimeApplyEffectItem(float timeApply, ItemEffectApplyingUI itemEffectUI)
+        {
+            if(preItemEffect != null)
+            {
+                Destroy(preItemEffect.gameObject);
+            }
+            preItemEffect = itemEffectUI;
+            float timeCount = timeApply;
+            while(timeCount > 0)
+            {
+                timeCount -= Time.deltaTime;
+                if (itemEffectUI!= null)
+                {
+                    itemEffectUI.Fill(timeCount / timeApply);
+                }
+                if (timeCount <= 0)
+                {
+                    ActionOnPlayerUnApplyItemEffectSpeed?.Invoke(id_Photon);
+                    Destroy(itemEffectUI.gameObject);        // dispose UI speed item
+                    ResetSpeed();
+                }
+                yield return new WaitForEndOfFrame();
+            }
+        }
+        public void ResetSpeed()
+        {
+            moveSpeed = originalMoveSpeed;
+        }
+        public void ShowImgItemEffectOnPlayer(int idSprite)
+        {
+            imgItemEffect.sprite = GamePlayController.instance.spriteItemEffectSpeed[idSprite];
+            imgItemEffect.gameObject.SetActive(true);
+        }
+        public void HideImgItemEffectOnPlayer()
+        {
+            imgItemEffect.gameObject.SetActive(false);
+        }
+
         #region Call Anim PUN
         [PunRPC]
         public void CallAnimRun()
@@ -479,6 +545,7 @@ namespace thaiht20183826
                         col.isTrigger = true;
 
                         Debug.Log("push");
+                        AudioController.Instance.PlaySoundCommom(AudioClipEnum.DataSound_push);
                         Vector2 pushDirection = otherRigidbody.transform.position - transform.position;
                         pushDirection = pushDirection.normalized;
                         if (isDashing)
@@ -507,6 +574,7 @@ namespace thaiht20183826
                             col.isTrigger = true;
 
                             Debug.Log("push");
+                            AudioController.Instance.PlaySoundCommom(AudioClipEnum.DataSound_push);
                             Vector2 pushDirection = otherRigidbody.transform.position - transform.position;
                             pushDirection = pushDirection.normalized;
                             if (isDashing)
@@ -537,6 +605,16 @@ namespace thaiht20183826
         //        }
         //    }
         //}
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (collision.CompareTag("SpeedItem"))
+            {
+                AudioController.Instance.PlaySoundCommom(AudioClipEnum.DataSound_ping);
+                var tmp = collision.GetComponent<SpeedItem>().OnTriggerItem();
+                ChangeSpeedItem(tmp.Item1, tmp.Item2, tmp.Item3);
+            }
+        }
 
         private void OnTriggerExit2D(Collider2D collision)
         {
@@ -574,6 +652,7 @@ namespace thaiht20183826
                             OnPlayerOutAreaMap?.Invoke(this);
                         }
                     }
+                   
                 }
             }
             catch (Exception e) { }

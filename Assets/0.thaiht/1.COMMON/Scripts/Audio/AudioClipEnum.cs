@@ -10,4 +10,6 @@ DataSound_die,
 DataSound_running,
 DataSound_wallfx,
 DataSound_dash,
+DataSound_push,
+DataSound_ping,
 }

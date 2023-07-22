@@ -32,11 +32,14 @@ namespace thaiht20183826
 
         [Header("Data")]
         public DataCharacter dataCharacterScriptableObj;
+        public Sprite[] spriteItemEffectSpeed;
 
         [Header("General")]
         public float gamePlayTime = 30;
         private float currentTime;
         [SerializeField] private bool isCounting = false;
+
+
 
         public static event Action<int> ActionOnGameContinueAfter;
 
@@ -60,6 +63,8 @@ namespace thaiht20183826
             PlayerGamePlay.OnPlayerOutAreaMap += PlayerGamePlay_OnPlayerOutAreaMap;
             PlayerGamePlay.OnPlayerDaHoiSinh += PlayerGamePlay_OnPlayerDaHoiSinh;
             PlayerGamePlay.OnPlayerLostByHeart += PlayerGamePlay_OnPlayerLostByHeart;
+            PlayerGamePlay.ActionOnPlayerApplyItemEffectSpeed += CallShowItemFXSpeedOnPlayer;
+            PlayerGamePlay.ActionOnPlayerUnApplyItemEffectSpeed += CallHideItemFXSpeedOnPlayer;
             AudioController.Instance.PlayBackgroundMusicOnGamePlay();
         }
 
@@ -71,6 +76,8 @@ namespace thaiht20183826
             PlayerGamePlay.OnPlayerOutAreaMap -= PlayerGamePlay_OnPlayerOutAreaMap;
             PlayerGamePlay.OnPlayerDaHoiSinh -= PlayerGamePlay_OnPlayerDaHoiSinh;
             PlayerGamePlay.OnPlayerLostByHeart -= PlayerGamePlay_OnPlayerLostByHeart;
+            PlayerGamePlay.ActionOnPlayerApplyItemEffectSpeed -= CallShowItemFXSpeedOnPlayer;
+            PlayerGamePlay.ActionOnPlayerUnApplyItemEffectSpeed -= CallHideItemFXSpeedOnPlayer;
         }
         #endregion
 
@@ -244,6 +251,29 @@ namespace thaiht20183826
             gamePlayView.SetTextTimeCount((int)currentTime);
         }
 
+        #region Call Show Image Item FX Speed PUN
+        void CallShowItemFXSpeedOnPlayer(int idPlayer, int idSprite)
+        {
+            photonView.RPC(nameof(Pun_CallShowItemFXSpeedOnPlayer), RpcTarget.All, idPlayer, idSprite);
+        }
+        void CallHideItemFXSpeedOnPlayer(int idPlayer)
+        {
+            photonView.RPC(nameof(Pun_CallHideItemFXSpeedOnPlayer), RpcTarget.All, idPlayer);
+        }
+        [PunRPC]
+        void Pun_CallShowItemFXSpeedOnPlayer(int idPlayer, int idSprite)
+        {
+            GetPlayer(idPlayer).ShowImgItemEffectOnPlayer(idSprite);
+        }
+        [PunRPC]
+        void Pun_CallHideItemFXSpeedOnPlayer(int idPlayer)
+        {
+            GetPlayer(idPlayer).HideImgItemEffectOnPlayer();
+        }
+
+
+        #endregion
+
 
         bool isGameEnd = false;
         [PunRPC]
@@ -259,7 +289,8 @@ namespace thaiht20183826
                 gamePlayView.popupOptions.Hide();
                 AudioController.Instance.PlaySoundCommom(AudioClipEnum.DataSound_leaderboardendgame);
                 gamePlayView.ShowLeaderBoardEndGame(arrScore);
-                listPlayersGamePlay.ForEach(s => { if (s != null) { s.isCanControl = false; s.enabled = false; PhotonNetwork.Destroy(s.gameObject); } });
+                listPlayersGamePlay.ForEach(s => { if (s != null) { s.isCanControl = false; s.enabled = false; } });
+                PhotonNetwork.Destroy((listPlayersGamePlay.First(s => s.photonPlayer == PhotonNetwork.LocalPlayer).gameObject));
                 var tmpTrans = gamePlayView.leaderBoardEndGameView.holderElement;
                 for (int i = 0; i < tmpTrans.childCount; i++)
                 {

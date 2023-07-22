@@ -42,6 +42,12 @@ namespace thaiht20183826
             selfSpriteRenderer.color = selfColor;
         }
 
+        public float GetMinRadius()
+        {
+            return Mathf.Min(selfEllipseCollider.radiusX, selfEllipseCollider.radiusY);
+        }
+     
+
     
     }
 }

@@ -19,6 +19,7 @@ public static class GlobalValue
     public static bool isMuteMusic = false;
     public static bool isMuteSound = false;
     public const int DEFAULT_FPS = 120;
+    public static int TIME_SPAWN_BETWEEN_ITEMS;
 }
 
 public static class MyPlayerValue

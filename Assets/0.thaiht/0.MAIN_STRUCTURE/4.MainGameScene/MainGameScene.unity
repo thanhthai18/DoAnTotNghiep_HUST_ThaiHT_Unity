@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028331, g: 0.2257133, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2430,6 +2430,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1021422850}
   - component: {fileID: 1021422849}
+  - component: {fileID: 1021422852}
   - component: {fileID: 1021422851}
   m_Layer: 0
   m_Name: GamePlayController
@@ -2459,6 +2460,9 @@ MonoBehaviour:
   isEndGame: 0
   dataCharacterScriptableObj: {fileID: 11400000, guid: fa7545d1de23e2a4a899205ba93dc65e,
     type: 2}
+  spriteItemEffectSpeed:
+  - {fileID: 21300004, guid: 2183f75904738814fb98ee9f080f4c20, type: 3}
+  - {fileID: 21300006, guid: 2183f75904738814fb98ee9f080f4c20, type: 3}
   gamePlayTime: 30
   isCounting: 0
 --- !u!4 &1021422850
@@ -2498,6 +2502,24 @@ MonoBehaviour:
   sceneViewId: 2
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &1021422852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1021422848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c10f25ba0eff1049a2118750c851908, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speedUpItemPrefab: {fileID: 1115491837899655703, guid: 52f169d7399656a4d81306a36c51c2dd,
+    type: 3}
+  speedDownItemPrefab: {fileID: 7188648801370523834, guid: 8bc3833985e902749ae8dc3615d4dc86,
+    type: 3}
+  teleportItemPrefab: {fileID: 5455224487663736084, guid: fa9ea0d821c7ad644b706956449d065b,
+    type: 3}
 --- !u!1 &1070631726
 GameObject:
   m_ObjectHideFlags: 0
@@ -4889,6 +4911,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: View - PopupOptions (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 8062464590326313202, guid: eaa19f5377326f34099cfa8aa7a4e3bb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eaa19f5377326f34099cfa8aa7a4e3bb, type: 3}
 --- !u!114 &1459057498 stripped
@@ -7050,6 +7077,7 @@ GameObject:
   - component: {fileID: 1997494096}
   - component: {fileID: 1997494098}
   - component: {fileID: 1997494097}
+  - component: {fileID: 1997494099}
   m_Layer: 5
   m_Name: PanelCurrentEffectItem
   m_TagString: Untagged
@@ -7115,6 +7143,32 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1997494095}
   m_CullTransparentMesh: 1
+--- !u!114 &1997494099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1997494095}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 4
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &2030852255
 GameObject:
   m_ObjectHideFlags: 0
@@ -7180,6 +7234,9 @@ MonoBehaviour:
   btnSound: {fileID: 0}
   btnMusic: {fileID: 0}
   btnClose: {fileID: 0}
+  panelCurrentEffectItem: {fileID: 1997494095}
+  itemEffectApplyingUIPrefab: {fileID: 1603222591561352518, guid: 28267778bc9ed334dbe93d69994b962e,
+    type: 3}
 --- !u!1 &2064938043
 GameObject:
   m_ObjectHideFlags: 0

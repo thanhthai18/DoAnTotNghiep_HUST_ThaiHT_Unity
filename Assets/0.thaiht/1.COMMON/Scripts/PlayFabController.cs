@@ -113,12 +113,18 @@ public class PlayFabController : PersistentSingleton<PlayFabController>
         if (result.Data.TryGetValue("TIME_PLAY_RANK_MODE", out string titleDataValue0))
         {
             GlobalValue.TIME_PLAY_RANK_MODE = int.Parse(titleDataValue0);
-            Debug.Log("TIME_PLAY_RANK_MODE: "+GlobalValue.TIME_PLAY_RANK_MODE);
+            Debug.Log("TIME_PLAY_RANK_MODE: " + GlobalValue.TIME_PLAY_RANK_MODE);
         }
         if (result.Data.TryGetValue("MAX_TIME_MINIGAME_SOCCER", out string titleDataValue1))
         {
             GlobalValue.MAX_TIME_MINIGAME_SOCCER = int.Parse(titleDataValue1);
             Debug.Log("MAX_TIME_MINIGAME_SOCCER: " + GlobalValue.MAX_TIME_MINIGAME_SOCCER);
+        }
+
+        if (result.Data.TryGetValue("TIME_SPAWN_BETWEEN_ITEMS", out string titleDataValue2))
+        {
+            GlobalValue.TIME_SPAWN_BETWEEN_ITEMS = int.Parse(titleDataValue1);
+            Debug.Log("TIME_SPAWN_BETWEEN_ITEMS: " + GlobalValue.TIME_SPAWN_BETWEEN_ITEMS);
         }
 
 

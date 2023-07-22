@@ -9,7 +9,7 @@ namespace thaiht20183826
     public class MapController : Singleton<MapController>
     {
         [SerializeField] private DataMapScriptableObj dataMapScriptableObj;
-        [SerializeField] Map currentMap;
+        [SerializeField] public Map currentMap;
         [SerializeField] int indexCurrentMap;
         [SerializeField] public List<Transform> listSpawnPlayer = new List<Transform>();
         

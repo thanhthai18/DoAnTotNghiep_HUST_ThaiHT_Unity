@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using thaiht20183826;
 using UnityEngine;
 
 public class EffectMouse : MonoBehaviour
@@ -31,6 +32,7 @@ public class EffectMouse : MonoBehaviour
             eff.Play();
             effRing.Stop();
             effRing.Play();
+            AudioController.Instance?.PlaySoundCommom(AudioClipEnum.DataSound_click);
         }
         else if (Input.GetMouseButton(0))
         {
