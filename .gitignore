@@ -70,7 +70,7 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
-/[Aa]ssets/TopDownEngine/*
+/[Aa]ssets/[Tt]opDownEngine/*
 build2/MonoBleedingEdge/*
 build2/DoAnTotNghiep_HUST_ThaiHT_Unity_Data/*
 build2/DoAnTotNghiep_HUST_ThaiHT_Unity_BurstDebugInformation_DoNotShip/*

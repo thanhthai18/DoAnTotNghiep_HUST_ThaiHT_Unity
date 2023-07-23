@@ -61,6 +61,7 @@ public class ProfileView : View
     {
         txtDisplayName.text = newName;
         MenuController.Instance.SetNewNamePlayer(newName);
+        MyPlayerValue.playerName = newName;
     }
 
     public bool CheckIsActive()
