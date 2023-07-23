@@ -1,5 +1,6 @@
 # DoAnTotNghiep_HUST_ThaiHT_Unity
- Multiplayer Push Fighting 2D With Unity
+ Multiplayer Push Fighting 2D With Unity - King of Push
+ Download now: https://drive.google.com/file/d/1stUbuVXXWP3qNplZrZue3pUHnctbqfXV/view?usp=sharing
 
 - Login
 <img width="960" alt="login" src="https://github.com/thanhthai18/DoAnTotNghiep_HUST_ThaiHT_Unity/assets/81027580/b34e5739-66c7-4e3e-8a2c-9fec1c2e668a">
@@ -11,7 +12,7 @@
 <img width="960" alt="forgetpass" src="https://github.com/thanhthai18/DoAnTotNghiep_HUST_ThaiHT_Unity/assets/81027580/7a96513f-1546-4658-ae8f-d656838d3106">
 
 - Main Menu
-<img width="960" alt="mainmenu" src="https://github.com/thanhthai18/DoAnTotNghiep_HUST_ThaiHT_Unity/assets/81027580/dad64b14-53c6-4b4d-85f9-27878360ed0e">
+<img width="959" alt="mainmenu" src="https://github.com/thanhthai18/DoAnTotNghiep_HUST_ThaiHT_Unity/assets/81027580/4248c0cb-ef42-404f-8e08-b14d90f24428">
 
 - Leaderboard
 <img width="960" alt="leaderboards" src="https://github.com/thanhthai18/DoAnTotNghiep_HUST_ThaiHT_Unity/assets/81027580/bbfea4e3-4334-4ab1-9299-bd3577d0bd6f">
