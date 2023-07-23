@@ -106,37 +106,7 @@ public static class Helpers
         return foundComponent;
     }
 
-    public static System.Collections.Generic.List<int> GetAddScoreRank(int maxPlayer)
-    {
-        System.Collections.Generic.List<int> listScore = new System.Collections.Generic.List<int>();
-        switch (maxPlayer)
-        {
-            case 2:
-                {
-                    listScore.Add(Random.Range((int)(0.7f * GlobalValue.ELO_RANK), 1 * GlobalValue.ELO_RANK));
-                    listScore.Add(-1 * Random.Range((int)(0.25f * GlobalValue.ELO_RANK), (int)(0.6f * GlobalValue.ELO_RANK)));
-                    break;
-                }
-            case 3:
-                {
-                    listScore.Add(Random.Range((int)(0.7f * GlobalValue.ELO_RANK), 1 * GlobalValue.ELO_RANK));
-                    listScore.Add(Random.Range((int)(0.2f * GlobalValue.ELO_RANK), (int)(0.5f * GlobalValue.ELO_RANK)));
-                    listScore.Add(-1 * Random.Range((int)(0.25f * GlobalValue.ELO_RANK), (int)(0.6f * GlobalValue.ELO_RANK)));
-                    break;
-                }
-            case 4:
-                {
-                    listScore.Add(Random.Range((int)(0.7f * GlobalValue.ELO_RANK), 1 * GlobalValue.ELO_RANK));
-                    listScore.Add(Random.Range((int)(0.3f * GlobalValue.ELO_RANK), (int)(0.7f * GlobalValue.ELO_RANK)));
-                    listScore.Add(Random.Range(0, 4));
-                    listScore.Add(-1 * Random.Range((int)(0.25f * GlobalValue.ELO_RANK), (int)(0.6f * GlobalValue.ELO_RANK)));
-                    break;
-                }
-            default:
-                break;
-        }
-        return listScore;
-    }
+    
 
     public static Vector3 GetMousePosWorld(Camera camera)
     {

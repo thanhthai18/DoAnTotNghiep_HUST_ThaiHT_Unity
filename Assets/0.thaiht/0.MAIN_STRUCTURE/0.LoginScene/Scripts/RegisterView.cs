@@ -7,46 +7,49 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RegisterView : View
+namespace thaiht20183826
 {
-    [SerializeField] Button btnClose;
-    [SerializeField] Button btnConfirmRegister;
-
-    [Header("Register")]
-    [SerializeField] TMP_InputField inputUsernameRegister;
-    [SerializeField] TMP_InputField inputEmailRegister;
-    [SerializeField] TMP_InputField inputPasswordRegister;
-    [SerializeField] TextMeshProUGUI txtMessageRegister;
-
-    public override void Initialize()
+    public class RegisterView : View
     {
-        txtMessageRegister.text = "";
-        btnConfirmRegister.onClick.AddListener(RegisterUser);
-        btnClose.onClick.AddListener(() => ViewManager.Show<LoginView>());
-    }
+        [SerializeField] Button btnClose;
+        [SerializeField] Button btnConfirmRegister;
 
-    public void RegisterUser()
-    {
-        var request = new RegisterPlayFabUserRequest
+        [Header("Register")]
+        [SerializeField] TMP_InputField inputUsernameRegister;
+        [SerializeField] TMP_InputField inputEmailRegister;
+        [SerializeField] TMP_InputField inputPasswordRegister;
+        [SerializeField] TextMeshProUGUI txtMessageRegister;
+
+        public override void Initialize()
         {
-            DisplayName = inputUsernameRegister.text,
-            Email = inputEmailRegister.text,
-            Password = inputPasswordRegister.text,
+            txtMessageRegister.text = "";
+            btnConfirmRegister.onClick.AddListener(RegisterUser);
+            btnClose.onClick.AddListener(() => ViewManager.Show<LoginView>());
+        }
 
-            RequireBothUsernameAndEmail = false,
-        };
+        public void RegisterUser()
+        {
+            var request = new RegisterPlayFabUserRequest
+            {
+                DisplayName = inputUsernameRegister.text,
+                Email = inputEmailRegister.text,
+                Password = inputPasswordRegister.text,
 
-        PlayFabClientAPI.RegisterPlayFabUser(request, OnRegisterSucces, OnRegisterError);
-    }
-    private void OnRegisterSucces(RegisterPlayFabUserResult result)
-    {
-        txtMessageRegister.ShowMessageText("Dang ky thanh cong!", true);
-    }
-    private void OnRegisterError(PlayFabError error)
-    {
-        txtMessageRegister.ShowMessageText(error.ErrorMessage, false);
-        Debug.Log(error.GenerateErrorReport());
-    }
+                RequireBothUsernameAndEmail = false,
+            };
 
-    
+            PlayFabClientAPI.RegisterPlayFabUser(request, OnRegisterSucces, OnRegisterError);
+        }
+        private void OnRegisterSucces(RegisterPlayFabUserResult result)
+        {
+            txtMessageRegister.ShowMessageText("Dang ky thanh cong!", true);
+        }
+        private void OnRegisterError(PlayFabError error)
+        {
+            txtMessageRegister.ShowMessageText(error.ErrorMessage, false);
+            Debug.Log(error.GenerateErrorReport());
+        }
+
+
+    }
 }

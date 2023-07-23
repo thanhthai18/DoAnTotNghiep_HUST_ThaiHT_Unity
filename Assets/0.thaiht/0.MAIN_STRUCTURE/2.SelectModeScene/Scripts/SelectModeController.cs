@@ -2,21 +2,23 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class SelectModeController : MonoBehaviourPunCallbacks
+namespace thaiht20183826
 {
-    public override void OnConnectedToMaster()
+    public class SelectModeController : MonoBehaviourPunCallbacks
     {
-        LoaderSystem.Loading(false);
+        public override void OnConnectedToMaster()
+        {
+            LoaderSystem.Loading(false);
 
-        if (GlobalValue.currentModeGame == ModeGame.RoomMode)
-        {
-            PhotonNetwork.LoadLevel(SceneGame.RoomModeScene);
+            if (GlobalValue.currentModeGame == ModeGame.RoomMode)
+            {
+                PhotonNetwork.LoadLevel(SceneGame.RoomModeScene);
+            }
+            else if (GlobalValue.currentModeGame == ModeGame.RankMode)
+            {
+                PhotonNetwork.LoadLevel(SceneGame.RankModeScene);
+            }
         }
-        else if (GlobalValue.currentModeGame == ModeGame.RankMode)
-        {
-            PhotonNetwork.LoadLevel(SceneGame.RankModeScene);
-        }
+
     }
-    
 }

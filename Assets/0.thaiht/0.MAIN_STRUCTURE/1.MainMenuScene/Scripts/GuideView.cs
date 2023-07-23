@@ -3,34 +3,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
-public class GuideView : View
+namespace thaiht20183826
 {
-    [SerializeField] private Button btnClose;
-    public static GuideView instance;
+    public class GuideView : View
+    {
+        [SerializeField] private Button btnClose;
+        public static GuideView instance;
 
-    private void Awake()
-    {
-        if (instance == null)
-            instance = this;
-    }
-    public override void Initialize()
-    {
-        btnClose.onClick.AddListener(() =>
+        private void Awake()
         {
-            isActive = false;
-            gameObject.SetActive(isActive);
-        });
-    }
+            if (instance == null)
+                instance = this;
+        }
+        public override void Initialize()
+        {
+            btnClose.onClick.AddListener(() =>
+            {
+                isActive = false;
+                gameObject.SetActive(isActive);
+            });
+        }
 
-    public bool CheckIsActive()
-    {
-        return isActive;
-    }
+        public bool CheckIsActive()
+        {
+            return isActive;
+        }
 
-    private void OnDisable()
-    {
-        transform.DOKill();
-        transform.DOScale(0, 0.5f);
+        private void OnDisable()
+        {
+            transform.DOKill();
+            transform.DOScale(0, 0.5f);
+        }
     }
 }

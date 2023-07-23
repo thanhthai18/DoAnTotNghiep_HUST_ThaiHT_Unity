@@ -1,84 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
-using thaiht20183826;
 using UnityEngine;
 
-public class LoginController : MonoBehaviour
+namespace thaiht20183826
 {
-    void Start()
+    public class LoginController : MonoBehaviour
     {
-        AudioController.Instance.PlayBackgroundMusicCommon();
+        void Start()
+        {
+            AudioController.Instance.PlayBackgroundMusicCommon();
+        }
+
+        void Update()
+        {
+
+        }
     }
-
-    void Update()
-    {
-        
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

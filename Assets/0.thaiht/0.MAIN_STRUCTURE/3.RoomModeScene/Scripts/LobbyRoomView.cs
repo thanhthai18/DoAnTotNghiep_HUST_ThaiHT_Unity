@@ -7,31 +7,32 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-
-public class LobbyRoomView : View
+namespace thaiht20183826
 {
-    [SerializeField] public Button btnBack;
-    [SerializeField] public TextMeshProUGUI txtMessage;
-    [SerializeField] public Button btnCreateRoom;
-    [SerializeField] public Button btnJoinRoom;
-    [SerializeField] public TMP_InputField inputRoomName;
-    [SerializeField] public GameObject contentSlot;
-
-    public override void Initialize()
+    public class LobbyRoomView : View
     {
-        btnBack.onClick.AddListener(() =>
-        {
-            LoaderSystem.Loading(true);
-            if (PhotonNetwork.InLobby)
-            {
-                PhotonNetwork.LeaveLobby();
-            }
-            GlobalController.Instance.Wait(0.2f, () =>
-            {
-                SceneManager.LoadScene(SceneGame.SelectModeScene);
-                LoaderSystem.Loading(false);
-            });
-        });
-    }
+        [SerializeField] public Button btnBack;
+        [SerializeField] public TextMeshProUGUI txtMessage;
+        [SerializeField] public Button btnCreateRoom;
+        [SerializeField] public Button btnJoinRoom;
+        [SerializeField] public TMP_InputField inputRoomName;
+        [SerializeField] public GameObject contentSlot;
 
+        public override void Initialize()
+        {
+            btnBack.onClick.AddListener(() =>
+            {
+                LoaderSystem.Loading(true);
+                if (PhotonNetwork.InLobby)
+                {
+                    PhotonNetwork.LeaveLobby();
+                }
+                GlobalController.Instance.Wait(0.2f, () =>
+                {
+                    SceneManager.LoadScene(SceneGame.SelectModeScene);
+                    LoaderSystem.Loading(false);
+                });
+            });
+        }
+    }
 }

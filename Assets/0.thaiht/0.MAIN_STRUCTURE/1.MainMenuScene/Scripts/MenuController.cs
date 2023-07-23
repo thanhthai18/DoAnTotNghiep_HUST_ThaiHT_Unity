@@ -10,162 +10,164 @@ using DG.Tweening;
 using System.Linq;
 using Photon.Pun;
 using System;
-
-public class MenuController : Singleton<MenuController>
+namespace thaiht20183826
 {
-    [SerializeField] Button btnRank;
-    [SerializeField] Button btnProfile;
-    [SerializeField] Button btnGuide;
-    [SerializeField] Button btnSettings;
-    [SerializeField] Button btnPlay;
-    [SerializeField] GameObject panelTool;
-    [SerializeField] TextMeshProUGUI txtDisplayName;
-    [SerializeField] TextMeshProUGUI txtDisplayRank;
-    [SerializeField] TextMeshProUGUI txtDisplayScore;
-    [SerializeField] Button btnLogout;
-    public OverviewProfileData overviewProfileData;
-    public static event Action<OverviewProfileData> ActionOnSetOverviewProfileData;
-
-    private void Start()
+    public class MenuController : Singleton<MenuController>
     {
-        GlobalController.ActionOnUpdatedGlobalLeaderboard += LoadOverviewData;
-        PlayFabController.GetLeaderboard();
+        [SerializeField] Button btnRank;
+        [SerializeField] Button btnProfile;
+        [SerializeField] Button btnGuide;
+        [SerializeField] Button btnSettings;
+        [SerializeField] Button btnPlay;
+        [SerializeField] GameObject panelTool;
+        [SerializeField] TextMeshProUGUI txtDisplayName;
+        [SerializeField] TextMeshProUGUI txtDisplayRank;
+        [SerializeField] TextMeshProUGUI txtDisplayScore;
+        [SerializeField] Button btnLogout;
+        public OverviewProfileData overviewProfileData;
+        public static event Action<OverviewProfileData> ActionOnSetOverviewProfileData;
 
-        /*---Button Tool---*/
-        btnRank.onClick.AddListener(() =>
+        private void Start()
         {
-            btnRank.AnimButton(0);
-            if (RankView.instance != null)
+            GlobalController.ActionOnUpdatedGlobalLeaderboard += LoadOverviewData;
+            PlayFabController.GetLeaderboard();
+
+            /*---Button Tool---*/
+            btnRank.onClick.AddListener(() =>
             {
-                if (!RankView.instance.CheckIsActive())
+                btnRank.AnimButton(0);
+                if (RankView.instance != null)
+                {
+                    if (!RankView.instance.CheckIsActive())
+                    {
+                        ViewManager.ShowWithAnim<RankView>();
+                    }
+                }
+                else
                 {
                     ViewManager.ShowWithAnim<RankView>();
                 }
-            }
-            else
+            });
+            btnProfile.onClick.AddListener(() =>
             {
-                ViewManager.ShowWithAnim<RankView>();
-            }
-        });
-        btnProfile.onClick.AddListener(() =>
-        {
-            btnProfile.AnimButton(0);
-            if (ProfileView.instance != null)
-            {
-                if (!ProfileView.instance.CheckIsActive())
+                btnProfile.AnimButton(0);
+                if (ProfileView.instance != null)
+                {
+                    if (!ProfileView.instance.CheckIsActive())
+                    {
+                        ViewManager.ShowWithAnim<ProfileView>();
+                    }
+                }
+                else
                 {
                     ViewManager.ShowWithAnim<ProfileView>();
                 }
-            }
-            else
+            });
+            btnGuide.onClick.AddListener(() =>
             {
-                ViewManager.ShowWithAnim<ProfileView>();
-            }
-        });
-        btnGuide.onClick.AddListener(() =>
-        {
-            btnGuide.AnimButton(0);
-            if (GuideView.instance != null)
-            {
-                if (!GuideView.instance.CheckIsActive())
+                btnGuide.AnimButton(0);
+                if (GuideView.instance != null)
+                {
+                    if (!GuideView.instance.CheckIsActive())
+                    {
+                        ViewManager.ShowWithAnim<GuideView>();
+                    }
+                }
+                else
                 {
                     ViewManager.ShowWithAnim<GuideView>();
                 }
-            }
-            else
+            });
+            btnSettings.onClick.AddListener(() =>
             {
-                ViewManager.ShowWithAnim<GuideView>();
-            }
-        });
-        btnSettings.onClick.AddListener(() =>
-        {
-            btnSettings.AnimButton(0);
-            if (SettingsView.instance != null)
-            {
-                if (!SettingsView.instance.CheckIsActive())
+                btnSettings.AnimButton(0);
+                if (SettingsView.instance != null)
+                {
+                    if (!SettingsView.instance.CheckIsActive())
+                    {
+                        ViewManager.ShowWithAnim<SettingsView>();
+                    }
+                }
+                else
                 {
                     ViewManager.ShowWithAnim<SettingsView>();
                 }
-            }
-            else
-            {
-                ViewManager.ShowWithAnim<SettingsView>();
-            }
-        });
+            });
 
 
 
-        /*---Button Login---*/
-        btnLogout.onClick.AddListener(() => { PhotonNetwork.Disconnect(); SceneManager.LoadScene(SceneGame.LoginScene); });
+            /*---Button Login---*/
+            btnLogout.onClick.AddListener(() => { PhotonNetwork.Disconnect(); SceneManager.LoadScene(SceneGame.LoginScene); });
 
 
-        //Invoke(nameof(LoadOverviewData), 0.1f);
+            //Invoke(nameof(LoadOverviewData), 0.1f);
 
-        /*---Button Play (Select Mode)---*/
-        btnPlay.onClick.AddListener(ClickButtonPlayMode);
-
-
-    }
+            /*---Button Play (Select Mode)---*/
+            btnPlay.onClick.AddListener(ClickButtonPlayMode);
 
 
-
-    public void LoadOverviewData()
-    {
-        string tmpRankPosition = "null";
-       
-        for (int i = 0; i < GlobalValue.listPlayerLeaderBoard.Count; i++)
-        {
-            if(GlobalValue.listPlayerLeaderBoard[i].DisplayName == MyPlayerValue.playerName)
-            {
-                tmpRankPosition = (GlobalValue.listPlayerLeaderBoard[i].Position + 1).ToString();
-            }
         }
-        overviewProfileData = new OverviewProfileData
+
+
+
+        public void LoadOverviewData()
         {
-            displayName = MyPlayerValue.playerName,
-            displayRank = $"Rank: {tmpRankPosition}",
-            displayScore = $"Score: {GlobalController.Instance.GetRankScorePlayer(MyPlayerValue.playerName)}",
-        };
-        txtDisplayName.text = overviewProfileData.displayName;
-        txtDisplayRank.text = overviewProfileData.displayRank;
-        txtDisplayScore.text = overviewProfileData.displayScore;
-        ActionOnSetOverviewProfileData?.Invoke(overviewProfileData);
-    }
-    public void SetNewNamePlayer(string newName)
-    {
-        txtDisplayName.text = newName;
-    }
+            string tmpRankPosition = "null";
 
-
-
-    public void ClickButtonPlayMode()
-    {
-        LoaderSystem.Loading(true);
-        //transform.DOMoveZ(transform.position.z, 0.5f).OnComplete(() =>
-        //{
-        //    ViewManager.Show<PlayModeView>();
-        //    LoaderSystem.Loading(false);
-        //    blockPanel.SetActive(false);
-        //});
-        this.Wait(0.5f, () =>
+            for (int i = 0; i < GlobalValue.listPlayerLeaderBoard.Count; i++)
+            {
+                if (GlobalValue.listPlayerLeaderBoard[i].DisplayName == MyPlayerValue.playerName)
+                {
+                    tmpRankPosition = (GlobalValue.listPlayerLeaderBoard[i].Position + 1).ToString();
+                }
+            }
+            overviewProfileData = new OverviewProfileData
+            {
+                displayName = MyPlayerValue.playerName,
+                displayRank = $"Rank: {tmpRankPosition}",
+                displayScore = $"Score: {GlobalController.Instance.GetRankScorePlayer(MyPlayerValue.playerName)}",
+            };
+            txtDisplayName.text = overviewProfileData.displayName;
+            txtDisplayRank.text = overviewProfileData.displayRank;
+            txtDisplayScore.text = overviewProfileData.displayScore;
+            ActionOnSetOverviewProfileData?.Invoke(overviewProfileData);
+        }
+        public void SetNewNamePlayer(string newName)
         {
-            SceneManager.LoadScene(SceneGame.SelectModeScene);
-            LoaderSystem.Loading(false);
-        });
+            txtDisplayName.text = newName;
+        }
+
+
+
+        public void ClickButtonPlayMode()
+        {
+            LoaderSystem.Loading(true);
+            //transform.DOMoveZ(transform.position.z, 0.5f).OnComplete(() =>
+            //{
+            //    ViewManager.Show<PlayModeView>();
+            //    LoaderSystem.Loading(false);
+            //    blockPanel.SetActive(false);
+            //});
+            this.Wait(0.5f, () =>
+            {
+                SceneManager.LoadScene(SceneGame.SelectModeScene);
+                LoaderSystem.Loading(false);
+            });
+        }
+
+        private void OnDestroy()
+        {
+            GlobalController.ActionOnUpdatedGlobalLeaderboard -= LoadOverviewData;
+        }
     }
 
-    private void OnDestroy()
+
+
+
+    public class OverviewProfileData
     {
-        GlobalController.ActionOnUpdatedGlobalLeaderboard -= LoadOverviewData;
+        public string displayName;
+        public string displayRank;
+        public string displayScore;
     }
-}
-
-
-
-
-public class OverviewProfileData
-{
-    public string displayName;
-    public string displayRank;
-    public string displayScore;
 }

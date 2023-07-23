@@ -6,80 +6,80 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using DG.Tweening;
 using Photon.Pun;
-
-public class SelectModeView : View
+namespace thaiht20183826
 {
-    [SerializeField] UIButton btnBack;
-    [SerializeField] UIButton btnRankMode;
-    [SerializeField] UIButton btnTraningMode;
-    [SerializeField] UIButton btnRoomMode;
-
-    public override void Initialize()
+    public class SelectModeView : View
     {
-        btnBack.onClickEvent.AddListener(() =>
+        [SerializeField] UIButton btnBack;
+        [SerializeField] UIButton btnRankMode;
+        [SerializeField] UIButton btnTraningMode;
+        [SerializeField] UIButton btnRoomMode;
+
+        public override void Initialize()
         {
-            LoaderSystem.Loading(true);
-            GlobalController.Instance.Wait(0.2f, () =>
+            btnBack.onClickEvent.AddListener(() =>
             {
-                SceneManager.LoadScene(SceneGame.MainMenuScene);
-                LoaderSystem.Loading(false);
+                LoaderSystem.Loading(true);
+                GlobalController.Instance.Wait(0.2f, () =>
+                {
+                    SceneManager.LoadScene(SceneGame.MainMenuScene);
+                    LoaderSystem.Loading(false);
+                });
             });
-        });
-        btnRoomMode.onClickEvent.AddListener(() => { OpenMode(0); });
-        btnRankMode.onClickEvent.AddListener(() => { OpenMode(1); });
-        btnTraningMode.onClickEvent.AddListener(() => { OpenMode(2); });
+            btnRoomMode.onClickEvent.AddListener(() => { OpenMode(0); });
+            btnRankMode.onClickEvent.AddListener(() => { OpenMode(1); });
+            btnTraningMode.onClickEvent.AddListener(() => { OpenMode(2); });
 
-    }
-
-
-    public void OpenMode(int indexMode)
-    {
-        //btn.AnimButton(-1);
-
-        switch (indexMode)
-        {
-            case 0:
-                OpenRoomMode((ModeGame)indexMode);
-                break;
-            case 1:
-                OpenRankMode((ModeGame)indexMode);
-                break;
-            case 2:
-                OpenTrainingMode();
-                break;
-            default:
-                break;
         }
 
-    }
 
-    public void OpenRoomMode(ModeGame enumMode)
-    {
-        Debug.Log("Open Room Mode");
-        LoaderSystem.Loading(true);
-        NetworkManager.Instance.ConnectMasterServerToOpenMode(enumMode);
-
-    }
-    public void OpenRankMode(ModeGame enumMode)
-    {
-        Debug.Log("Open Rank Mode");
-        LoaderSystem.Loading(true);
-        NetworkManager.Instance.ConnectMasterServerToOpenMode(enumMode);
-    }
-    public void OpenTrainingMode()
-    {
-        Debug.Log("Open Training Mode");
-        LoaderSystem.Loading(true);
-        this.Wait(0.5f, () =>
+        public void OpenMode(int indexMode)
         {
-            LoaderSystem.Loading(false);
-            GlobalValue.currentModeGame = ModeGame.TrainingMode;
-            SceneManager.LoadScene(SceneGame.TrainingModeScene);
-        });
- 
+            //btn.AnimButton(-1);
+
+            switch (indexMode)
+            {
+                case 0:
+                    OpenRoomMode((ModeGame)indexMode);
+                    break;
+                case 1:
+                    OpenRankMode((ModeGame)indexMode);
+                    break;
+                case 2:
+                    OpenTrainingMode();
+                    break;
+                default:
+                    break;
+            }
+
+        }
+
+        public void OpenRoomMode(ModeGame enumMode)
+        {
+            Debug.Log("Open Room Mode");
+            LoaderSystem.Loading(true);
+            NetworkManager.Instance.ConnectMasterServerToOpenMode(enumMode);
+
+        }
+        public void OpenRankMode(ModeGame enumMode)
+        {
+            Debug.Log("Open Rank Mode");
+            LoaderSystem.Loading(true);
+            NetworkManager.Instance.ConnectMasterServerToOpenMode(enumMode);
+        }
+        public void OpenTrainingMode()
+        {
+            Debug.Log("Open Training Mode");
+            LoaderSystem.Loading(true);
+            this.Wait(0.5f, () =>
+            {
+                LoaderSystem.Loading(false);
+                GlobalValue.currentModeGame = ModeGame.TrainingMode;
+                SceneManager.LoadScene(SceneGame.TrainingModeScene);
+            });
+
+        }
     }
-
 }
-
 
 

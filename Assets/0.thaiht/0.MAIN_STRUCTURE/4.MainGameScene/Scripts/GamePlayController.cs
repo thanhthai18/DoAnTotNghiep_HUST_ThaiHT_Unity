@@ -150,7 +150,7 @@ namespace thaiht20183826
         }
         private void HandleEndGame()
         {
-            int[] arrScore = Helpers.GetAddScoreRank(gamePlayView.tabPlayerInfo.listHolderPlayerIconInTab.Count).ToArray();
+            int[] arrScore = GlobalController.GetAddScoreRank(gamePlayView.tabPlayerInfo.listHolderPlayerIconInTab.Count).ToArray();
 
             photonView.RPC(nameof(GameEndRPC), RpcTarget.All, arrScore);
         }

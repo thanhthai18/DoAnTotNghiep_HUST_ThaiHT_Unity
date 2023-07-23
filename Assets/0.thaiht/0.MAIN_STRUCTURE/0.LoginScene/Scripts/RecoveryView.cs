@@ -7,40 +7,41 @@ using UnityEngine.UI;
 using PlayFab;
 using System;
 
-public class RecoveryView : View
+namespace thaiht20183826
 {
-    [Header("Recovery")]
-    [SerializeField] TMP_InputField inputEmailRecovery;
-    [SerializeField] Button btnRecovery;
-    [SerializeField] Button btnClose;
-    [SerializeField] TextMeshProUGUI txtMessageRecovery;
-    public override void Initialize()
+    public class RecoveryView : View
     {
-        txtMessageRecovery.text = "";
-        btnClose.onClick.AddListener(() => ViewManager.Show<LoginView>());
-        btnRecovery.onClick.AddListener(RecoveryUser);
-    }
-
-    private void RecoveryUser()
-    {
-        var request = new SendAccountRecoveryEmailRequest
+        [Header("Recovery")]
+        [SerializeField] TMP_InputField inputEmailRecovery;
+        [SerializeField] Button btnRecovery;
+        [SerializeField] Button btnClose;
+        [SerializeField] TextMeshProUGUI txtMessageRecovery;
+        public override void Initialize()
         {
-            Email = inputEmailRecovery.text,
-            TitleId = "60FF7",
-        };
+            txtMessageRecovery.text = "";
+            btnClose.onClick.AddListener(() => ViewManager.Show<LoginView>());
+            btnRecovery.onClick.AddListener(RecoveryUser);
+        }
 
-        PlayFabClientAPI.SendAccountRecoveryEmail(request, OnRecoverySucces, OnRecoveryError);
-    }
+        private void RecoveryUser()
+        {
+            var request = new SendAccountRecoveryEmailRequest
+            {
+                Email = inputEmailRecovery.text,
+                TitleId = "60FF7",
+            };
 
-    private void OnRecoverySucces(SendAccountRecoveryEmailResult result)
-    {
-        txtMessageRecovery.ShowMessageText("Recovery Mail Sent", true);
-    }
+            PlayFabClientAPI.SendAccountRecoveryEmail(request, OnRecoverySucces, OnRecoveryError);
+        }
 
-    private void OnRecoveryError(PlayFabError error)
-    {
-        txtMessageRecovery.ShowMessageText(error.ErrorMessage, false);
+        private void OnRecoverySucces(SendAccountRecoveryEmailResult result)
+        {
+            txtMessageRecovery.ShowMessageText("Recovery Mail Sent", true);
+        }
+
+        private void OnRecoveryError(PlayFabError error)
+        {
+            txtMessageRecovery.ShowMessageText(error.ErrorMessage, false);
+        }
     }
 }
-
-

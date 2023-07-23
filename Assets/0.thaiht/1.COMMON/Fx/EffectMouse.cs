@@ -1,46 +1,47 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using thaiht20183826;
 using UnityEngine;
-
-public class EffectMouse : MonoBehaviour
+namespace thaiht20183826
 {
-    //private static EffectMouse Ins;
-
-    public ParticleSystem eff;
-    public ParticleSystem effRing;
-
-    //private void Awake()
-    //{
-    //   if (Ins == null)
-    //   {
-    //      Ins = this;
-    //      DontDestroyOnLoad(gameObject);
-    //   } else if (Ins != this)
-    //   {
-    //      Destroy(gameObject);
-    //   }
-    //}
-
-    private void Update()
+    public class EffectMouse : MonoBehaviour
     {
-        if (Input.GetMouseButtonDown(0))
+        //private static EffectMouse Ins;
+
+        public ParticleSystem eff;
+        public ParticleSystem effRing;
+
+        //private void Awake()
+        //{
+        //   if (Ins == null)
+        //   {
+        //      Ins = this;
+        //      DontDestroyOnLoad(gameObject);
+        //   } else if (Ins != this)
+        //   {
+        //      Destroy(gameObject);
+        //   }
+        //}
+
+        private void Update()
         {
-            eff.transform.position = Helpers.GetMousePosWorld(Camera.main);
-            effRing.transform.position = Helpers.GetMousePosWorld(Camera.main);
-            eff.Play();
-            effRing.Stop();
-            effRing.Play();
-            AudioController.Instance?.PlaySoundCommom(AudioClipEnum.DataSound_click);
-        }
-        else if (Input.GetMouseButton(0))
-        {
-            eff.transform.position = Helpers.GetMousePosWorld(Camera.main);
-        }
-        else if (Input.GetMouseButtonUp(0))
-        {
-            eff.Stop();
+            if (Input.GetMouseButtonDown(0))
+            {
+                eff.transform.position = Helpers.GetMousePosWorld(Camera.main);
+                effRing.transform.position = Helpers.GetMousePosWorld(Camera.main);
+                eff.Play();
+                effRing.Stop();
+                effRing.Play();
+                AudioController.Instance?.PlaySoundCommom(AudioClipEnum.DataSound_click);
+            }
+            else if (Input.GetMouseButton(0))
+            {
+                eff.transform.position = Helpers.GetMousePosWorld(Camera.main);
+            }
+            else if (Input.GetMouseButtonUp(0))
+            {
+                eff.Stop();
+            }
         }
     }
 }
