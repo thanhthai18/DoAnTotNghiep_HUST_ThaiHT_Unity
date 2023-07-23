@@ -307,7 +307,7 @@ namespace thaiht20183826
                     this.Wait(0.5f, () =>
                     {
                         LoaderSystem.Loading(false);
-                        AudioController.Instance.PlayBackgroundMusicCommon();
+                  
                         if (GlobalValue.currentModeGame == ModeGame.RoomMode)
                         {
                             GlobalController.Instance.ReloadPreviousRoom();

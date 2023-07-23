@@ -91,6 +91,7 @@ public class GlobalController : MonoBehaviour
 
     void DelayCallJoin()
     {
+        AudioController.Instance.PlayBackgroundMusicCommon();
         PlayFabController.GetLeaderboard();
         RoomModeController.instance.HandleOnJoinedRoom();
 

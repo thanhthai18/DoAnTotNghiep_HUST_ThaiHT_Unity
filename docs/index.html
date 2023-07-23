@@ -7,7 +7,7 @@
   </head>
   <body style="text-align: center; padding: 0; border: 0; margin: 0;">
     <canvas id="unity-canvas" width=960 height=600 style="width: 960px; height: 600px; background: #BF2D00"></canvas>
-    <script src="Build/buildWeb.loader.js"></script>
+    <script src="Build/docs.loader.js"></script>
     <script>
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
         // Mobile device style: fill the whole browser client area with the game canvas:
@@ -25,9 +25,9 @@
       }
 
       createUnityInstance(document.querySelector("#unity-canvas"), {
-        dataUrl: "Build/buildWeb.data.br",
-        frameworkUrl: "Build/buildWeb.framework.js.br",
-        codeUrl: "Build/buildWeb.wasm.br",
+        dataUrl: "Build/docs.data.gz",
+        frameworkUrl: "Build/docs.framework.js.gz",
+        codeUrl: "Build/docs.wasm.gz",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "DefaultCompany",
         productName: "DoAnTotNghiep_HUST_ThaiHT_Unity",
