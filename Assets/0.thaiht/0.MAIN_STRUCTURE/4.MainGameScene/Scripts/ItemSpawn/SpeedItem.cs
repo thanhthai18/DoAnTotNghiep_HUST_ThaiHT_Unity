@@ -32,7 +32,7 @@ namespace thaiht20183826
     
         void Start()
         {
-            Destroy(gameObject, 5);
+   
         }
 
         public (float, float, int) OnTriggerItem()

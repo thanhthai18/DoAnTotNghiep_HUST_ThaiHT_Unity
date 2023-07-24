@@ -15,6 +15,8 @@ namespace thaiht20183826
         private int timeCountWaiting;
         public bool isCounting;
         Coroutine coroutineCountWaiting;
+
+        public int TimeCountWaiting => timeCountWaiting;
         public override void Initialize()
         {
             ShowWaiting(false);
@@ -27,7 +29,7 @@ namespace thaiht20183826
             boxWaiting.SetActive(isShow);
         }
 
-        void ToggleCounting()
+         void ToggleCounting()
         {
             if (!isCounting)
             {

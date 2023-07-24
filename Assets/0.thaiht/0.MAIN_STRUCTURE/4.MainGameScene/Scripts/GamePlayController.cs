@@ -66,6 +66,7 @@ namespace thaiht20183826
             PlayerGamePlay.ActionOnPlayerApplyItemEffectSpeed += CallShowItemFXSpeedOnPlayer;
             PlayerGamePlay.ActionOnPlayerUnApplyItemEffectSpeed += CallHideItemFXSpeedOnPlayer;
             AudioController.Instance.PlayBackgroundMusicOnGamePlay();
+            NetworkManager.ActionOnPLayerLeftRoom += HandleOnPlayerQuitGame;
         }
 
 
@@ -78,6 +79,7 @@ namespace thaiht20183826
             PlayerGamePlay.OnPlayerLostByHeart -= PlayerGamePlay_OnPlayerLostByHeart;
             PlayerGamePlay.ActionOnPlayerApplyItemEffectSpeed -= CallShowItemFXSpeedOnPlayer;
             PlayerGamePlay.ActionOnPlayerUnApplyItemEffectSpeed -= CallHideItemFXSpeedOnPlayer;
+            NetworkManager.ActionOnPLayerLeftRoom -= HandleOnPlayerQuitGame;
         }
         #endregion
 
@@ -234,6 +236,14 @@ namespace thaiht20183826
         {
             Debug.Log("End Game Rank");
             HandleEndGame();
+        }
+
+        private void HandleOnPlayerQuitGame(Player _player)
+        {
+            if(PhotonNetwork.CurrentRoom.PlayerCount == 1)
+            {
+                HandleEndGame();
+            }
         }
 
 

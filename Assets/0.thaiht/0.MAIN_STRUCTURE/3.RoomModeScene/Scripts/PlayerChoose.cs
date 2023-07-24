@@ -83,19 +83,19 @@ namespace thaiht20183826
                     {
                         isPlayerReady = !isPlayerReady;
                         SetPlayerReady(isPlayerReady);
-
-                        Hashtable props = new Hashtable() { { "isPlayerReady", isPlayerReady } };
-                        if (myPlayerPhoton.CustomProperties["isPlayerReady"] == null)
-                        {
-                            myPlayerPhoton.SetCustomProperties(props);
-                        }
-                        else
-                        {
-                            myPlayerPhoton.CustomProperties["isPlayerReady"] = isPlayerReady;
-                            myPlayerPhoton.SetCustomProperties(props);
-                        }
                         if (SceneManagerHelper.ActiveSceneName == SceneGame.RoomModeScene)
                         {
+                            Hashtable props = new Hashtable() { { "isPlayerReady", isPlayerReady } };
+                            if (myPlayerPhoton.CustomProperties["isPlayerReady"] == null)
+                            {
+                                myPlayerPhoton.SetCustomProperties(props);
+                            }
+                            else
+                            {
+                                myPlayerPhoton.CustomProperties["isPlayerReady"] = isPlayerReady;
+                                myPlayerPhoton.SetCustomProperties(props);
+                            }
+
                             if (PhotonNetwork.IsMasterClient)
                             {
                                 RoomModeController.instance?.LocalPlayerPropertiesUpdated();

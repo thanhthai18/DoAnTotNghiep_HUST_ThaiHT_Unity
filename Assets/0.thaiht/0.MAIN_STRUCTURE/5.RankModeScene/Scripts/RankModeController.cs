@@ -48,7 +48,7 @@ namespace thaiht20183826
             //NetworkManager.ActionOnRoomListUpdate += HandleOnRoomListUpdate;
             NetworkManager.ActionOnJoinedLobby += HandleOnJoinedLobby;
             NetworkManager.ActionOnLeftLobby += HandleOnLeftLobby;
-            NetworkManager.ActionOnCreateRoomFailed += HandleOnCreateRoomFailed;
+            //NetworkManager.ActionOnCreateRoomFailed += HandleOnCreateRoomFailed;
             NetworkManager.ActionOnJoinRoomFailed += HandleOnJoinRoomFailed;
             NetworkManager.ActionOnJoinedRoom += HandleOnJoinedRoom;
             //NetworkManager.ActionOnCreateRoom += HandleOnCreatedRoom;
@@ -58,6 +58,8 @@ namespace thaiht20183826
             //NetworkManager.ActionOnMasterClientSwitched += HandleOnMasterClientSwitched;
             NetworkManager.ActionOnPlayerPropertiesUpdate += HandleOnPlayerPropertiesUpdate;
             NetworkManager.ActionOnRoomUpdateProperties += HandleOnRoomUpdateProperties;
+            NetworkManager.ActionOnConnectedToMaster += DelayInteractableBtnPlay;
+            NetworkManager.ActionOnJoinedRoom += DelayInteractableBtnPlay;
         }
 
 
@@ -72,7 +74,7 @@ namespace thaiht20183826
             //NetworkManager.ActionOnRoomListUpdate -= HandleOnRoomListUpdate;
             NetworkManager.ActionOnJoinedLobby -= HandleOnJoinedLobby;
             NetworkManager.ActionOnLeftLobby -= HandleOnLeftLobby;
-            NetworkManager.ActionOnCreateRoomFailed -= HandleOnCreateRoomFailed;
+            //NetworkManager.ActionOnCreateRoomFailed -= HandleOnCreateRoomFailed;
             NetworkManager.ActionOnJoinRoomFailed -= HandleOnJoinRoomFailed;
             NetworkManager.ActionOnJoinedRoom -= HandleOnJoinedRoom;
             //NetworkManager.ActionOnCreateRoom -= HandleOnCreatedRoom;
@@ -82,6 +84,9 @@ namespace thaiht20183826
             //NetworkManager.ActionOnMasterClientSwitched -= HandleOnMasterClientSwitched;
             NetworkManager.ActionOnPlayerPropertiesUpdate -= HandleOnPlayerPropertiesUpdate;
             NetworkManager.ActionOnRoomUpdateProperties -= HandleOnRoomUpdateProperties;
+            NetworkManager.ActionOnConnectedToMaster -= DelayInteractableBtnPlay;
+            NetworkManager.ActionOnJoinedRoom -= DelayInteractableBtnPlay;
+
         }
 
         public void HandleOnJoinedLobby()
@@ -150,19 +155,32 @@ namespace thaiht20183826
             }
         }
 
+        //old code
         public void HandleOnJoinedRoom()
         {
             Debug.Log("Joined Room" + PhotonNetwork.CurrentRoom.Name);
         }
+        //public void HandleOnJoinRoomFailed()
+        //{
+        //    PhotonNetwork.CreateRoom(countRoomCreateRank + "_FindRoom_", new RoomOptions { MaxPlayers = 2, IsVisible = false });
+        //}
+        //public void HandleOnCreateRoomFailed()
+        //{
+        //    countRoomCreateRank++;
+        //    PhotonNetwork.JoinRoom(countRoomCreateRank + "_FindRoom_");
+        //}
+
         public void HandleOnJoinRoomFailed()
         {
-            PhotonNetwork.CreateRoom(countRoomCreateRank + "_FindRoom_", new RoomOptions { MaxPlayers = 2, IsVisible = false });
-        }
-        public void HandleOnCreateRoomFailed()
-        {
             countRoomCreateRank++;
-            PhotonNetwork.JoinRoom(countRoomCreateRank + "_FindRoom_");
+            PhotonNetwork.JoinOrCreateRoom(countRoomCreateRank + "_FindRoom_", new RoomOptions { MaxPlayers = 2, IsVisible = false }, TypedLobby.Default);
         }
+
+        //public void HandleOnCreateRoomFailed()s
+        //{
+        //    PhotonNetwork.JoinRoom(countRoomCreateRank + "_FindRoom_");
+        //}
+
 
         int countRoomCreateRank = 0;
         public void OnFindMatch()
@@ -170,17 +188,44 @@ namespace thaiht20183826
             countRoomCreateRank = 0;
             if (rankModeView.isCounting)
             {
+                            
                 StopCoroutine(coroutineCheckMatchSuccess);
                 if (PhotonNetwork.InRoom)
                 {
+                    rankModeView.btnPlay.interactable = false;
                     PhotonNetwork.LeaveRoom();
                 }
             }
             else
             {
-                coroutineCheckMatchSuccess = StartCoroutine(CheckFindMatchSuccess());
-                PhotonNetwork.JoinRoom(countRoomCreateRank + "_FindRoom_");
+                if (PhotonNetwork.IsConnectedAndReady)
+                {
+                    rankModeView.btnPlay.interactable = false;
+                    StartJoinOrCreate();
+                }
+                else
+                {
+                    NetworkManager.ActionOnConnectedToMaster += StartJoinOrCreate;
+                }
+               
             }
+        }
+
+        void StartJoinOrCreate()
+        {
+            coroutineCheckMatchSuccess = StartCoroutine(CheckFindMatchSuccess());
+            PhotonNetwork.JoinOrCreateRoom(countRoomCreateRank + "_FindRoom_", new RoomOptions { MaxPlayers = 2, IsVisible = false }, TypedLobby.Default);
+            NetworkManager.ActionOnConnectedToMaster -= StartJoinOrCreate;
+        }
+        void DelayInteractableBtnPlay()
+        {
+            rankModeView.btnPlay.interactable = true;
+        }
+        void AutoInvokeBtnPlay()
+        {
+            rankModeView.btnPlay.interactable = true;
+            rankModeView.btnPlay.onClick.Invoke();
+            NetworkManager.ActionOnConnectedToMaster -= AutoInvokeBtnPlay;
         }
 
         public void HandleOnLeftRoom()
@@ -191,6 +236,8 @@ namespace thaiht20183826
         {
             if (obj.ContainsKey("indexMap"))
             {
+                PhotonNetwork.CurrentRoom.IsOpen = false;
+                PhotonNetwork.CurrentRoom.IsVisible = false;
                 NetworkManager.Instance.ChangeScene("MainGameScene");
             }
         }
@@ -200,7 +247,12 @@ namespace thaiht20183826
             {
                 yield return new WaitForSeconds(1);
 
+                if(rankModeView.TimeCountWaiting >= 30)
+                {
+                    rankModeView.btnPlay.onClick.Invoke();
+                    NetworkManager.ActionOnConnectedToMaster += AutoInvokeBtnPlay;
 
+                }
 
                 if (PhotonNetwork.IsMasterClient)
                 {

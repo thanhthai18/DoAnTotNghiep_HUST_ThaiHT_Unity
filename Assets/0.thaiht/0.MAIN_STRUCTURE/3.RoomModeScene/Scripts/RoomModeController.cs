@@ -450,6 +450,10 @@ namespace thaiht20183826
 
         public void OnClickBtnCreateRoom()
         {
+            if (lobbyRoomView.inputRoomName.text.Contains("_FindRoom_"))
+            {
+                return;
+            }
             NetworkManager.Instance.CreateRoom(lobbyRoomView.inputRoomName.text);
         }
         public void OnClickBtnJoinRoom()

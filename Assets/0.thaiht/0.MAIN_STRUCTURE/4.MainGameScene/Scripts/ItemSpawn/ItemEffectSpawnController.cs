@@ -82,11 +82,13 @@ namespace thaiht20183826
         public void SpawnSpeedUp(Vector3 posSpawn)
         {
             var speedItem = Instantiate(speedUpItemPrefab, posSpawn, Quaternion.identity);
+            Destroy(speedItem.gameObject, 7);
         }
         [PunRPC]
         public void SpawnSpeedDown(Vector3 posSpawn)
         {
             var speedItem = Instantiate(speedDownItemPrefab, posSpawn, Quaternion.identity);
+            Destroy(speedItem.gameObject, 7);
         }
 
         private void OnDestroy()
