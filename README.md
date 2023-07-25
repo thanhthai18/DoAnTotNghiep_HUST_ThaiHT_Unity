@@ -29,10 +29,10 @@
 
 - Ready
 <img width="1424" alt="ready" src="https://github.com/thanhthai18/DoAnTotNghiep_HUST_ThaiHT_Unity/assets/81027580/37368327-378f-4ac0-a9ee-54c0da7dec21">
+<img width="941" alt="Screenshot 2023-07-24 140519" src="https://github.com/thanhthai18/DoAnTotNghiep_HUST_ThaiHT_Unity/assets/81027580/e79de9a4-c7d6-4e16-a4fb-b45802635024">
 
 - In Game
 <img width="960" alt="InGame" src="https://github.com/thanhthai18/DoAnTotNghiep_HUST_ThaiHT_Unity/assets/81027580/e746dcce-dd6a-4134-82ca-107e6dc7ce83">
-<img width="941" alt="Screenshot 2023-07-24 140519" src="https://github.com/thanhthai18/DoAnTotNghiep_HUST_ThaiHT_Unity/assets/81027580/e79de9a4-c7d6-4e16-a4fb-b45802635024">
 <img width="950" alt="Screenshot 2023-07-24 140544" src="https://github.com/thanhthai18/DoAnTotNghiep_HUST_ThaiHT_Unity/assets/81027580/62ca29b0-0c56-48ba-9e0e-2b3a45499711">
 
 - Push
