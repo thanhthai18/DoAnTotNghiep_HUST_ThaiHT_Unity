@@ -1,4 +1,4 @@
-<img width="922" alt="Screenshot 2023-07-24 140603" src="https://github.com/thanhthai18/DoAnTotNghiep_HUST_ThaiHT_Unity/assets/81027580/a10f9439-87ab-41df-836d-e25004ae1a4b"># DoAnTotNghiep_HUST_ThaiHT_Unity
+# DoAnTotNghiep_HUST_ThaiHT_Unity
  Multiplayer Push Fighting 2D With Unity - King of Push
 - Download now: https://drive.google.com/drive/folders/1m8JpGWj91mZKAUsF462tSsfBB2UpOx4f?usp=sharing
 - Play now: https://thanhthai18.itch.io/kingofpush
@@ -41,7 +41,7 @@
 
 - Leaderboard Endgame
 <img width="960" alt="leaderboardEndgame" src="https://github.com/thanhthai18/DoAnTotNghiep_HUST_ThaiHT_Unity/assets/81027580/7ac3240b-c436-48b3-b3f2-da742ef3e676">
-<img width="922" alt="Screenshot 2023-07-24 140603" src="https://github.com/thanhthai18/DoAnTotNghiep_HUST_ThaiHT_Unity/assets/81027580/f08fdba0-2b45-441b-87c9-82c7af24c5c0">
+<img width="922" alt="Screenshot 2023-07-24 140603" src="https://github.com/thanhthai18/DoAnTotNghiep_HUST_ThaiHT_Unity/assets/81027580/a10f9439-87ab-41df-836d-e25004ae1a4b">
 
 - Rank Mode
 <img width="960" alt="RankMode" src="https://github.com/thanhthai18/DoAnTotNghiep_HUST_ThaiHT_Unity/assets/81027580/4ae583df-1d1d-4276-b36d-714dd6405992">
