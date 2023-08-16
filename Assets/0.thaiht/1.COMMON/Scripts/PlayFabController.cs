@@ -124,7 +124,7 @@ namespace thaiht20183826
 
             if (result.Data.TryGetValue("TIME_SPAWN_BETWEEN_ITEMS", out string titleDataValue2))
             {
-                GlobalValue.TIME_SPAWN_BETWEEN_ITEMS = int.Parse(titleDataValue1);
+                GlobalValue.TIME_SPAWN_BETWEEN_ITEMS = int.Parse(titleDataValue2);
                 Debug.Log("TIME_SPAWN_BETWEEN_ITEMS: " + GlobalValue.TIME_SPAWN_BETWEEN_ITEMS);
             }
 
